@@ -1,0 +1,26 @@
+#作为制定应用在任何profile下都通用的配置文件
+spring:
+  # 静态资源路径
+  resources:
+    static-locations: classpath:static/,file:static/
+  mvc:
+    static-path-pattern: /static/**
+
+#mybatis
+mybatis:
+  type-aliases-package: com.linzd.mobile.entity
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#日志
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.sleuth: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+
+#feign
+feign:
+  hystrix:
+    enabled: true

@@ -1,0 +1,11 @@
+#这个文件 作为所有应用在任何profile下都通用的配置文件
+
+#监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

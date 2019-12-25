@@ -1,0 +1,3 @@
+#作为所有应用在指定profile下的配置文件
+info:
+  profile: dev

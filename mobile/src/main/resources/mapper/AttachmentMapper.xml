@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.AttachmentMapper">
+    <resultMap id="BaseResultMap" type="com.linzd.mobile.entity.Attachment">
+        <!-- 主键 -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <!-- 附件名称 -->
+        <result column="filename" jdbcType="VARCHAR" property="filename"/>
+        <!-- 附件别名 -->
+        <result column="filealias" jdbcType="VARCHAR" property="filealias"/>
+        <!-- 附件类型 -->
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <!-- 附件的url地址 -->
+        <result column="fileurl" jdbcType="VARCHAR" property="fileurl"/>
+        <!-- 附件路径 -->
+        <result column="filepath" jdbcType="VARCHAR" property="filepath"/>
+        <!-- 附件大小 -->
+        <result column="filesize" jdbcType="DOUBLE" property="filesize"/>
+        <!-- 附件状态 -->
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <!-- 创建时间 -->
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <!-- 更新时间 -->
+        <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from attachment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert"  >
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into attachment (filename, filealias, `type`,
+        fileurl, filepath, filesize,
+        `status`, createtime, updatetime
+        )
+        values (#{filename,jdbcType=VARCHAR}, #{filealias,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+        #{fileurl,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, #{filesize,jdbcType=DOUBLE},
+        #{status,jdbcType=INTEGER}, now(), now()
+        )
+    </insert>
+    <update id="updateByPrimaryKey">
+        update attachment
+        set filename = #{filename,jdbcType=VARCHAR},
+          filealias = #{filealias,jdbcType=VARCHAR},
+          `type` = #{type,jdbcType=VARCHAR},
+          fileurl = #{fileurl,jdbcType=VARCHAR},
+          filepath = #{filepath,jdbcType=VARCHAR},
+          filesize = #{filesize,jdbcType=DOUBLE},
+          `status` = #{status,jdbcType=INTEGER},
+          createtime = #{createtime,jdbcType=TIMESTAMP},
+          updatetime = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id, filename, filealias, `type`, fileurl, filepath, filesize, `status`, createtime,
+        updatetime
+        from attachment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, filename, filealias, `type`, fileurl, filepath, filesize, `status`, createtime,
+        updatetime
+        from attachment
+    </select>
+
+    <!-- ### 以上代码由MBG + CommentPlugin自动生成, 生成时间: 2019-11-27 19:35:55 ### -->
+    <!--根据ids 获取附件信息-->
+    <select id="getAttachmentByIds" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select id, filename, filealias, `type`, fileurl, filepath, filesize, `status`, createtime,
+        updatetime
+        from attachment where id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- Your codes goes here!!! -->
+
+</mapper>
