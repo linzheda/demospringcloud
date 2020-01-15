@@ -1,4 +1,4 @@
-package com.linzd.login;
+package com.linzd.backsystem;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -12,10 +12,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableCircuitBreaker
 @MapperScan("com.linzd.*.*.mapper")
-public class LoginApplication {
+public class BacksystemApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(LoginApplication.class, args);
+        SpringApplication.run(BacksystemApplication.class, args);
     }
 
 }

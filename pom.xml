@@ -8,16 +8,21 @@
     <artifactId>demospringcloud</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <!--通用服务-->
         <module>eureka-server</module>
         <module>hystrix-dashboard</module>
         <module>hystrix-turbine</module>
-        <module>mobile</module>
-        <module>pc</module>
         <module>zuul-api-gateway</module>
         <module>admin-server</module>
         <module>gateway-api</module>
+        <!--自己写的通用服务-->
         <module>attachment</module>
         <module>login</module>
+        <module>backsystem</module>
+        <!--业务模块-->
+        <module>mobile</module>
+        <module>pc</module>
+
     </modules>
     <packaging>pom</packaging>
     <name>demospringcloud</name>
