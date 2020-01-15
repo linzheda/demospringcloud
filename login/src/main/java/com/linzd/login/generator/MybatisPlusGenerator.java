@@ -62,8 +62,8 @@ public  class MybatisPlusGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir")+ File.separator;
-        gc.setOutputDir(projectPath +properties.getProperty("generator.project.name")+ "/src/main/java");
+        String projectPath = System.getProperty("user.dir")+ File.separator +properties.getProperty("generator.project.name");
+        gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("linzd");
         gc.setOpen(false);  // 是否打开输出目录,默认true
         gc.setSwagger2(true); //实体属性 Swagger2 注解
@@ -151,7 +151,6 @@ public  class MybatisPlusGenerator {
         strategy.setEntityLombokModel(true);// 是否为lombok模型
         strategy.setEntityBooleanColumnRemoveIsPrefix(true); // Boolean类型字段是否移除is前缀
         strategy.setRestControllerStyle(true); // 生成 @RestController 控制器
-
         if(!"all".equals(scanner("是否生成所有实体类(所有请输入:all)"))){
             strategy.setInclude(scanner("表名"));//设置要生成的表名
         }
