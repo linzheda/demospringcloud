@@ -7,6 +7,7 @@ import com.linzd.unifiedauth.annotation.UserLoginToken;
 import com.linzd.unifiedauth.login.entity.User;
 import com.linzd.unifiedauth.login.service.UserService;
 import com.linzd.unifiedauth.utils.Encrypt;
+import com.linzd.unifiedauth.utils.JwtTokenUtil;
 import com.linzd.unifiedauth.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,7 +31,7 @@ import javax.annotation.Resource;
  */
 @Api(value = "用户控制器", tags = {"用户控制器"})
 @RestController
-@RequestMapping("/login/user")
+@RequestMapping("/userCtr")
 @UserLoginToken
 public class UserController {
     @Resource(name = "userServiceImpl")
@@ -53,9 +54,20 @@ public class UserController {
         QueryWrapper<User> queryWrapper =new QueryWrapper<>();
         queryWrapper.eq("loginname",name);
         queryWrapper.eq("password",md5Password);
-        System.out.println( userservice.getOne(queryWrapper));
-        return userservice.login(name,password);
-
+        User user = null;
+        try {
+            user = userservice.getOne(queryWrapper);
+            String token = JwtTokenUtil.sign(user.getId());
+            user.setToken(token);
+        } catch (Exception e) {
+            user = null;
+            return ResultUtil.error(e.toString());
+        }
+        if (user != null) {
+            return ResultUtil.success(user);
+        } else {
+            return ResultUtil.error("用户名或密码错误..");
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-package com.linzd.unifiedauth.generator;
+package com.linzd.attachment.generator;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -62,8 +62,8 @@ public  class MybatisPlusGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir")+ File.separator;
-        gc.setOutputDir(projectPath +properties.getProperty("generator.project.name")+ "/src/main/java");
+        String projectPath = System.getProperty("user.dir")+ File.separator +properties.getProperty("generator.project.name");
+        gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("linzd");
         gc.setOpen(false);  // 是否打开输出目录,默认true
         gc.setSwagger2(true); //实体属性 Swagger2 注解

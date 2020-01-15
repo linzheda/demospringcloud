@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableEurekaClient
 @EnableFeignClients
 @EnableCircuitBreaker
-@MapperScan("com.linzd.unifiedauth.login.mapper")
+@MapperScan("com.linzd.unifiedauth.*.mapper")
 public class UnifiedAuthApplication {
 
     public static void main(String[] args) {
