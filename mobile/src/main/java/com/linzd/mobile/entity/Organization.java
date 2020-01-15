@@ -2,15 +2,12 @@ package com.linzd.mobile.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
  * Table: organization
  */
 @Data
-@ApiModel(value="Organization",description="组织机构Organization")
 public class Organization implements Serializable {
     /**
      * id

@@ -19,11 +19,11 @@ public interface UserService {
 	
 	/**
 	 * 根据用户名密码查询用户，用于登录
-	 * @param name
-	 * @param pwd
+	 * @param loginname 登录名
+	 * @param pwd 密码
 	 * @return
 	 */
-	User getUser(String name, String pwd);
+	User getUser(String loginname, String pwd);
 	
 	/**
 	 * 添加用户

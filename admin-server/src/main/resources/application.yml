@@ -28,7 +28,7 @@ eureka:
   client:
     #注册中心地址
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://admin:admin@localhost:8761/eureka/
   instance:
     #将自己的IP注册到eureka
     prefer-ip-address: true

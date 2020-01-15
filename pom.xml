@@ -16,6 +16,7 @@
         <module>zuul-api-gateway</module>
         <module>admin-server</module>
         <module>gateway-api</module>
+        <module>unified-auth</module>
     </modules>
     <packaging>pom</packaging>
     <name>demospringcloud</name>
@@ -29,13 +30,28 @@
     </parent>
 
     <properties>
+        <!--编码集-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--jdk-->
         <java.version>1.8</java.version>
         <!--swagger的版本-->
         <swagger.version>2.9.2</swagger.version>
         <!--springboot admin的版本-->
         <admin.version>2.2.1</admin.version>
+        <!--mysql版本-->
         <mysql.version>8.0.14</mysql.version>
+        <!--mybatisplus版本-->
+        <mybatisplus.version>3.3.0</mybatisplus.version>
+        <!--mybatisplus 代码生成器-->
+        <mybatisplus-generator.version>3.3.0</mybatisplus-generator.version>
+        <!--代码生成器模板引擎-->
+        <velocity.version>2.1</velocity.version>
+        <!--jwt版本-->
+        <jwt.version>3.4.0</jwt.version>
+        <!--commons-lang 工具包-->
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <!--gson -->
+        <gson.version>2.8.5</gson.version>
     </properties>
 
     <!--springcloud 版本管理器-->
@@ -50,6 +66,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <!--通用的jar-->
     <dependencies>
         <!-- springboot依赖 -->
         <dependency>

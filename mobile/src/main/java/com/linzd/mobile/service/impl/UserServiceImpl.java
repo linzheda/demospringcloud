@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(String name, String pwd) {
+	public User getUser(String loginname, String pwd) {
 		User user=new User();
-		user.setName(name);
+		user.setLoginname(loginname);
 		user.setPassword(pwd);
 		User user2=(User)this.baseDao.findOne(user, "login");
 		return 	user2;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int deleteById(int uid) {
 		User user=new User();
-		user.setId(uid);
+		user.setId(Long.valueOf(uid));
 		int result=this.baseDao.delete(user, "deleteById");
 		return result;
 	}
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(int uid) {
 		User user=new User();
-		user.setId(uid);
+		user.setId(Long.valueOf(uid));
 		List<User> list=this.baseDao.findAll(user, "findById");
 		return list.size()>0?list.get(0):null;
 	}

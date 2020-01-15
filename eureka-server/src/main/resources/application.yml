@@ -5,7 +5,11 @@ server:
 spring:
   application:
     name: eureka-server
-
+  #开启 http basic 的安全认证
+  security:
+    user:
+      name: admin
+      password: admin
   #eureka配置
   #表示是否把自己注册到Eureka上 默认为true
 eureka:
@@ -21,7 +25,9 @@ eureka:
     fetchRegistry: false
     #设置与eureka server交互的地址
     serviceUrl:
-      defaultZone: http://localhost:${server.port}/eureka/
+      defaultZone: http://eureka01.com:${server.port}/eureka/
+
+
 
 
 

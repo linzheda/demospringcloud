@@ -8,7 +8,10 @@ import com.linzd.mobile.service.UserService;
 import com.linzd.mobile.util.Encrypt;
 import com.linzd.mobile.util.JwtTokenUtil;
 import com.linzd.mobile.util.ResultUtil;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +43,6 @@ public class UserController {
     @PassToken
     public @ResponseBody
     ResultUtil login(String name, String password) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-
         if (StringUtils.isBlank(name) || StringUtils.isBlank(password)) {
             return ResultUtil.error("用户名或密码不允许为空");
         }
