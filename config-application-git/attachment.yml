@@ -9,7 +9,6 @@ spring:
 logging:
   level:
     root: INFO
-    com.linzd.unifiedauth.login.mapper: trace
     org.springframework.cloud.sleuth: DEBUG
     org.springframework.cloud.openfeign: DEBUG
 

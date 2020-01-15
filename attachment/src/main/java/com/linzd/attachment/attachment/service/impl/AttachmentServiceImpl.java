@@ -29,7 +29,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
 
     @Override
     public int saveAttach(Attachment attachment) {
-        return 0;
+        return attachmentMapper.insert(attachment);
     }
 
     @Override

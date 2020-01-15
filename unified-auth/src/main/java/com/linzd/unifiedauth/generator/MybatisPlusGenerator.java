@@ -69,6 +69,7 @@ public  class MybatisPlusGenerator {
         gc.setSwagger2(true); //实体属性 Swagger2 注解
         gc.setEnableCache(true); // 是否在xml中添加二级缓存配置,默认false
         gc.setFileOverride(true); // 是否覆盖已有文件
+        gc.setActiveRecord(true);//设置ActiveRecord
         //自定义文件命名
         gc.setMapperName("%sMapper");
         gc.setXmlName("%sMapper");
@@ -150,6 +151,7 @@ public  class MybatisPlusGenerator {
         strategy.setEntityLombokModel(true);// 是否为lombok模型
         strategy.setEntityBooleanColumnRemoveIsPrefix(true); // Boolean类型字段是否移除is前缀
         strategy.setRestControllerStyle(true); // 生成 @RestController 控制器
+
         if(!"all".equals(scanner("是否生成所有实体类(所有请输入:all)"))){
             strategy.setInclude(scanner("表名"));//设置要生成的表名
         }

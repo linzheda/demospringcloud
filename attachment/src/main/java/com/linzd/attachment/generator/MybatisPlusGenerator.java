@@ -69,6 +69,7 @@ public  class MybatisPlusGenerator {
         gc.setSwagger2(true); //实体属性 Swagger2 注解
         gc.setEnableCache(true); // 是否在xml中添加二级缓存配置,默认false
         gc.setFileOverride(true); // 是否覆盖已有文件
+        gc.setActiveRecord(true);//设置ActiveRecord
         //自定义文件命名
         gc.setMapperName("%sMapper");
         gc.setXmlName("%sMapper");
