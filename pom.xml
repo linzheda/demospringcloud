@@ -16,7 +16,8 @@
         <module>zuul-api-gateway</module>
         <module>admin-server</module>
         <module>gateway-api</module>
-        <module>unified-auth</module>
+        <module>attachment</module>
+        <module>login</module>
     </modules>
     <packaging>pom</packaging>
     <name>demospringcloud</name>
