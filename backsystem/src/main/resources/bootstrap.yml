@@ -1,6 +1,6 @@
 spring:
   application:
-    name: attachment    # 对应config server所获取的配置文件的{application}
+    name: backsystem    # 对应config server所获取的配置文件的{application}
   cloud:
     config:
       profile: dev            # profile对应config server所获取的配置文件中的{profile}

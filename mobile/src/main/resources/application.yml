@@ -1,6 +1,0 @@
-server:
-  #端口
-  port: 8090
-  #设置post请求大小
-  tomcat:
-    max-http-post-size: -1

@@ -52,6 +52,8 @@
         <mybatisplus-generator.version>3.3.0</mybatisplus-generator.version>
         <!--代码生成器模板引擎-->
         <velocity.version>2.1</velocity.version>
+        <!--二级缓存-->
+        <mybatis-ehcache.version>1.2.0</mybatis-ehcache.version>
         <!--jwt版本-->
         <jwt.version>3.4.0</jwt.version>
         <!--commons-lang 工具包-->
