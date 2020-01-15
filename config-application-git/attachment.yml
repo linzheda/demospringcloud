@@ -12,6 +12,10 @@ logging:
     org.springframework.cloud.sleuth: DEBUG
     org.springframework.cloud.openfeign: DEBUG
 
+#mybatis-plus配置控制台打印完整带参数SQL语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #feign
 feign:
