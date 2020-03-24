@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.user.mapper.ResourcesMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
+   <!-- <typeAlias type="com.linzd.backsystem.common.entity.Tree" alias="User"/>-->
+
+    <resultMap id="baseTree" type="com.linzd.backsystem.common.entity.Tree">
+        <id column="id" property="id"></id>
+        <result column="pid" property="pid"></result>
+        <result column="text" property="text"></result>
+        <association property="attr" javaType="com.linzd.backsystem.user.entity.Resources">
+            <id column="id" property="id"></id>
+            <result column="name" property="name" ></result>
+            <result column="type" property="type" ></result>
+            <result column="description" property="description" ></result>
+            <result column="css" property="css" ></result>
+            <result column="icon" property="icon" ></result>
+            <result column="status" property="status" ></result>
+            <result column="seq" property="seq" ></result>
+        </association>
+    </resultMap>
+    <select id="getResourcesByUserId" parameterType="Integer" resultMap="baseTree" >
+        select t.*,t.name as text
+        from resources t
+        left join role_resources t2 on t.id=t2.resid
+        left join role_user t3 on t3.roleid=t2.roleid
+        where t3.userid=#{userId}
+    </select>
+</mapper>

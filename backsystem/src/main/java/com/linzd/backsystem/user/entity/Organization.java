@@ -23,53 +23,41 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="User对象", description="")
-public class User extends Model<User> {
+@ApiModel(value="Organization对象", description="")
+public class Organization extends Model<Organization> {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "主键")
+    @ApiModelProperty(value = "id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "登录名")
-    private String loginname;
-
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "密码")
-    private String password;
+    @ApiModelProperty(value = "父级id")
+    private Long parentid;
 
-    @ApiModelProperty(value = "组织机构id (和组织机构相关联)")
-    private Long orgid;
+    @ApiModelProperty(value = "机构代码")
+    private String code;
 
-    @ApiModelProperty(value = "岗位id")
-    private Long jobid;
+    @ApiModelProperty(value = "树级路径")
+    private String isn;
 
-    @ApiModelProperty(value = "身份证号码")
-    private String idcard;
+    @ApiModelProperty(value = "状态")
+    private String status;
 
-    @ApiModelProperty(value = "地址")
-    private String address;
+    @ApiModelProperty(value = "等级")
+    private String rank;
 
-    @ApiModelProperty(value = "手机号")
-    private String tel;
+    @ApiModelProperty(value = "描述")
+    private String description;
 
-    @ApiModelProperty(value = "1男2 女")
-    private Integer sex;
-
-    @ApiModelProperty(value = "邮箱地址")
-    private String email;
-
-    @ApiModelProperty(value = "备注")
-    private String remark;
+    @ApiModelProperty(value = "所属区域")
+    private String areacode;
 
     @ApiModelProperty(value = "排序")
     private String seq;
-
-    @ApiModelProperty(value = "令牌")
-    private String token;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createtime;
