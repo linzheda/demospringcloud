@@ -1,6 +1,7 @@
 package com.linzd.backsystem.user.controller;
 
 
+import com.linzd.backsystem.annotation.UserLoginToken;
 import com.linzd.backsystem.user.service.ResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author linzd
  * @since 2020-03-20
  */
-@Api(value = "权限菜单控制层",tags = "权限菜单控制层")
+@Api(value = "权限菜单控制层", tags = "权限菜单控制层")
 @RestController
+@UserLoginToken
 @RequestMapping("/user/resources")
 public class ResourcesController {
     @Autowired
@@ -30,7 +32,7 @@ public class ResourcesController {
 
     @ApiOperation(value = "获取权限菜单通过用户id")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String")
     })
     @PostMapping(value = "/getResourcesByUserId")
     public @ResponseBody

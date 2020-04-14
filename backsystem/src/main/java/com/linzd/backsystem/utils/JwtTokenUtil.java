@@ -64,6 +64,7 @@ public class JwtTokenUtil {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
+            System.out.println(jwt);
             Long userId = jwt.getClaim("userId").asLong();
             return userId;
         } catch (Exception e){

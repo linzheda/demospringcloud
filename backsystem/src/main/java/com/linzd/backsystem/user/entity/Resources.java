@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author linzd
- * @since 2020-03-20
+ * @since 2020-03-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -38,6 +38,21 @@ public class Resources extends Model<Resources> {
     @ApiModelProperty(value = "菜单类型 1目录 2 菜单 3按钮")
     private String type;
 
+    @ApiModelProperty(value = "资源路径")
+    private String path;
+
+    @ApiModelProperty(value = "路由")
+    private String route;
+
+    @ApiModelProperty(value = "参数")
+    private String attr;
+
+    @ApiModelProperty(value = "等级")
+    private Integer rank;
+
+    @ApiModelProperty(value = "树级菜单的isn")
+    private String isn;
+
     @ApiModelProperty(value = "描述")
     private String description;
 
@@ -58,6 +73,7 @@ public class Resources extends Model<Resources> {
 
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updatetime;
+
 
     @Override
     protected Serializable pkVal() {

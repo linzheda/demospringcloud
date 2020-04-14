@@ -1,6 +1,8 @@
 package com.linzd.backsystem.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
+import com.linzd.backsystem.common.entity.RouteTree;
 import com.linzd.backsystem.common.entity.Tree;
 import com.linzd.backsystem.user.entity.Resources;
 import com.linzd.backsystem.user.mapper.ResourcesMapper;
@@ -10,6 +12,7 @@ import com.linzd.backsystem.utils.TreeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,9 +39,22 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
     @Override
     public ResultUtil getResourcesByUserId(Integer userId) {
         List<Tree> menu=resourcesMapper.getResourcesByUserId(userId);
+        List<RouteTree> route = new ArrayList<>();
+        Gson gson=new Gson();
+        for(Tree<Resources> item:menu){
+            RouteTree temp=null;
+            if(item.getAttr().getRoute()!=null){
+                temp = gson.fromJson(item.getAttr().getRoute(), RouteTree.class);
+            }else{
+                temp=new RouteTree();
+            }
+            temp.setId(item.getId());
+            temp.setPid(item.getPid());
+            temp.setText(item.getText());
+            route.add(temp);
+        }
         TreeUtils tu=new TreeUtils();
-        List<Tree> tree= tu.toTree(menu);
-
+        List<RouteTree> tree= tu.toRouteTree(route);
         return ResultUtil.success(tree);
     }
 }

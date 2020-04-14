@@ -22,4 +22,6 @@ public interface UserService extends IService<User> {
      * @created 2020/1/15 20:51
      **/
     ResultUtil login(String name, String password);
+
+    ResultUtil updatePassword(Integer id, String oldPassword, String newPassword);
 }

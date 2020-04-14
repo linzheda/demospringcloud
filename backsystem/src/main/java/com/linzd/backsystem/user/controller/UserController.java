@@ -2,6 +2,7 @@ package com.linzd.backsystem.user.controller;
 
 
 import com.linzd.backsystem.annotation.PassToken;
+import com.linzd.backsystem.annotation.UserLoginToken;
 import com.linzd.backsystem.user.service.UserService;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "用户控制层",tags = "用户控制层")
 @RestController
+@UserLoginToken
 @RequestMapping("/user/userCtr")
 public class UserController {
     @Autowired
@@ -39,6 +41,18 @@ public class UserController {
     public @ResponseBody
     ResultUtil login(String name, String password) {
         return userService.login(name,password);
+    }
+
+    @ApiOperation(value = "修改密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/updatePassword")
+    public @ResponseBody ResultUtil updatePassword(Integer id,String oldPassword,String newPassword){
+
+        return  userService.updatePassword(id,oldPassword,newPassword);
     }
 }
 

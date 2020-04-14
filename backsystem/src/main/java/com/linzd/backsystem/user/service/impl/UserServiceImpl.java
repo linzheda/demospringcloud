@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author linzd
@@ -38,9 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return ResultUtil.error("用户名或密码不允许为空");
         }
         String md5Password = Encrypt.md5AndSha(password);
-        QueryWrapper<User> queryWrapper =new QueryWrapper<>();
-        queryWrapper.eq("loginname",name);
-        queryWrapper.eq("password",md5Password);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("loginname", name);
+        queryWrapper.eq("password", md5Password);
         User user = null;
         try {
             user = userMapper.selectOne(queryWrapper);
@@ -56,5 +56,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return ResultUtil.error("用户名或密码错误..");
         }
 
+    }
+
+    /**
+     * 描述  修改密码
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/4/10 17:02
+     **/
+    @Override
+    public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
+        User user = userMapper.selectById(id);
+        String oldPwdMd5 = Encrypt.md5AndSha(oldPassword);
+        boolean isSuccess=false;
+        String msg="";
+        if (!user.getPassword().equals(oldPwdMd5)) {
+            isSuccess=false;
+            msg="原密码错误";
+        }else{
+            isSuccess=true;
+            String newPwdMd5 = Encrypt.md5AndSha(newPassword);
+            user.setPassword(newPwdMd5);
+            user.updateById();
+            isSuccess=true;
+            msg="修改密码成功,请重新登录";
+        }
+
+        return ResultUtil.success(msg, isSuccess);
     }
 }

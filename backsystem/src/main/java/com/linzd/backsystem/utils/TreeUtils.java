@@ -1,5 +1,6 @@
 package com.linzd.backsystem.utils;
 
+import com.linzd.backsystem.common.entity.RouteTree;
 import com.linzd.backsystem.common.entity.Tree;
 
 import java.util.ArrayList;
@@ -13,6 +14,13 @@ import java.util.List;
  */
 public class TreeUtils<T> {
 
+    /**
+     * 描述  生成普通树
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/3/27 14:19
+     **/
     public List<Tree> toTree(List<Tree> menus) {
         List<Tree> result = new ArrayList<>();
         //用递归找子。
@@ -36,5 +44,34 @@ public class TreeUtils<T> {
         return tree;
     }
 
+    /**
+     * 描述  生成路由树
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/3/27 14:20
+     **/
+    public List<RouteTree> toRouteTree(List<RouteTree> menus) {
+        List<RouteTree> result = new ArrayList<>();
+        //用递归找子。
+        for (RouteTree tree : menus) {
+            if (tree.getPid()==0) {
+                result.add(findChildren(tree, menus));
+            }
+        }
+        return result;
+    }
 
+
+    private RouteTree findChildren(RouteTree tree, List<RouteTree> list) {
+        for (RouteTree node : list) {
+            if (node.getPid().equals(tree.getId())) {
+                if (tree.getChildren() == null) {
+                    tree.setChildren(new ArrayList<RouteTree>());
+                }
+                tree.getChildren().add(findChildren(node, list));
+            }
+        }
+        return tree;
+    }
 }
