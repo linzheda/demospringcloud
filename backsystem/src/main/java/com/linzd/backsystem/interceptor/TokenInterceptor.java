@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 描述 token拦截器
@@ -30,7 +32,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
         // OPTIONS请求类型直接返回不处理
-        if ("OPTIONS".equals(httpServletRequest.getMethod())){
+        if ("OPTIONS".equals(httpServletRequest.getMethod())) {
             return false;
         }
         // 从 http 请求头中取出 token
@@ -90,8 +92,15 @@ public class TokenInterceptor implements HandlerInterceptor {
                 Long userId;
                 User user = null;
                 try {
-                    JwtTokenUtil jtu = new JwtTokenUtil();
-                    userId = JwtTokenUtil.verify(token);
+                    Map<String,Object> verifyResult=JwtTokenUtil.verify(token);
+                    userId = (long)verifyResult.get("userId") ;
+                    long exp =((Date) verifyResult.get("exp")).getTime();
+                    long now = System.currentTimeMillis();
+                    //说明当前时间+5分钟小于到期时间=>距离过期时间不足5分钟 生产新的token
+                    if((now+300000)>exp){
+                        httpServletResponse.setHeader("authorization",JwtTokenUtil.sign(userId));
+                    }
+                    //查询用户id是否存在  这个可以放到redis
                     user = userMapper.selectById(userId);
                 } catch (Exception j) {
                     httpServletResponse.sendError(403, "token错误!");

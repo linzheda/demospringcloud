@@ -59,14 +59,18 @@ public class JwtTokenUtil {
      * @param **token**
      * @return
      */
-    public static Long verify(String token){
+    public static Map<String,Object> verify(String token){
+        Map<String, Object> result = new HashMap<>();
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
-            System.out.println(jwt);
             Long userId = jwt.getClaim("userId").asLong();
-            return userId;
+            //id
+            result.put("userId",userId);
+            //过期时间
+            result.put("exp",jwt.getExpiresAt());
+            return result;
         } catch (Exception e){
             return null;
         }
