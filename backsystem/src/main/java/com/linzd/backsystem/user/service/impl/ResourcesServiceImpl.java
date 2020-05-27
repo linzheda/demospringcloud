@@ -68,7 +68,7 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      **/
     @Override
     public ResultUtil getResourcesByPid(Long pid) {
-        List<Resources> resources = resourcesMapper.getResourcesByPid(pid);
+        List<Map<String,Object>> resources = resourcesMapper.getResourcesByPid(pid);
         return ResultUtil.success(resources);
     }
 }

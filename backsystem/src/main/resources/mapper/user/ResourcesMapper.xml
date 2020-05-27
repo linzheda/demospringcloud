@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.linzd.backsystem.user.mapper.ResourcesMapper">
-    <resultMap id="baseTree" type="com.linzd.backsystem.common.entity.Tree">
+    <resultMap id="baseTree" type="Tree">
         <id column="id" property="id"></id>
         <result column="pid" property="pid"></result>
         <result column="text" property="text"></result>
-        <association property="attr" javaType="com.linzd.backsystem.user.entity.Resources">
+        <association property="attr" javaType="Resources">
             <id column="id" property="id"></id>
             <result column="name" property="name"></result>
             <result column="description" property="description"></result>
@@ -32,13 +32,15 @@
         </if>
         order by t.rank,t.seq
     </select>
-    <select id="getResourcesByPid"  resultType="Resources">
-        select t.*,(select count(*) from resources where pid=t.id ) childcnt
+    <select id="getResourcesByPid"  resultType="Map">
+
+        select t.*,(select count(*) from resources where pid=t.id ) children_cnt
         from resources t
         where 1=1
         <if test="pid!=null">
             and t.pid=#{pid}
         </if>
+        order by t.seq
     </select>
 
 

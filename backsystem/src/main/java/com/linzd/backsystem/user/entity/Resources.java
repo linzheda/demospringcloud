@@ -1,11 +1,13 @@
 package com.linzd.backsystem.user.entity;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.linzd.backsystem.user.entity.enums.ResourcesTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@Alias("Resources")
 @ApiModel(value="Resources对象", description="")
 public class Resources extends Model<Resources> {
 
@@ -36,7 +39,7 @@ public class Resources extends Model<Resources> {
     private String name;
 
     @ApiModelProperty(value = "菜单类型 1目录 2 菜单 3按钮")
-    private String type;
+    private ResourcesTypeEnum type;
 
     @ApiModelProperty(value = "资源路径")
     private String path;
