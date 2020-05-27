@@ -5,6 +5,7 @@ import com.linzd.backsystem.common.entity.Tree;
 import com.linzd.backsystem.user.entity.Resources;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,5 +24,14 @@ public interface ResourcesMapper extends BaseMapper<Resources> {
      * @params
      * @created 2020/3/23 11:44
      **/
-    List<Tree> getResourcesByUserId(Integer userId);
+    List<Tree> getResourcesByUserId(Map<String,Object> condition);
+    
+    /**
+     * 描述  根据父级id获取资源菜单
+     *
+     * @author Lorenzo Lin
+     * @params  
+     * @created 2020/5/26 16:30
+     **/
+    List<Resources> getResourcesByPid(Long pid);
 }

@@ -12,18 +12,17 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author linzd
  * @since 2020-01-15
  */
-@Api(value = "用户控制层",tags = "用户控制层")
+@Api(value = "用户控制层", tags = "用户控制层")
 @RestController
 @UserLoginToken
 @RequestMapping("/user/userCtr")
@@ -38,9 +37,8 @@ public class UserController {
     })
     @PostMapping(value = "/login")
     @PassToken
-    public @ResponseBody
-    ResultUtil login(String name, String password) {
-        return userService.login(name,password);
+    public ResultUtil login(String name, String password) {
+        return userService.login(name, password);
     }
 
     @ApiOperation(value = "修改密码")
@@ -50,9 +48,9 @@ public class UserController {
             @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType = "String")
     })
     @PostMapping(value = "/updatePassword")
-    public @ResponseBody ResultUtil updatePassword(Integer id,String oldPassword,String newPassword){
+    public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
 
-        return  userService.updatePassword(id,oldPassword,newPassword);
+        return userService.updatePassword(id, oldPassword, newPassword);
     }
 }
 

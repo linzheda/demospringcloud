@@ -51,11 +51,11 @@ public class TreeUtils<T> {
      * @params
      * @created 2020/3/27 14:20
      **/
-    public List<RouteTree> toRouteTree(List<RouteTree> menus) {
+    public List<RouteTree> toRouteTree(List<RouteTree> menus,Integer pid) {
         List<RouteTree> result = new ArrayList<>();
         //用递归找子。
         for (RouteTree tree : menus) {
-            if (tree.getPid()==0) {
+            if (tree.getPid().equals(pid)) {
                 result.add(findChildren(tree, menus));
             }
         }

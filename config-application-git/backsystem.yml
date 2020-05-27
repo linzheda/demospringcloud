@@ -16,6 +16,7 @@ logging:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  typeAliasesPackage: com.linzd.backsystem.*.entity
 
 #feign
 feign:

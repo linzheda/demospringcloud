@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,8 +38,8 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      * @created 2020/3/23 11:24
      **/
     @Override
-    public ResultUtil getResourcesByUserId(Integer userId) {
-        List<Tree> menu=resourcesMapper.getResourcesByUserId(userId);
+    public ResultUtil getResourcesByUserId(Map<String,Object> condition) {
+        List<Tree> menu=resourcesMapper.getResourcesByUserId(condition);
         List<RouteTree> route = new ArrayList<>();
         Gson gson=new Gson();
         for(Tree<Resources> item:menu){
@@ -54,7 +55,20 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
             route.add(temp);
         }
         TreeUtils tu=new TreeUtils();
-        List<RouteTree> tree= tu.toRouteTree(route);
+        List<RouteTree> tree= tu.toRouteTree(route,Integer.valueOf(condition.get("pid").toString()));
         return ResultUtil.success(tree);
+    }
+
+    /**
+     * 描述  根据父级id获取资源菜单列表
+     *
+     * @author Lorenzo Lin
+     * @params  
+     * @created 2020/5/26 11:52
+     **/
+    @Override
+    public ResultUtil getResourcesByPid(Long pid) {
+        List<Resources> resources = resourcesMapper.getResourcesByPid(pid);
+        return ResultUtil.success(resources);
     }
 }

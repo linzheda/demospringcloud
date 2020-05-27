@@ -9,10 +9,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -32,12 +31,20 @@ public class ResourcesController {
 
     @ApiOperation(value = "获取权限菜单通过用户id")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "String")
+            @ApiImplicitParam(name = "condition", value = "用户userid和pid", required = true, dataType = "Integer"),
     })
     @PostMapping(value = "/getResourcesByUserId")
-    public @ResponseBody
-    ResultUtil getResourcesByUserId(Integer userId) {
-        return resourcesService.getResourcesByUserId(userId);
+    public ResultUtil getResourcesByUserId(@RequestParam Map<String, Object> condition) {
+        return resourcesService.getResourcesByUserId(condition);
+    }
+
+    @ApiOperation(value = "获取权限菜单通过pid")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pid", value = "父级id", required = true, dataType = "Long"),
+    })
+    @PostMapping(value = "/getResourcesByPid")
+    public ResultUtil getResourcesByPid(Long pid) {
+        return resourcesService.getResourcesByPid(pid);
     }
 }
 

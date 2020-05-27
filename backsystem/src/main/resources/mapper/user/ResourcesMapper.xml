@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.linzd.backsystem.user.mapper.ResourcesMapper">
-
     <resultMap id="baseTree" type="com.linzd.backsystem.common.entity.Tree">
         <id column="id" property="id"></id>
         <result column="pid" property="pid"></result>
         <result column="text" property="text"></result>
         <association property="attr" javaType="com.linzd.backsystem.user.entity.Resources">
             <id column="id" property="id"></id>
-            <result column="name" property="name" ></result>
-            <result column="description" property="description" ></result>
-            <result column="type" property="type" ></result>
-            <result column="path" property="path" ></result>
-            <result column="route" property="route" ></result>
-            <result column="attr" property="attr" ></result>
-            <result column="rank" property="rank" ></result>
-            <result column="isn" property="isn" ></result>
-            <result column="css" property="css" ></result>
-            <result column="icon" property="icon" ></result>
-            <result column="status" property="status" ></result>
-            <result column="seq" property="seq" ></result>
+            <result column="name" property="name"></result>
+            <result column="description" property="description"></result>
+            <result column="type" property="type"></result>
+            <result column="path" property="path"></result>
+            <result column="route" property="route"></result>
+            <result column="attr" property="attr"></result>
+            <result column="rank" property="rank"></result>
+            <result column="isn" property="isn"></result>
+            <result column="css" property="css"></result>
+            <result column="icon" property="icon"></result>
+            <result column="status" property="status"></result>
+            <result column="seq" property="seq"></result>
         </association>
     </resultMap>
-    <select id="getResourcesByUserId" parameterType="Integer" resultMap="baseTree" >
+    <select id="getResourcesByUserId" parameterType="Map" resultMap="baseTree">
         select t.*,t.name as text
         from resources t
         left join role_resources t2 on t.id=t2.resid
         left join role_user t3 on t3.roleid=t2.roleid
         where t3.userid=#{userId}
+        <if test="isn!=null and isn!=''">
+            and t.isn like concat(#{isn},'%')
+        </if>
         order by t.rank,t.seq
     </select>
+    <select id="getResourcesByPid"  resultType="com.linzd.backsystem.user.entity.Resources">
+        select t.*,(select count(*) from resources where pid=t.id ) childcnt
+        from resources t
+        where 1=1
+        <if test="pid!=null">
+            and t.pid=#{pid}
+        </if>
+    </select>
+
+
 </mapper>
