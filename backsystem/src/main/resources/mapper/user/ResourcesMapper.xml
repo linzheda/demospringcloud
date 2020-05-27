@@ -32,7 +32,7 @@
         </if>
         order by t.rank,t.seq
     </select>
-    <select id="getResourcesByPid"  resultType="Resources">
+    <select id="getResourcesByPid"  resultType="com.linzd.backsystem.user.entity.Resources">
         select t.*,(select count(*) from resources where pid=t.id ) childcnt
         from resources t
         where 1=1
