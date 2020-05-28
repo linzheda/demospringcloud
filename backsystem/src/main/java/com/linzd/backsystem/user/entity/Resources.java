@@ -1,7 +1,6 @@
 package com.linzd.backsystem.user.entity;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.linzd.backsystem.user.entity.enums.ResourcesTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -39,7 +38,7 @@ public class Resources extends Model<Resources> {
     private String name;
 
     @ApiModelProperty(value = "菜单类型 1目录 2 菜单 3按钮")
-    private ResourcesTypeEnum type;
+    private Integer type;
 
     @ApiModelProperty(value = "资源路径")
     private String path;

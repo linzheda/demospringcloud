@@ -1,5 +1,9 @@
 #作为制定应用在任何profile下都通用的配置文件
 spring:
+  #时间戳统一转换
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   # 静态资源路径
   resources:
     static-locations: classpath:static/,file:static/

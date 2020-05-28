@@ -2,6 +2,7 @@ package com.linzd.backsystem.user.controller;
 
 
 import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.user.entity.Resources;
 import com.linzd.backsystem.user.service.ResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
@@ -46,5 +47,19 @@ public class ResourcesController {
     public ResultUtil getResourcesByPid(Long pid) {
         return resourcesService.getResourcesByPid(pid);
     }
+
+
+    @ApiOperation(value = "编辑菜单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "resources", value = "菜单", required = true, dataType = "Resources"),
+    })
+    @PostMapping(value = "/editResources")
+    public ResultUtil editResources(Resources resources){
+        boolean  result= resources.insertOrUpdate();
+        String msg = result ? "编辑成功" : "编辑失败";
+        return ResultUtil.success(msg,result);
+    }
+
+
 }
 

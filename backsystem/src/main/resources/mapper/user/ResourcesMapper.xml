@@ -19,9 +19,11 @@
             <result column="icon" property="icon"></result>
             <result column="status" property="status"></result>
             <result column="seq" property="seq"></result>
+            <result column="createtime" property="createtime"></result>
+            <result column="updatetime" property="updatetime"></result>
         </association>
     </resultMap>
-    <select id="getResourcesByUserId" parameterType="Map" resultMap="baseTree">
+    <select id="getResourcesByUserId"  resultMap="baseTree">
         select t.*,t.name as text
         from resources t
         left join role_resources t2 on t.id=t2.resid
@@ -33,9 +35,11 @@
         order by t.rank,t.seq
     </select>
     <select id="getResourcesByPid"  resultType="Map">
-
-        select t.*,(select count(*) from resources where pid=t.id ) children_cnt
+        select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
+        t2.name pid_text
         from resources t
+        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.rank=2
+        left join resources t2 on t.pid=t2.id
         where 1=1
         <if test="pid!=null">
             and t.pid=#{pid}
