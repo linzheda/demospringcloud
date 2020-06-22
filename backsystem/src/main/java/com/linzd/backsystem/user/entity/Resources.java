@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *  菜单资源
  * </p>
  *
  * @author linzd
@@ -40,8 +40,6 @@ public class Resources extends Model<Resources> {
     @ApiModelProperty(value = "菜单类型 1目录 2 菜单 3按钮")
     private Integer type;
 
-    @ApiModelProperty(value = "资源路径")
-    private String path;
 
     @ApiModelProperty(value = "路由")
     private String route;

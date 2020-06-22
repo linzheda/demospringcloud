@@ -10,7 +10,6 @@
             <result column="name" property="name"></result>
             <result column="description" property="description"></result>
             <result column="type" property="type"></result>
-            <result column="path" property="path"></result>
             <result column="route" property="route"></result>
             <result column="attr" property="attr"></result>
             <result column="rank" property="rank"></result>
@@ -43,6 +42,9 @@
         where 1=1
         <if test="pid!=null">
             and t.pid=#{pid}
+        </if>
+        <if test="filter_id!=null">
+            and t.id not in (#{filter_id})
         </if>
         order by t.seq
     </select>

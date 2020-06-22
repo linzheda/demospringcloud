@@ -33,5 +33,5 @@ public interface ResourcesService extends IService<Resources> {
      * @params
      * @created 2020/5/26 11:53
      **/
-    ResultUtil getResourcesByPid(Long pid);
+    ResultUtil getResourcesByPid(Map<String,Object> condition);
 }

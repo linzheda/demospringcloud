@@ -32,7 +32,7 @@ public class ResourcesController {
 
     @ApiOperation(value = "获取权限菜单通过用户id")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "condition", value = "用户userid和pid", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "condition", value = "用户userid和pid", required = true, dataType = "Map"),
     })
     @PostMapping(value = "/getResourcesByUserId")
     public ResultUtil getResourcesByUserId(@RequestParam Map<String, Object> condition) {
@@ -41,11 +41,11 @@ public class ResourcesController {
 
     @ApiOperation(value = "获取权限菜单通过pid")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pid", value = "父级id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesByPid")
-    public ResultUtil getResourcesByPid(Long pid) {
-        return resourcesService.getResourcesByPid(pid);
+    public ResultUtil getResourcesByPid(@RequestParam Map<String, Object> condition) {
+        return resourcesService.getResourcesByPid(condition);
     }
 
 

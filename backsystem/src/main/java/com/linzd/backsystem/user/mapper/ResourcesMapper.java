@@ -33,5 +33,5 @@ public interface ResourcesMapper extends BaseMapper<Resources> {
      * @params  
      * @created 2020/5/26 16:30
      **/
-    List<Map<String,Object>> getResourcesByPid(Long pid);
+    List<Map<String,Object>> getResourcesByPid(Map<String,Object> condition);
 }
