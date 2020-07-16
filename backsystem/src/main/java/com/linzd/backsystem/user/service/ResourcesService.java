@@ -34,4 +34,13 @@ public interface ResourcesService extends IService<Resources> {
      * @created 2020/5/26 11:53
      **/
     ResultUtil getResourcesByPid(Map<String,Object> condition);
+
+    /**
+     * 描述  删除资源和下级
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/7/16 16:47
+     **/
+    ResultUtil delResources(Long id);
 }

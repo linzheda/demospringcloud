@@ -32,7 +32,7 @@ public class Resources extends Model<Resources> {
     private Long id;
 
     @ApiModelProperty(value = "父级菜单")
-    private Integer pid;
+    private Long pid;
 
     @ApiModelProperty(value = "菜单名称")
     private String name;

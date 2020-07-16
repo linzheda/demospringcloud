@@ -3,8 +3,7 @@ package com.linzd.backsystem.utils;
 import com.linzd.backsystem.common.entity.RouteTree;
 import com.linzd.backsystem.common.entity.Tree;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 描述 树级菜单生成工具类
@@ -25,7 +24,7 @@ public class TreeUtils<T> {
         List<Tree> result = new ArrayList<>();
         //用递归找子。
         for (Tree tree : menus) {
-            if (tree.getPid()==0) {
+            if (tree.getPid() == 0) {
                 result.add(findChildren(tree, menus));
             }
         }
@@ -51,7 +50,7 @@ public class TreeUtils<T> {
      * @params
      * @created 2020/3/27 14:20
      **/
-    public List<RouteTree> toRouteTree(List<RouteTree> menus,Integer pid) {
+    public List<RouteTree> toRouteTree(List<RouteTree> menus, Integer pid) {
         List<RouteTree> result = new ArrayList<>();
         //用递归找子。
         for (RouteTree tree : menus) {
@@ -74,4 +73,53 @@ public class TreeUtils<T> {
         }
         return tree;
     }
+
+
+    /**
+     * 描述  生产map的树
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/7/3 10:21
+     **/
+    public List<Map<String, Object>> toMapTree(List<Map<String, Object>> menus, Integer pid) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        if(pid!=null){
+            //用递归找子。
+            for (Map<String, Object> tree : menus) {
+                if (tree.get("pid").equals(pid)) {
+                    result.add(findChildren(tree, menus));
+                }
+            }
+        }else{
+            HashSet<Object> pid_set = new HashSet<>();
+            for  (Map<String, Object> item : menus) {
+
+                pid_set.add(item.get("id"));
+            }
+            for  (Map<String, Object> item : menus) {
+                //说明不存在
+               if(!pid_set.contains(item.get("pid"))){
+                   result.add(findChildren(item, menus));
+               }
+            }
+        }
+        return result;
+    }
+
+    private Map<String, Object> findChildren(Map<String, Object> tree, List<Map<String, Object>> list) {
+        for (Map<String, Object> node : list) {
+            if (node.get("pid").equals(tree.get("id"))) {
+                if (tree.get("children") == null) {
+                    tree.put("children", new ArrayList<>());
+                }
+                List<Map<String, Object>> children =(ArrayList) tree.get("children");
+                children.add(findChildren(node, list));
+                tree.put("children", children);
+            }
+        }
+        return tree;
+    }
+
+
 }

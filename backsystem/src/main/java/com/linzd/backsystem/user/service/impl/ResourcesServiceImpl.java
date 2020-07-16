@@ -69,6 +69,23 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
     @Override
     public ResultUtil getResourcesByPid(Map<String,Object> condition) {
         List<Map<String,Object>> resources = resourcesMapper.getResourcesByPid(condition);
-        return ResultUtil.success(resources);
+        TreeUtils tu=new TreeUtils();
+        List<Map<String,Object>> tree=tu.toMapTree(resources,null);
+        return ResultUtil.success(tree);
+    }
+
+
+    /**
+     * 描述  删除资源和下级
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/7/16 16:48
+     **/
+    @Override
+    public ResultUtil delResources(Long id) {
+        int result= resourcesMapper.delResources(id);
+        String msg = result >0 ? "删除成功" : "删除失败";
+        return ResultUtil.success(msg, result);
     }
 }

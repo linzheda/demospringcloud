@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,10 +55,26 @@ public class ResourcesController {
             @ApiImplicitParam(name = "resources", value = "菜单", required = true, dataType = "Resources"),
     })
     @PostMapping(value = "/editResources")
-    public ResultUtil editResources(Resources resources){
-        boolean  result= resources.insertOrUpdate();
-        String msg = result ? "编辑成功" : "编辑失败";
-        return ResultUtil.success(msg,result);
+    public ResultUtil editResources(Resources resources) {
+        String msg =  resources.getId() != null  ? "编辑" : "新增";
+        boolean isSuccess = resources.insertOrUpdate();
+        msg += isSuccess ? "成功" : "失败";
+        Resources p=new Resources().selectById(resources.getPid());
+        resources.setIsn(p.getIsn() + "." + resources.getId());
+        resources.updateById();
+        Map<String, Object> result = new HashMap<>();
+        result.put("isSuccess", isSuccess);
+        result.put("id", resources.getId());
+        return ResultUtil.success(msg, result);
+    }
+
+    @ApiOperation(value = "删除菜单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "菜单", required = true, dataType = "Long"),
+    })
+    @PostMapping(value = "/delResources")
+    public ResultUtil delResources(Long id) {
+        return resourcesService.delResources(id);
     }
 
 

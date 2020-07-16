@@ -34,4 +34,13 @@ public interface ResourcesMapper extends BaseMapper<Resources> {
      * @created 2020/5/26 16:30
      **/
     List<Map<String,Object>> getResourcesByPid(Map<String,Object> condition);
+
+    /**
+     * 描述  删除资源和下级
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/7/16 16:49
+     **/
+    int delResources(Long id);
 }

@@ -22,6 +22,8 @@
             <result column="updatetime" property="updatetime"></result>
         </association>
     </resultMap>
+
+    <!--获取资源根据用户id-->
     <select id="getResourcesByUserId"  resultMap="baseTree">
         select t.*,t.name as text
         from resources t
@@ -33,15 +35,20 @@
         </if>
         order by t.rank,t.seq
     </select>
-    <select id="getResourcesByPid"  resultType="Map">
+
+    <!--获取资源根据pid-->
+    <select id="getResourcesByPid"  resultType="java.util.Map">
         select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
         t2.name pid_text
         from resources t
         left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.rank=2
         left join resources t2 on t.pid=t2.id
         where 1=1
-        <if test="pid!=null">
+        <if test="pid!=null and pid!=''">
             and t.pid=#{pid}
+        </if>
+        <if test="name!=null">
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="filter_id!=null">
             and t.id not in (#{filter_id})
@@ -49,5 +56,27 @@
         order by t.seq
     </select>
 
+
+    <!--删除当前id和下级-->
+    <delete id="delResources" parameterType="Long" >
+        delete from resources where id in(
+        SELECT id
+        FROM (
+            SELECT name,id, pid,
+                   @le := IF(pid = 0, 0,
+                       IF(LOCATE(CONCAT('|', pid, ':'), @pathlevel) > 0,
+                           SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', pid, ':'), -1), '|', 1) + 1,@le + 1)) levels,
+                   @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') pathlevel,
+                   @pathnodes := IF(pid = 0, ',root',
+                       CONCAT_WS(',', IF(LOCATE(CONCAT('|', pid, ':'), @pathall) > 0,
+                         SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', pid, ':'), -1), '|', 1), @pathnodes), pid)) paths,
+                   @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') pathall
+            FROM resources,
+            (SELECT @le := 0,@pathlevel := '',
+            @pathall := '',@pathnodes := '') vv
+            ORDER BY paths
+        ) t where  instr(paths,#{id})>0
+        ORDER BY paths ) or id=#{id}
+    </delete>
 
 </mapper>
