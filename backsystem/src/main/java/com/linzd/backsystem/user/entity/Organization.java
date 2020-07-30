@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 机构
  * </p>
  *
  * @author linzd
- * @since 2020-03-20
+ * @since 2020-07-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Organization对象", description="")
+@ApiModel(value="Organization对象", description="机构")
 public class Organization extends Model<Organization> {
 
     private static final long serialVersionUID=1L;

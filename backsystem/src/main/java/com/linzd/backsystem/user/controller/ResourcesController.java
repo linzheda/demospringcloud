@@ -29,7 +29,7 @@ import java.util.Map;
 @RequestMapping("/user/resources")
 public class ResourcesController {
     @Autowired
-    private ResourcesService resourcesService;
+    private ResourcesService service;
 
     @ApiOperation(value = "获取权限菜单通过用户id")
     @ApiImplicitParams({
@@ -37,7 +37,7 @@ public class ResourcesController {
     })
     @PostMapping(value = "/getResourcesByUserId")
     public ResultUtil getResourcesByUserId(@RequestParam Map<String, Object> condition) {
-        return resourcesService.getResourcesByUserId(condition);
+        return service.getResourcesByUserId(condition);
     }
 
     @ApiOperation(value = "获取权限菜单通过pid")
@@ -46,7 +46,7 @@ public class ResourcesController {
     })
     @PostMapping(value = "/getResourcesByPid")
     public ResultUtil getResourcesByPid(@RequestParam Map<String, Object> condition) {
-        return resourcesService.getResourcesByPid(condition);
+        return service.getResourcesByPid(condition);
     }
 
 
@@ -74,7 +74,7 @@ public class ResourcesController {
     })
     @PostMapping(value = "/delResources")
     public ResultUtil delResources(Long id) {
-        return resourcesService.delResources(id);
+        return service.delResources(id);
     }
 
 

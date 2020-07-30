@@ -3,6 +3,15 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.UserMapper">
 
     <!-- 开启二级缓存 -->
+<!--
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+-->
+    <!--获取用户列表-->
+    <select id="getUserList"  resultType="java.util.Map">
+        select t.*,t2.name as orgid_txt,t3.name jobid_txt
+        from user t
+        left join organization t2 on t.orgid=t2.id
+        left join job t3 on t.jobid=t3.id
+    </select>
 
 </mapper>

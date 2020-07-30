@@ -1,6 +1,8 @@
 package com.linzd.backsystem.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.user.entity.User;
 import com.linzd.backsystem.user.mapper.UserMapper;
@@ -12,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * <p>
  * 服务实现类
@@ -22,8 +26,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
     @Autowired
-    private UserMapper userMapper;
+    private UserMapper mapper;
 
     /**
      * 描述  登录
@@ -43,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("password", md5Password);
         User user = null;
         try {
-            user = userMapper.selectOne(queryWrapper);
+            user = mapper.selectOne(queryWrapper);
             String token = JwtTokenUtil.sign(user.getId());
             user.setToken(token);
         } catch (Exception e) {
@@ -67,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      **/
     @Override
     public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
-        User user = userMapper.selectById(id);
+        User user = mapper.selectById(id);
         String oldPwdMd5 = Encrypt.md5AndSha(oldPassword);
         boolean isSuccess=false;
         String msg="";
@@ -84,5 +89,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return ResultUtil.success(msg, isSuccess);
+    }
+
+    /**
+     * 描述  获取用户列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/7/25 18:08
+     **/
+    @Override
+    public ResultUtil getUserList(Map<String, Object> condition) {
+        long current= Long.valueOf(condition.get("pageNo").toString());
+        long size = Long.valueOf(condition.get("pageSize").toString());
+        Page<Map> page = new Page<>(current,size);
+        IPage<Map> result=mapper.getUserList(page,condition);
+        return ResultUtil.success(result);
     }
 }

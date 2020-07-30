@@ -1,5 +1,6 @@
 package com.linzd.backsystem.dictionary.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
@@ -30,7 +31,7 @@ public class Dictionary extends Model<Dictionary> {
     private static final long serialVersionUID=1L;
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "字典名称")

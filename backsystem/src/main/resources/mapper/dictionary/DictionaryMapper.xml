@@ -10,7 +10,7 @@
         select t.*,(select count(*) from dictionary where pid=t.id ) children_cnt,
         t2.name pid_text
         from dictionary t
-        left join resources t2 on t.pid=t2.id
+        left join dictionary t2 on t.pid=t2.id
         where 1=1
         <if test="pid!=null and pid!=''">
             and t.pid=#{pid}

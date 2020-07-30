@@ -12,7 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -25,10 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "用户控制层", tags = "用户控制层")
 @RestController
 @UserLoginToken
-@RequestMapping("/user/userCtr")
+@RequestMapping("/user/user")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserService service;
 
     @ApiOperation(value = "登录")
     @ApiImplicitParams({
@@ -38,7 +41,7 @@ public class UserController {
     @PostMapping(value = "/login")
     @PassToken
     public ResultUtil login(String name, String password) {
-        return userService.login(name, password);
+        return service.login(name, password);
     }
 
     @ApiOperation(value = "修改密码")
@@ -49,8 +52,19 @@ public class UserController {
     })
     @PostMapping(value = "/updatePassword")
     public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
-
-        return userService.updatePassword(id, oldPassword, newPassword);
+        return service.updatePassword(id, oldPassword, newPassword);
     }
+
+    @ApiOperation(value = "获取用户列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
+    })
+    @PostMapping(value = "/getUserList")
+    public ResultUtil getUserList(@RequestParam Map<String,Object> condition){
+        return service.getUserList(condition);
+    }
+
+
+
 }
 
