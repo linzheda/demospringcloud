@@ -1,6 +1,6 @@
 #作为指定应用在指定profile下的配置文件
 info:
-  profile: dev
+  profile: prod
 
 spring:
   #mysql

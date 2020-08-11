@@ -42,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (StringUtils.isBlank(name) || StringUtils.isBlank(password)) {
             return ResultUtil.error("用户名或密码不允许为空");
         }
-        String md5Password = Encrypt.md5AndSha(password);
+        String md5Password = password;
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("loginname", name);
         queryWrapper.eq("password", md5Password);
@@ -71,9 +71,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @created 2020/4/10 17:02
      **/
     @Override
-    public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
+    public ResultUtil updatePassword(Long id, String oldPassword, String newPassword) {
         User user = mapper.selectById(id);
-        String oldPwdMd5 = Encrypt.md5AndSha(oldPassword);
+        String oldPwdMd5 = Encrypt.md5(oldPassword);
         boolean isSuccess=false;
         String msg="";
         if (!user.getPassword().equals(oldPwdMd5)) {
@@ -81,7 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             msg="原密码错误";
         }else{
             isSuccess=true;
-            String newPwdMd5 = Encrypt.md5AndSha(newPassword);
+            String newPwdMd5 = Encrypt.md5(newPassword);
             user.setPassword(newPwdMd5);
             user.updateById();
             isSuccess=true;

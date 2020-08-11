@@ -1,20 +1,26 @@
 package com.linzd.backsystem.user.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.sysparam.entity.SysParam;
+import com.linzd.backsystem.user.entity.User;
 import com.linzd.backsystem.user.service.UserService;
+import com.linzd.backsystem.utils.Encrypt;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,6 +34,7 @@ import java.util.Map;
 @Api(value = "用户控制层", tags = "用户控制层")
 @RestController
 @UserLoginToken
+@Transactional(rollbackFor = Exception.class)
 @RequestMapping("/user/user")
 public class UserController {
     @Autowired
@@ -40,19 +47,37 @@ public class UserController {
     })
     @PostMapping(value = "/login")
     @PassToken
+    @Transactional(readOnly = true)
     public ResultUtil login(String name, String password) {
         return service.login(name, password);
     }
 
     @ApiOperation(value = "修改密码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, dataType = "String"),
             @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType = "String")
     })
     @PostMapping(value = "/updatePassword")
-    public ResultUtil updatePassword(Integer id, String oldPassword, String newPassword) {
+    public ResultUtil updatePassword(Long id, String oldPassword, String newPassword) {
         return service.updatePassword(id, oldPassword, newPassword);
+    }
+
+    @ApiOperation(value = "重置密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Long")
+    })
+    @PostMapping(value = "/resetPassword")
+    public ResultUtil resetPassword(Long id){
+        //设置默认密码
+        QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", "password");
+        SysParam defaultPassword=new SysParam().selectOne(queryWrapper);
+        String md5Password = Encrypt.md5(defaultPassword.getValue());
+        User user = new User().selectById(id);
+        user.setPassword(md5Password);
+        boolean isSuccess=user.updateById();
+        return ResultUtil.success("重置密码成功",isSuccess);
     }
 
     @ApiOperation(value = "获取用户列表")
@@ -60,10 +85,45 @@ public class UserController {
             @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserList")
-    public ResultUtil getUserList(@RequestParam Map<String,Object> condition){
+    public ResultUtil getUserList(@RequestParam Map<String, Object> condition) {
         return service.getUserList(condition);
     }
 
+
+    @ApiOperation(value = "编辑用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "User")
+    })
+    @PostMapping(value = "/editUser")
+    public ResultUtil editUser(User user) {
+        boolean isInsert=user.getId() != null ? false:true;
+        String msg = isInsert ? "编辑" : "新增";
+        if(isInsert&&user.getPassword()==null){
+            //设置默认密码
+            QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("code", "password");
+            SysParam defaultPassword=new SysParam().selectOne(queryWrapper);
+            String md5Password = Encrypt.md5(defaultPassword.getValue());
+            user.setPassword(md5Password);
+        }
+        boolean isSuccess =user.insertOrUpdate();
+        msg += isSuccess ? "成功" : "失败";
+        Map<String, Object> result = new HashMap<>();
+        result.put("isSuccess", isSuccess);
+        result.put("id", user.getId());
+        return ResultUtil.success(msg, result);
+    }
+
+    @ApiOperation(value = "删除用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户", required = true, dataType = "Long")
+    })
+    @PostMapping(value = "/delUser")
+    public ResultUtil delUser(Long id){
+        boolean isSuccess=service.removeById(id);
+        String msg =isSuccess ? "删除成功" : "删除失败";
+        return ResultUtil.success(msg,isSuccess);
+    }
 
 
 }

@@ -50,7 +50,7 @@ public class UserController {
         if (StringUtils.isBlank(name) || StringUtils.isBlank(password)) {
             return ResultUtil.error("用户名或密码不允许为空");
         }
-        String md5Password = Encrypt.md5AndSha(password);
+        String md5Password = Encrypt.md5(password);
         QueryWrapper<User> queryWrapper =new QueryWrapper<>();
         queryWrapper.eq("loginname",name);
         queryWrapper.eq("password",md5Password);

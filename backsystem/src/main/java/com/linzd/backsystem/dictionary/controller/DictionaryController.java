@@ -1,6 +1,7 @@
 package com.linzd.backsystem.dictionary.controller;
 
 
+import com.linzd.backsystem.annotation.UserLoginToken;
 import com.linzd.backsystem.dictionary.entity.Dictionary;
 import com.linzd.backsystem.dictionary.service.DictionaryService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +29,8 @@ import java.util.Map;
  */
 @Api(value = "数据字典控制层", tags = "数据字典控制层")
 @RestController
+@Transactional(rollbackFor=Exception.class)
+@UserLoginToken
 @RequestMapping("/dictionary/dictionary")
 public class DictionaryController {
 
@@ -49,6 +53,10 @@ public class DictionaryController {
     @PostMapping(value = "/editDict")
     public ResultUtil editDict(Dictionary dictionary) {
         String msg =  dictionary.getId() != null  ? "编辑" : "新增";
+        if(dictionary.getPid()==null){
+            dictionary.setPid(0L);
+            dictionary.setRank(0);
+        }
         boolean isSuccess = dictionary.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         Map<String, Object> result = new HashMap<>();

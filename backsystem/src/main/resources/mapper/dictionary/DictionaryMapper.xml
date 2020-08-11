@@ -19,7 +19,7 @@
             and t.name like concat('%',#{name},'%')
         </if>
         <if test="key!=null">
-            and t.key like concat('%',#{key},'%')
+            and t.dictkey like concat('%',#{key},'%')
         </if>
         <if test="filter_id!=null">
             and t.id not in (#{filter_id})

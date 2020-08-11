@@ -3,15 +3,37 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.UserMapper">
 
     <!-- 开启二级缓存 -->
-<!--
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
--->
+    <!--
+        <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    -->
     <!--获取用户列表-->
-    <select id="getUserList"  resultType="java.util.Map">
-        select t.*,t2.name as orgid_txt,t3.name jobid_txt
+    <select id="getUserList" parameterType="hashmap" resultType="java.util.Map">
+        select t.*,t2.name as orgid_text,t3.name jobid_text,d.name sex_text
         from user t
         left join organization t2 on t.orgid=t2.id
         left join job t3 on t.jobid=t3.id
+        left join dictionary d on t.sex=d.value and d.dictkey='sex'
+        <where>
+            <if test="condition.id!=null">
+                id=#{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                and name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.loginname!=null">
+                and loginname like concat('%',#{condition.loginname},'%')
+            </if>
+            <if test="condition.tel!=null">
+                and tel like concat('%',#{condition.tel},'%')
+            </if>
+            <if test="condition.orgid!=null and condition.orgid!='' ">
+                and orgid in
+                <foreach collection="condition.orgid.split(',')" open="(" separator="," close=")" index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
     </select>
 
 </mapper>

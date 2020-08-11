@@ -5,6 +5,8 @@ import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.UserLoginToken;
 import com.linzd.backsystem.dictionary.entity.Dictionary;
 import com.linzd.backsystem.pub.service.PubService;
+import com.linzd.backsystem.user.entity.User;
+import com.linzd.backsystem.utils.JwtTokenUtil;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述 通用方法的控制层
@@ -38,15 +41,34 @@ public class PubController {
     })
     @PostMapping(value = "/getDict")
     @PassToken
-    public ResultUtil getDict(String key,Integer rank){
-        QueryWrapper<Dictionary> queryWrapper=new QueryWrapper<Dictionary>();
+    public ResultUtil getDict(String key, Integer rank) {
+        QueryWrapper<Dictionary> queryWrapper = new QueryWrapper<Dictionary>();
         queryWrapper.eq("dictkey", key);
-        if (rank!=null){
+        if (rank != null) {
             queryWrapper.eq("rank", rank);
-        }else{
+        } else {
             queryWrapper.eq("rank", 2);
         }
         List<Dictionary> result = new Dictionary().selectList(queryWrapper);
         return ResultUtil.success(result);
+    }
+
+
+   
+
+
+    @ApiOperation(value = "根据token获取用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/getUserInfoByToken")
+    @PassToken
+    public ResultUtil getUserInfoByToken(String token) {
+        Map<String, Object> verifyResult = JwtTokenUtil.verify(token);
+        Long userId = (long) verifyResult.get("userId");
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+        queryWrapper.eq("id", userId);
+        User user = new User().selectOne(queryWrapper);
+        return ResultUtil.success(user);
     }
 }

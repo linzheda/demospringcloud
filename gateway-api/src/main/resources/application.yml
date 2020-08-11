@@ -18,6 +18,7 @@ spring:
           lowerCaseServiceId: true
 
 
+
 eureka:
   #客户端
   client:

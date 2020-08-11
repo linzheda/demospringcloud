@@ -32,7 +32,7 @@ public interface UserService extends IService<User> {
      * @params
      * @created 2020/7/25 18:07
      **/
-    ResultUtil updatePassword(Integer id, String oldPassword, String newPassword);
+    ResultUtil updatePassword(Long id, String oldPassword, String newPassword);
 
     /**
      * 描述  获取用户列表
