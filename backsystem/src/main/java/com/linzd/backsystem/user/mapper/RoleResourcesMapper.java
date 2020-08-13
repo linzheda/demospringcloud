@@ -13,4 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface RoleResourcesMapper extends BaseMapper<RoleResources> {
 
+    /**
+     * 描述  删除无效的关联数据
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/12 10:30
+     **/
+    int delRoleResourcesLink();
 }

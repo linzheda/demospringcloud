@@ -1,7 +1,10 @@
 package com.linzd.backsystem.user.service;
 
-import com.linzd.backsystem.user.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.linzd.backsystem.user.entity.Role;
+import com.linzd.backsystem.utils.ResultUtil;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * 描述  获取角色列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/11 15:57
+     **/
+    ResultUtil getRoleList(Map<String,Object> condition);
 }

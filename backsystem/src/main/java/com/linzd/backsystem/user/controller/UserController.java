@@ -6,6 +6,7 @@ import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.UserLoginToken;
 import com.linzd.backsystem.sysparam.entity.SysParam;
 import com.linzd.backsystem.user.entity.User;
+import com.linzd.backsystem.user.service.RoleUserService;
 import com.linzd.backsystem.user.service.UserService;
 import com.linzd.backsystem.utils.Encrypt;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -39,6 +40,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService service;
+    @Autowired
+    private RoleUserService roleUserService;
 
     @ApiOperation(value = "登录")
     @ApiImplicitParams({
@@ -82,7 +85,7 @@ public class UserController {
 
     @ApiOperation(value = "获取用户列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
+            @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserList")
     public ResultUtil getUserList(@RequestParam Map<String, Object> condition) {
@@ -120,7 +123,10 @@ public class UserController {
     })
     @PostMapping(value = "/delUser")
     public ResultUtil delUser(Long id){
+        //删除用户
         boolean isSuccess=service.removeById(id);
+        //删除用户角色关联表的数据
+        roleUserService.delRoleUserLink();
         String msg =isSuccess ? "删除成功" : "删除失败";
         return ResultUtil.success(msg,isSuccess);
     }

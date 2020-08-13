@@ -3,6 +3,24 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.RoleMapper">
 
     <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    <!--  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+    <!--查询角色列表-->
+    <select id="getRoleList" resultType="java.util.Map">
+        select t.*,d.name as status_text
+        from role t
+        left join dictionary d on t.status=d.value and d.dictkey='able_disable'
+        <where>
+            <if test="condition.id!=null">
+                t.id=#{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                and t.name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.code!=null">
+                and t.code like concat('%',#{condition.code},'%')
+            </if>
+        </where>
+    </select>
 
 </mapper>

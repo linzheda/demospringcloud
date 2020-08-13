@@ -100,8 +100,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      **/
     @Override
     public ResultUtil getUserList(Map<String, Object> condition) {
-        long current= Long.valueOf(condition.get("pageNo").toString());
-        long size = Long.valueOf(condition.get("pageSize").toString());
+        long current= Long.valueOf(condition.get("current").toString());
+        long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
         IPage<Map> result=mapper.getUserList(page,condition);
         return ResultUtil.success(result);

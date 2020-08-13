@@ -13,4 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface RoleUserMapper extends BaseMapper<RoleUser> {
 
+    /**
+     * 描述  删除无效的roleuser的关联数据
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/12 10:53
+     **/
+    int delRoleUserLink();
 }

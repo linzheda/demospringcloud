@@ -39,7 +39,7 @@ public class Role extends Model<Role> {
     private String description;
 
     @ApiModelProperty(value = "状态")
-    private String status;
+    private Integer status;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createtime;

@@ -3,6 +3,16 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.RoleResourcesMapper">
 
     <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+    <delete id="delRoleResourcesLink" >
+        delete
+        from role_resources
+        where id in (select t.id
+                     from (select id
+                           from role_resources
+                           where resid not in (select id from resources)
+                              or roleid not in (select id from role)) t)
+    </delete>
 
 </mapper>

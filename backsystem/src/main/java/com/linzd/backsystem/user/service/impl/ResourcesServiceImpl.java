@@ -7,6 +7,7 @@ import com.linzd.backsystem.common.entity.Tree;
 import com.linzd.backsystem.user.entity.Resources;
 import com.linzd.backsystem.user.mapper.ResourcesMapper;
 import com.linzd.backsystem.user.service.ResourcesService;
+import com.linzd.backsystem.user.service.RoleResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
 import com.linzd.backsystem.utils.TreeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
 
     @Autowired
     private ResourcesMapper resourcesMapper;
+    @Autowired
+    private RoleResourcesService roleResourcesService;
 
     /**
      * 描述  获取资源菜单通用过用户id
@@ -84,8 +87,11 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      **/
     @Override
     public ResultUtil delResources(Long id) {
+        //删除资源
         int result= resourcesMapper.delResources(id);
         String msg = result >0 ? "删除成功" : "删除失败";
+        //删除角色资源的关联数据
+        roleResourcesService.delRoleResourcesLink();
         return ResultUtil.success(msg, result);
     }
 }

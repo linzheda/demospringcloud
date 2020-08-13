@@ -3,6 +3,18 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.RoleUserMapper">
 
     <!-- 开启二级缓存 -->
+<!--
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+-->
+    <!--删除无效的关联数据-->
+    <delete id="delRoleUserLink">
+        delete
+        from role_user
+        where id in (select t.id
+                     from (select id
+                           from role_user
+                           where userid not in (select id from user)
+                              or roleid not in (select id from role)) t)
+    </delete>
 
 </mapper>

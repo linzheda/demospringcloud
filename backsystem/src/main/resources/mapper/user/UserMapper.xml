@@ -15,19 +15,19 @@
         left join dictionary d on t.sex=d.value and d.dictkey='sex'
         <where>
             <if test="condition.id!=null">
-                id=#{condition.id}
+                t.id=#{condition.id}
             </if>
             <if test="condition.name!=null">
-                and name like concat('%',#{condition.name},'%')
+                and t.name like concat('%',#{condition.name},'%')
             </if>
             <if test="condition.loginname!=null">
-                and loginname like concat('%',#{condition.loginname},'%')
+                and t.loginname like concat('%',#{condition.loginname},'%')
             </if>
             <if test="condition.tel!=null">
-                and tel like concat('%',#{condition.tel},'%')
+                and t.tel like concat('%',#{condition.tel},'%')
             </if>
             <if test="condition.orgid!=null and condition.orgid!='' ">
-                and orgid in
+                and t.orgid in
                 <foreach collection="condition.orgid.split(',')" open="(" separator="," close=")" index="index"
                          item="item">
                     #{item}
