@@ -2,7 +2,7 @@ package com.linzd.backsystem.user.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.linzd.backsystem.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -24,7 +23,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="User对象", description="")
-public class User extends Model<User> {
+public class User extends BaseEntity<User> {
 
     private static final long serialVersionUID=1L;
 
@@ -70,13 +69,6 @@ public class User extends Model<User> {
 
     @ApiModelProperty(value = "令牌")
     private String token;
-
-    @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createtime;
-
-    @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updatetime;
-
 
     @Override
     protected Serializable pkVal() {

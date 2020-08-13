@@ -55,7 +55,7 @@ public class DictionaryController {
         String msg =  dictionary.getId() != null  ? "编辑" : "新增";
         if(dictionary.getPid()==null){
             dictionary.setPid(0L);
-            dictionary.setRank(0);
+            dictionary.setLevel(0);
         }
         boolean isSuccess = dictionary.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";

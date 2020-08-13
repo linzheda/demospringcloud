@@ -1,6 +1,6 @@
 package com.linzd.backsystem.user.entity;
 
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.linzd.backsystem.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -24,7 +23,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Alias("Resources")
 @ApiModel(value="Resources对象", description="")
-public class Resources extends Model<Resources> {
+public class Resources extends BaseEntity<Resources> {
 
     private static final long serialVersionUID=1L;
 
@@ -48,7 +47,7 @@ public class Resources extends Model<Resources> {
     private String attr;
 
     @ApiModelProperty(value = "等级")
-    private Integer rank;
+    private Integer level;
 
     @ApiModelProperty(value = "树级菜单的isn")
     private String isn;
@@ -67,13 +66,6 @@ public class Resources extends Model<Resources> {
 
     @ApiModelProperty(value = "排序")
     private Integer seq;
-
-    @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createtime;
-
-    @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updatetime;
-
 
     @Override
     protected Serializable pkVal() {

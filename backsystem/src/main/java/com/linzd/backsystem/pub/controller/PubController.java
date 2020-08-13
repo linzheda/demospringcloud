@@ -37,17 +37,17 @@ public class PubController {
     @ApiOperation(value = "获取字典")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "key", value = "字典key", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "rank", value = "字典rank", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "level", value = "字典登记", required = true, dataType = "Integer"),
     })
     @PostMapping(value = "/getDict")
     @PassToken
-    public ResultUtil getDict(String key, Integer rank) {
+    public ResultUtil getDict(String key, Integer level) {
         QueryWrapper<Dictionary> queryWrapper = new QueryWrapper<Dictionary>();
         queryWrapper.eq("dictkey", key);
-        if (rank != null) {
-            queryWrapper.eq("rank", rank);
+        if (level != null) {
+            queryWrapper.eq("level", level);
         } else {
-            queryWrapper.eq("rank", 2);
+            queryWrapper.eq("level", 2);
         }
         List<Dictionary> result = new Dictionary().selectList(queryWrapper);
         return ResultUtil.success(result);

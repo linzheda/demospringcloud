@@ -102,6 +102,7 @@ public class TokenInterceptor implements HandlerInterceptor {
                     }
                     //查询用户id是否存在  这个可以放到redis
                     user = userMapper.selectById(userId);
+                    httpServletRequest.setAttribute("doUserId",userId);
                 } catch (Exception j) {
                     httpServletResponse.sendError(403, "token错误!");
                     return false;

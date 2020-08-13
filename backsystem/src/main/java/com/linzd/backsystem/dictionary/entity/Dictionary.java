@@ -2,7 +2,7 @@ package com.linzd.backsystem.dictionary.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.linzd.backsystem.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,7 +11,6 @@ import lombok.experimental.Accessors;
 import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -26,7 +25,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Alias("Dictionary")
 @ApiModel(value="Dictionary对象", description="字典")
-public class Dictionary extends Model<Dictionary> {
+public class Dictionary extends BaseEntity<Dictionary> {
 
     private static final long serialVersionUID=1L;
 
@@ -47,20 +46,13 @@ public class Dictionary extends Model<Dictionary> {
     private Long pid;
 
     @ApiModelProperty(value = "等级")
-    private Integer rank;
+    private Integer level;
 
     @ApiModelProperty(value = "排序")
     private Integer seq;
 
     @ApiModelProperty(value = "描述")
     private String description;
-
-    @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createtime;
-
-    @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updatetime;
-
 
     @Override
     protected Serializable pkVal() {

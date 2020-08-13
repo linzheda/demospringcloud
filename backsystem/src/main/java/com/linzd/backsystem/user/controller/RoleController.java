@@ -59,7 +59,7 @@ public class RoleController {
     @PostMapping(value = "/editRole")
     public ResultUtil editRole(Role role){
         boolean isInsert=role.getId() != null ? false:true;
-        String msg = isInsert ? "编辑" : "新增";
+        String msg = isInsert ? "新增" : "编辑";
         boolean isSuccess =role.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         Map<String, Object> result = new HashMap<>();

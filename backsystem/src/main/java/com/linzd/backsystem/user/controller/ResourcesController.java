@@ -62,6 +62,7 @@ public class ResourcesController {
     @PostMapping(value = "/editResources")
     public ResultUtil editResources(Resources resources) {
         String msg =  resources.getId() != null  ? "编辑" : "新增";
+        resources.setUpdatetime(null);
         boolean isSuccess = resources.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         if(resources.getPid()!=null){

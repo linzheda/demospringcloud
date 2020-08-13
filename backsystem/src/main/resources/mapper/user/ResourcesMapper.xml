@@ -12,7 +12,7 @@
             <result column="type" property="type"></result>
             <result column="route" property="route"></result>
             <result column="attr" property="attr"></result>
-            <result column="rank" property="rank"></result>
+            <result column="level" property="level"></result>
             <result column="isn" property="isn"></result>
             <result column="css" property="css"></result>
             <result column="icon" property="icon"></result>
@@ -33,7 +33,7 @@
         <if test="isn!=null and isn!=''">
             and t.isn like concat(#{isn},'%')
         </if>
-        order by t.rank,t.seq
+        order by t.level,t.seq
     </select>
 
     <!--获取资源根据pid-->
@@ -41,7 +41,7 @@
         select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
         t2.name pid_text
         from resources t
-        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.rank=2
+        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2
         left join resources t2 on t.pid=t2.id
         <where>
             <if test="pid!=null and pid!=''">

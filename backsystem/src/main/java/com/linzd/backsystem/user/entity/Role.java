@@ -41,12 +41,14 @@ public class Role extends Model<Role> {
     @ApiModelProperty(value = "状态")
     private Integer status;
 
+    @ApiModelProperty(value = "排序")
+    private Integer seq;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createtime;
 
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updatetime;
-
 
     @Override
     protected Serializable pkVal() {

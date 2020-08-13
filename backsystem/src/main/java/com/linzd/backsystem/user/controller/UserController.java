@@ -100,7 +100,7 @@ public class UserController {
     @PostMapping(value = "/editUser")
     public ResultUtil editUser(User user) {
         boolean isInsert=user.getId() != null ? false:true;
-        String msg = isInsert ? "编辑" : "新增";
+        String msg = isInsert ? "新增" : "编辑";
         if(isInsert&&user.getPassword()==null){
             //设置默认密码
             QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
