@@ -53,7 +53,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setToken(token);
         } catch (Exception e) {
             user = null;
-            return ResultUtil.error(e.toString());
         }
         if (user != null) {
             return ResultUtil.success(user);

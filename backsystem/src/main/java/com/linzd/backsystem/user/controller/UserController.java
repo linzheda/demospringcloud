@@ -109,6 +109,8 @@ public class UserController {
             String md5Password = Encrypt.md5(defaultPassword.getValue());
             user.setPassword(md5Password);
         }
+        user.setUpdateby(null);
+        user.setUpdatetime(null);
         boolean isSuccess =user.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         Map<String, Object> result = new HashMap<>();

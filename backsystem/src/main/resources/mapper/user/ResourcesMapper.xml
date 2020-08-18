@@ -29,7 +29,7 @@
         from resources t
         left join role_resources t2 on t.id=t2.resid
         left join role_user t3 on t3.roleid=t2.roleid
-        where t3.userid=#{userId}
+        where t3.userid=#{userId} and t.route is not null and LENGTH(trim(t.route))>0
         <if test="isn!=null and isn!=''">
             and t.isn like concat(#{isn},'%')
         </if>

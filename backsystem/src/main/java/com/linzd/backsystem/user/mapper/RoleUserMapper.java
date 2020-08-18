@@ -1,7 +1,12 @@
 package com.linzd.backsystem.user.mapper;
 
-import com.linzd.backsystem.user.entity.RoleUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.linzd.backsystem.user.entity.RoleUser;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,4 +26,22 @@ public interface RoleUserMapper extends BaseMapper<RoleUser> {
      * @created 2020/8/12 10:53
      **/
     int delRoleUserLink();
+
+    /**
+     * 描述  获取这个角色下的用户列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/17 16:50
+     **/
+    List<Map> getUserListByRoleId(Map<String, Object> condition);
+    
+    /**
+     * 描述  获取用户列表(分页)
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/18 10:36
+     **/
+    IPage<Map> getUserListByCondition(Page<Map> page, Map<String, Object> condition);
 }

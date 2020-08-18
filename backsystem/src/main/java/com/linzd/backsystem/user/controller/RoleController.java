@@ -60,6 +60,8 @@ public class RoleController {
     public ResultUtil editRole(Role role){
         boolean isInsert=role.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
+        role.setUpdatetime(null);
+        role.setUpdateby(null);
         boolean isSuccess =role.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         Map<String, Object> result = new HashMap<>();

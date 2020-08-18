@@ -8,6 +8,9 @@ import com.linzd.backsystem.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务实现类
@@ -31,6 +34,19 @@ public class RoleResourcesServiceImpl extends ServiceImpl<RoleResourcesMapper, R
     @Override
     public ResultUtil delRoleResourcesLink() {
         int result= mapper.delRoleResourcesLink();
+        return ResultUtil.success(result);
+    }
+
+    /**
+     * 描述  根据角色id获取资源列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/14 18:55
+     **/
+    @Override
+    public ResultUtil getResourcesListByRoleId(Map<String, Object> condition) {
+        List<Map<String,Object>> result = mapper.getResourcesListByRoleId(condition);
         return ResultUtil.success(result);
     }
 }

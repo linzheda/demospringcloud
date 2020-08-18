@@ -16,5 +16,56 @@
                            where userid not in (select id from user)
                               or roleid not in (select id from role)) t)
     </delete>
+    <!--获取某个角色下的所以用户-->
+    <select id="getUserListByRoleId" resultType="java.util.Map">
+        select u.id,u.loginname,u.name,u.tel,o.name orgname
+        from role_user ru
+        left join user u on ru.userid = u.id
+        left join organization o on u.orgid = o.id
+        where u.id is not null and  ru.roleid=#{roleid}
+        <if test="name!=null">
+            and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="loginname!=null">
+            and u.loginname like concat('%',#{loginname},'%')
+        </if>
+        <if test="tel!=null">
+            and u.tel like concat('%',#{tel},'%')
+        </if>
+    </select>
+
+    <!--获取用户列表分页-->
+    <select id="getUserListByCondition" resultType="java.util.Map">
+        select distinct u.id,u.loginname,u.name,u.tel,o.name orgname
+        from user u
+        left join role_user ru on ru.userid = u.id
+        left join organization o on u.orgid = o.id
+        <where>
+            <if test="condition.roleid!=null">
+               ru.roleid=#{roleid}
+            </if>
+            <if test="condition.name!=null">
+                and u.name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.loginname!=null">
+                and u.loginname like concat('%',#{condition.loginname},'%')
+            </if>
+            <if test="condition.tel!=null">
+                and u.tel like concat('%',#{condition.tel},'%')
+            </if>
+            <if test="condition.filter_roleid!=null">
+                ru.roleid not in
+                 <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")" >
+                     #{item}
+                 </foreach>
+            </if>
+            <if test="condition.filter_userid!=null">
+                ru.userid not in
+                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
 
 </mapper>

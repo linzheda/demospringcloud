@@ -35,7 +35,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Long userId=pubService.getUserIdByToken();
         // 起始版本 3.3.0(推荐使用)
-        this.strictInsertFill(metaObject, "updatetime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateby", Long.class, userId);
+        this.strictUpdateFill(metaObject, "updatetime", LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, "updateby", Long.class, userId);
     }
 }
