@@ -40,4 +40,20 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
         List<Map<String,Object>> tree=tu.toMapTree(list,null);
         return ResultUtil.success(tree);
     }
+
+    /**
+     * 描述  删除组织机构和下级
+     *
+     * @param id
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/19 19:53
+     */
+    @Override
+    public ResultUtil delOrganization(Long id) {
+        //删除资源
+        int result= mapper.delOrganization(id);
+        String msg = result >0 ? "删除成功" : "删除失败";
+        return ResultUtil.success(msg, result);
+    }
 }

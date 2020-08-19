@@ -66,12 +66,13 @@ public class ResourcesController {
         resources.setUpdateby(null);
         boolean isSuccess = resources.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
-        if(resources.getPid()!=null){
+        if(resources.getPid()!=null&&resources.getPid()!=0){
             //说明有父级
             Resources p=new Resources().selectById(resources.getPid());
             resources.setIsn(p.getIsn() + "." + resources.getId());
         }else{
             //说明没有父级
+            resources.setPid(0L);
             resources.setIsn( "0." + resources.getId());
         }
         resources.updateById();

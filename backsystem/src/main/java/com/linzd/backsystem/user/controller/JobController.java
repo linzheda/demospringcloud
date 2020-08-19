@@ -1,9 +1,9 @@
-package com.linzd.backsystem.sysparam.controller;
+package com.linzd.backsystem.user.controller;
 
 
 import com.linzd.backsystem.annotation.UserLoginToken;
-import com.linzd.backsystem.sysparam.entity.SysParam;
-import com.linzd.backsystem.sysparam.service.SysParamService;
+import com.linzd.backsystem.user.entity.Job;
+import com.linzd.backsystem.user.service.JobService;
 import com.linzd.backsystem.utils.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,62 +21,62 @@ import java.util.Map;
 
 /**
  * <p>
- * 系统参数 前端控制器
+ * 岗位 前端控制器
  * </p>
  *
  * @author linzd
- * @since 2020-08-07
+ * @since 2020-08-18
  */
-@Api(value = "系统参数控制层", tags = "系统参数控制层")
+@RestController
+@Api(value = "岗位控制层", tags = "岗位控制层")
 @UserLoginToken
 @Transactional(rollbackFor = Exception.class)
-@RestController
-@RequestMapping("/sysparam/sysparam")
-public class SysParamController {
+@RequestMapping("/user/job")
+public class JobController {
 
     @Autowired
-    private SysParamService service;
+    private JobService service;
 
-    @ApiOperation(value = "获取系统参数列表")
+
+    @ApiOperation(value = "获取岗位列表(分页)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
-    @PostMapping(value = "/getSysParamList")
-    public ResultUtil getSysParamList(@RequestParam Map<String, Object> condition) {
-        return service.getSysParamList(condition);
+    @PostMapping(value = "/getJobList")
+    public ResultUtil getJobList(@RequestParam Map<String, Object> condition) {
+        return service.getJobList(condition);
     }
 
-    @ApiOperation(value = "编辑系统参数")
+    @ApiOperation(value = "编辑岗位")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "sysParam", value = "参数", required = true, dataType = "SysParam")
+            @ApiImplicitParam(name = "job", value = "岗位", required = true, dataType = "Job")
     })
-    @PostMapping(value = "/editSysparam")
-    public ResultUtil editSysparam(SysParam sysParam) {
-        boolean isInsert=sysParam.getId() != null ? false:true;
+    @PostMapping(value = "/editJob")
+    public ResultUtil editJob(Job job) {
+        boolean isInsert=job.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
-        sysParam.setUpdateby(null);
-        sysParam.setUpdatetime(null);
-        boolean isSuccess =sysParam.insertOrUpdate();
+        job.setUpdateby(null);
+        job.setUpdatetime(null);
+        boolean isSuccess =job.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
-        result.put("id", sysParam.getId());
+        result.put("id", job.getId());
         return ResultUtil.success(msg, result);
     }
 
 
-    @ApiOperation(value = "删除参数")
+    @ApiOperation(value = "删除岗位")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "参数id", required = true, dataType = "Long")
+            @ApiImplicitParam(name = "id", value = "岗位id", required = true, dataType = "Long")
     })
-    @PostMapping(value = "/delSysparam")
-    public ResultUtil delSysparam(Long id){
+    @PostMapping(value = "/delJob")
+    public ResultUtil delJob(Long id){
         //删除用户
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
         return ResultUtil.success(msg,isSuccess);
     }
-
 
 }
 

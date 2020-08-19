@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 描述 树级菜单实体类
+ * 描述 树级实体类
  *
  * @author Lorenzo Lin
  * @created 2020年03月23日 15:23
@@ -17,9 +17,9 @@ import java.util.List;
 public class Tree<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Long id;
 
-    private Integer pid;
+    private Long pid;
 
     private String text;
 

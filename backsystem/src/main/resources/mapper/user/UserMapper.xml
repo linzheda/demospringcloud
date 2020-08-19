@@ -3,7 +3,9 @@
 <mapper namespace="com.linzd.backsystem.user.mapper.UserMapper">
 
     <!-- 开启二级缓存 -->
+<!--
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+-->
     <!--获取用户列表-->
     <select id="getUserList" parameterType="hashmap" resultType="java.util.Map">
         select t.*,t2.name as orgid_text,t3.name jobid_text,d.name sex_text

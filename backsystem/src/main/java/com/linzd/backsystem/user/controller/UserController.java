@@ -33,9 +33,9 @@ import java.util.Map;
  * @since 2020-01-15
  */
 @Api(value = "用户控制层", tags = "用户控制层")
-@RestController
 @UserLoginToken
 @Transactional(rollbackFor = Exception.class)
+@RestController
 @RequestMapping("/user/user")
 public class UserController {
     @Autowired

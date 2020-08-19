@@ -15,8 +15,8 @@ import java.util.Map;
 @Data
 public class RouteTree<T> implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
-    private Integer pid;
+    private Long id;
+    private Long pid;
     private String text;
     private String name;
     private String path;

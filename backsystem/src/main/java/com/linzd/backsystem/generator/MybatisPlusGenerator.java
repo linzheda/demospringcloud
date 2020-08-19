@@ -138,7 +138,7 @@ public  class MybatisPlusGenerator {
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
         // templateConfig.setEntity("templates/entity2.java");
         // templateConfig.setService();
-        // templateConfig.setController();
+         templateConfig.setController("templates/controller2.java");
 
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
@@ -147,7 +147,7 @@ public  class MybatisPlusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel); // 数据库表映射到实体的命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);// 数据库表字段映射到实体的命名策略, 未指定按照 naming 执行
-//        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");//自定义继承的Entity类全称，带包名
+        strategy.setSuperEntityClass("com.linzd.backsystem.common.entity.BaseEntity.java");//自定义继承的Entity类全称，带包名
         strategy.setEntityLombokModel(true);// 是否为lombok模型
         strategy.setEntityBooleanColumnRemoveIsPrefix(true); // Boolean类型字段是否移除is前缀
         strategy.setRestControllerStyle(true); // 生成 @RestController 控制器

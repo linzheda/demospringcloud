@@ -9,7 +9,7 @@
 
     <!--根据pid获取组织机构-->
     <select id="getOrganizationByPid" resultType="java.util.Map">
-        select t.*,(select count(*) from dictionary where pid=t.id ) children_cnt,
+        select t.*,(select count(*) from organization where pid=t.id ) children_cnt,
         t2.name pid_text
         from organization t
         left join organization t2 on t.pid=t2.id
@@ -21,13 +21,35 @@
             and t.name like concat('%',#{name},'%')
         </if>
         <if test="key!=null">
-            and t.key like concat('%',#{key},'%')
+            and t.code like concat('%',#{code},'%')
         </if>
         <if test="filter_id!=null">
             and t.id not in (#{filter_id})
         </if>
         order by t.seq
     </select>
+
+    <!--删除当前id和下级-->
+    <delete id="delOrganization" parameterType="Long" >
+        delete from organization where id in(
+        SELECT id
+        FROM (
+            SELECT name,id, pid,
+                   @le := IF(pid = 0, 0,
+                       IF(LOCATE(CONCAT('|', pid, ':'), @pathlevel) > 0,
+                           SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', pid, ':'), -1), '|', 1) + 1,@le + 1)) levels,
+                   @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') pathlevel,
+                   @pathnodes := IF(pid = 0, ',root',
+                       CONCAT_WS(',', IF(LOCATE(CONCAT('|', pid, ':'), @pathall) > 0,
+                         SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', pid, ':'), -1), '|', 1), @pathnodes), pid)) paths,
+                   @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') pathall
+            FROM organization,
+            (SELECT @le := 0,@pathlevel := '',
+            @pathall := '',@pathnodes := '') vv
+            ORDER BY paths
+        ) t where  instr(paths,#{id})>0
+        ORDER BY paths ) or id=#{id}
+    </delete>
 
 
 </mapper>

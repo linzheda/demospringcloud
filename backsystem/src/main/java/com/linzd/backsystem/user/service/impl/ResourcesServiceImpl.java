@@ -58,7 +58,7 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
             route.add(temp);
         }
         TreeUtils tu=new TreeUtils();
-        List<RouteTree> tree= tu.toRouteTree(route,Integer.valueOf(condition.get("pid").toString()));
+        List<RouteTree> tree= tu.toRouteTree(route,Long.valueOf(condition.get("pid").toString()));
         return ResultUtil.success(tree);
     }
 

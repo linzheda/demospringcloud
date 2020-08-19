@@ -22,10 +22,10 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SysParam对象", description="系统参数")
+@ApiModel(value = "SysParam对象", description = "系统参数")
 public class SysParam extends BaseEntity<SysParam> {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
     @TableId(value = "id", type = IdType.AUTO)
@@ -40,9 +40,14 @@ public class SysParam extends BaseEntity<SysParam> {
     @ApiModelProperty(value = "参数值")
     private String value;
 
+    @ApiModelProperty(value = "描述")
+    private String description;
+
     @ApiModelProperty(value = "状态 禁用启用")
     private Integer status;
 
+    @ApiModelProperty(value = "排序")
+    private Integer seq;
 
     @Override
     protected Serializable pkVal() {

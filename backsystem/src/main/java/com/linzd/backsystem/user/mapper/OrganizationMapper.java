@@ -24,4 +24,13 @@ public interface OrganizationMapper extends BaseMapper<Organization> {
      * @created 2020/7/25 15:16
      **/
     List<Map<String, Object>> getOrganizationByPid(Map<String, Object> condition);
+
+    /**
+     * 描述  删除机构和下级
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/19 19:55
+     **/
+    int delOrganization(Long id);
 }

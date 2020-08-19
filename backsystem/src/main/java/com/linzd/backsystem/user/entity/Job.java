@@ -10,53 +10,55 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- * 机构
+ * 岗位
  * </p>
  *
  * @author linzd
- * @since 2020-07-25
+ * @since 2020-08-18
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="Organization对象", description="机构")
-public class Organization extends BaseEntity<Organization> {
+@ApiModel(value="Job对象", description="岗位")
+public class Job extends BaseEntity<Job> {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "主键")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "父级id")
-    private Long pid;
-
-    @ApiModelProperty(value = "机构代码")
+    @ApiModelProperty(value = "编码")
     private String code;
-
-    @ApiModelProperty(value = "树级路径")
-    private String isn;
-
-    @ApiModelProperty(value = "状态")
-    private String status;
-
-    @ApiModelProperty(value = "等级")
-    private Integer level;
 
     @ApiModelProperty(value = "描述")
     private String description;
 
-    @ApiModelProperty(value = "所属区域")
-    private String areacode;
+    @ApiModelProperty(value = "状态")
+    private Integer status;
 
     @ApiModelProperty(value = "排序")
-    private String seq;
+    private Integer seq;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createtime;
+
+    @ApiModelProperty(value = "更新时间")
+    private LocalDateTime updatetime;
+
+    @ApiModelProperty(value = "更新人")
+    private Long updateby;
+
+    @ApiModelProperty(value = "创建人id")
+    private Long createby;
+
 
     @Override
     protected Serializable pkVal() {

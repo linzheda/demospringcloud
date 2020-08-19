@@ -50,7 +50,7 @@ public class TreeUtils<T> {
      * @params
      * @created 2020/3/27 14:20
      **/
-    public List<RouteTree> toRouteTree(List<RouteTree> menus, Integer pid) {
+    public List<RouteTree> toRouteTree(List<RouteTree> menus, Long pid) {
         List<RouteTree> result = new ArrayList<>();
         //用递归找子。
         for (RouteTree tree : menus) {
@@ -82,7 +82,7 @@ public class TreeUtils<T> {
      * @params
      * @created 2020/7/3 10:21
      **/
-    public List<Map<String, Object>> toMapTree(List<Map<String, Object>> menus, Integer pid) {
+    public List<Map<String, Object>> toMapTree(List<Map<String, Object>> menus, Long pid) {
         List<Map<String, Object>> result = new ArrayList<>();
         if(pid!=null){
             //用递归找子。

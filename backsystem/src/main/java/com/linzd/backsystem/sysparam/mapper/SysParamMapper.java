@@ -1,7 +1,11 @@
 package com.linzd.backsystem.sysparam.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.linzd.backsystem.sysparam.entity.SysParam;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysParamMapper extends BaseMapper<SysParam> {
 
+    /**
+     * 描述  获取系统参数列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/18 20:11
+     **/
+    IPage<Map> getSysParamList(Page<Map> page, Map<String, Object> condition);
 }
