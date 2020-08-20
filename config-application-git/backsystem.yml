@@ -21,7 +21,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     call-setters-on-nulls: true
-  typeAliasesPackage: com.linzd.backsystem.common.entity,com.linzd.backsystem.user.entity
+  typeAliasesPackage: com.linzd.backsystem.**.entity
   typeEnumsPackage: com.linzd.backsystem.**.enums
 
 #feign

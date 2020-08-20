@@ -91,7 +91,7 @@ public  class MybatisPlusGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.linzd."+properties.getProperty("generator.project.name"));
+        pc.setParent("com.linzd."+properties.getProperty("generator.project.name")+".core");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -147,7 +147,7 @@ public  class MybatisPlusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel); // 数据库表映射到实体的命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);// 数据库表字段映射到实体的命名策略, 未指定按照 naming 执行
-        strategy.setSuperEntityClass("com.linzd.backsystem.common.entity.BaseEntity.java");//自定义继承的Entity类全称，带包名
+        strategy.setSuperEntityClass("com.linzd.backsystem.common.entity.BaseEntity");//自定义继承的Entity类全称，带包名
         strategy.setEntityLombokModel(true);// 是否为lombok模型
         strategy.setEntityBooleanColumnRemoveIsPrefix(true); // Boolean类型字段是否移除is前缀
         strategy.setRestControllerStyle(true); // 生成 @RestController 控制器

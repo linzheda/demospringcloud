@@ -3,8 +3,8 @@ package com.linzd.backsystem.interceptor;
 
 import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.UserLoginToken;
-import com.linzd.backsystem.user.entity.User;
-import com.linzd.backsystem.user.mapper.UserMapper;
+import com.linzd.backsystem.core.user.entity.User;
+import com.linzd.backsystem.core.user.mapper.UserMapper;
 import com.linzd.backsystem.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

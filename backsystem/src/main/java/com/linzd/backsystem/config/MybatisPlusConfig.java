@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.linzd.*.*.mapper")
+@MapperScan("com.linzd.**.mapper")
 public class MybatisPlusConfig {
     @Bean
     public PaginationInterceptor paginationInterceptor() {

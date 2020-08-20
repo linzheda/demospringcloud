@@ -1,7 +1,7 @@
 package com.linzd.backsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.linzd.backsystem.pub.service.PubService;
+import com.linzd.backsystem.core.pub.service.PubService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
