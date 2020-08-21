@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.user.entity.RoleResources;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Api(value = "角色资源控制层", tags = "角色资源控制层")
 @Transactional(rollbackFor=Exception.class)
-@UserLoginToken
+@CheckToken
 @RestController
 @RequestMapping("/user/roleResources")
 public class RoleResourcesController {

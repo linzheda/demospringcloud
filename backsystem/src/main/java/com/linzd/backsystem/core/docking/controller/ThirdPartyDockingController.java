@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.docking.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.linzd.backsystem.core.docking.service.ThirdPartyDockingService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -30,7 +30,7 @@ import java.util.UUID;
  */
 @RestController
 @Api(value = "第三方平台应用表 控制层", tags = "第三方平台应用表 控制层")
-@UserLoginToken
+@CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("/docking/thirdPartyDocking")
 public class ThirdPartyDockingController {

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.pub.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.PassToken;
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.pub.service.PubService;
 import com.linzd.backsystem.core.user.entity.User;
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Api(value = "通用方法的控制层", tags = "通用方法的控制层")
 @RestController
-@UserLoginToken
+@CheckToken
 @RequestMapping("/pub/pubCtr")
 public class PubController {
     @Autowired
@@ -54,9 +54,6 @@ public class PubController {
     }
 
 
-   
-
-
     @ApiOperation(value = "根据token获取用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "token", required = true, dataType = "String")
@@ -71,4 +68,8 @@ public class PubController {
         User user = new User().selectOne(queryWrapper);
         return ResultUtil.success(user);
     }
+
+
+
+
 }

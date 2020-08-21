@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.user.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
 import com.linzd.backsystem.core.user.service.RoleService;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Api(value = "角色控制层", tags = "角色控制层")
 @Transactional(rollbackFor=Exception.class)
-@UserLoginToken
+@CheckToken
 @RestController
 @RequestMapping("/user/role")
 public class RoleController {

@@ -2,7 +2,7 @@ package com.linzd.login.interceptor;
 
 
 import com.linzd.login.annotation.PassToken;
-import com.linzd.login.annotation.UserLoginToken;
+import com.linzd.login.annotation.CheckToken;
 import com.linzd.login.login.entity.User;
 import com.linzd.login.login.mapper.UserMapper;
 import com.linzd.login.utils.JwtTokenUtil;
@@ -45,9 +45,9 @@ public class TokenInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
 
         boolean hasClassPassToken = method.getDeclaringClass().isAnnotationPresent(PassToken.class);
-        boolean hasClassUserLoginToken = method.getDeclaringClass().isAnnotationPresent(UserLoginToken.class);
+        boolean hasClassCheckToken = method.getDeclaringClass().isAnnotationPresent(CheckToken.class);
         boolean hasMethodPassToken = method.isAnnotationPresent(PassToken.class);
-        boolean hasMethodUserLoginToken = method.isAnnotationPresent(UserLoginToken.class);
+        boolean hasMethodCheckToken = method.isAnnotationPresent(CheckToken.class);
 
         //检查是否有PassToken注释(方法上)，有则跳过认证
         if (hasMethodPassToken) {
@@ -56,13 +56,13 @@ public class TokenInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        //是否检查 userLoginToken
+        //是否检查 CheckToken
         boolean checkFlag = false;
-        //获取 UserLoginToken
-        UserLoginToken userLoginToken = null;
-        //检查方法上是否有UserLoginToken注解
-        if (hasMethodUserLoginToken) {
-            userLoginToken = method.getAnnotation(UserLoginToken.class);
+        //获取 CheckToken
+        CheckToken CheckToken = null;
+        //检查方法上是否有CheckToken注解
+        if (hasMethodCheckToken) {
+            CheckToken = method.getAnnotation(CheckToken.class);
             checkFlag = true;
         }
 
@@ -74,15 +74,15 @@ public class TokenInterceptor implements HandlerInterceptor {
             }
         }
 
-        //检查类上是否有UserLoginToken注解
-        if (hasClassUserLoginToken) {
-            userLoginToken = method.getDeclaringClass().getAnnotation(UserLoginToken.class);
+        //检查类上是否有CheckToken注解
+        if (hasClassCheckToken) {
+            CheckToken = method.getDeclaringClass().getAnnotation(CheckToken.class);
             checkFlag = true;
         }
 
         //统一  要登录验证的  检查
         if (checkFlag) {
-            if (userLoginToken.required()) {
+            if (CheckToken.required()) {
                 // 执行认证
                 if (token == null) {
                     httpServletResponse.sendError(401, "无token，请重新登录!");

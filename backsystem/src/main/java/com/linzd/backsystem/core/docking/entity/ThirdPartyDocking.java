@@ -49,6 +49,8 @@ public class ThirdPartyDocking extends BaseEntity<ThirdPartyDocking> {
     @ApiModelProperty(value = "标签")
     private String tag;
 
+    @ApiModelProperty(value = "参数")
+    private String attr;
 
     @Override
     protected Serializable pkVal() {

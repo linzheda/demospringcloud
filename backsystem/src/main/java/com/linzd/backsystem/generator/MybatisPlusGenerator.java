@@ -67,8 +67,8 @@ public  class MybatisPlusGenerator {
         gc.setAuthor("linzd");
         gc.setOpen(false);  // 是否打开输出目录,默认true
         gc.setSwagger2(true); //实体属性 Swagger2 注解
-        gc.setEnableCache(true); // 是否在xml中添加二级缓存配置,默认false
-        gc.setFileOverride(true); // 是否覆盖已有文件
+        gc.setEnableCache(false); // 是否在xml中添加二级缓存配置,默认false
+        gc.setFileOverride(false); // 是否覆盖已有文件
         gc.setActiveRecord(true);//设置ActiveRecord
         //自定义文件命名
         gc.setMapperName("%sMapper");

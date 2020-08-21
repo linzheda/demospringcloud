@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.user.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.service.ResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -30,7 +30,7 @@ import java.util.Map;
 @Api(value = "权限菜单控制层", tags = "权限菜单控制层")
 @RestController
 @Transactional(rollbackFor=Exception.class)
-@UserLoginToken
+@CheckToken
 @RequestMapping("/user/resources")
 public class ResourcesController {
     @Autowired

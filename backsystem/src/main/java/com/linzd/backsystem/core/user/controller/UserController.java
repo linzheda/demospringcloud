@@ -3,7 +3,7 @@ package com.linzd.backsystem.core.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.PassToken;
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.core.user.service.RoleUserService;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @since 2020-01-15
  */
 @Api(value = "用户控制层", tags = "用户控制层")
-@UserLoginToken
+@CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RestController
 @RequestMapping("/user/user")

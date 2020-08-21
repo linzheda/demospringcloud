@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.user.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.user.entity.Job;
 import com.linzd.backsystem.core.user.service.JobService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @RestController
 @Api(value = "岗位控制层", tags = "岗位控制层")
-@UserLoginToken
+@CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("/user/job")
 public class JobController {

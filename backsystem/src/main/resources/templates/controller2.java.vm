@@ -26,7 +26,7 @@ import ${superControllerClassPackage};
 @Controller
 #end
 @Api(value = "$!{table.comment}控制层", tags = "$!{table.comment}控制层")
-@UserLoginToken
+@CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
 #if(${kotlin})

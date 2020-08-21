@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.sysparam.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.sysparam.service.SysParamService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 2020-08-07
  */
 @Api(value = "系统参数控制层", tags = "系统参数控制层")
-@UserLoginToken
+@CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RestController
 @RequestMapping("/sysparam/sysparam")

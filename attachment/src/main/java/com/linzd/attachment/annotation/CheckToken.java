@@ -1,4 +1,4 @@
-package com.linzd.login.annotation;
+package com.linzd.attachment.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
  **/
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UserLoginToken {
+public @interface CheckToken {
     boolean required() default true;
 }

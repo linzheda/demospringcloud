@@ -3,7 +3,7 @@ package com.linzd.login.login.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.login.annotation.PassToken;
-import com.linzd.login.annotation.UserLoginToken;
+import com.linzd.login.annotation.CheckToken;
 import com.linzd.login.login.entity.User;
 import com.linzd.login.login.service.UserService;
 import com.linzd.login.utils.Encrypt;
@@ -32,7 +32,7 @@ import javax.annotation.Resource;
 @Api(value = "用户控制器", tags = {"用户控制器"})
 @RestController
 @RequestMapping("/userCtr")
-@UserLoginToken
+@CheckToken
 public class UserController {
     @Resource(name = "userServiceImpl")
     private UserService userservice;

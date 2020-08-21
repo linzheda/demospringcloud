@@ -26,6 +26,9 @@
             <if test="condition.tel!=null">
                 and t.tel like concat('%',#{condition.tel},'%')
             </if>
+            <if test="condition.tag!=null">
+                and t.tag like concat('%',#{condition.tag},'%')
+            </if>
             <if test="condition.orgid!=null and condition.orgid!='' ">
                 and t.orgid in
                 <foreach collection="condition.orgid.split(',')" open="(" separator="," close=")" index="index"

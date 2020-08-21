@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig  implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 拦截所有请求，通过判断是否有 @UserLoginToken 注解 决定是否需要登录
+        // 拦截所有请求，通过判断是否有 @CheckToken 注解 决定是否需要登录
         registry.addInterceptor(tokenInterceptor())
                 .addPathPatterns("/**");
     }

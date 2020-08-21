@@ -1,7 +1,7 @@
 package com.linzd.backsystem.core.dictionary.controller;
 
 
-import com.linzd.backsystem.annotation.UserLoginToken;
+import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.dictionary.service.DictionaryService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -30,7 +30,7 @@ import java.util.Map;
 @Api(value = "数据字典控制层", tags = "数据字典控制层")
 @RestController
 @Transactional(rollbackFor=Exception.class)
-@UserLoginToken
+@CheckToken
 @RequestMapping("/dictionary/dictionary")
 public class DictionaryController {
 
