@@ -116,9 +116,9 @@
         left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2
         left join resources t2 on t.pid=t2.id
         left join role_resources rr on t.id=rr.resid and  rr.roleid=#{roleid}
-        <where>
+        where rr.id is not null
             <if test="pid!=null and pid!=''">
-                t.pid=#{pid}
+              and  t.pid=#{pid}
             </if>
             <if test="name!=null">
                 and t.name like concat('%',#{name},'%')
@@ -126,7 +126,6 @@
             <if test="filter_id!=null">
                 and t.id not in (#{filter_id})
             </if>
-        </where>
         order by t.seq
     </select>
     <!--获取这个角色下的用户列表-->

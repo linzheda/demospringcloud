@@ -55,7 +55,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user = null;
         }
         if (user != null) {
-            return ResultUtil.success(user);
+            if(user.getStatus()==1){
+                return ResultUtil.success(user);
+            }else{
+                return ResultUtil.error("账户被冻结,请联系管理员..");
+            }
         } else {
             return ResultUtil.error("用户名或密码错误..");
         }

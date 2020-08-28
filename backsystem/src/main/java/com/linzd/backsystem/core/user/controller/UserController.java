@@ -99,7 +99,7 @@ public class UserController {
     })
     @PostMapping(value = "/editUser")
     public ResultUtil editUser(User user) {
-        boolean isInsert=user.getId() != null ? false:true;
+        boolean isInsert= user.getId() == null;
         String msg = isInsert ? "新增" : "编辑";
         if(isInsert&&user.getPassword()==null){
             //设置默认密码

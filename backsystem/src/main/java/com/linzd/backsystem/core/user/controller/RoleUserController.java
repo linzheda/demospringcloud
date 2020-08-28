@@ -59,7 +59,9 @@ public class RoleUserController {
         return service.getUserListByCondition(condition);
     }
 
-    @ApiOperation(value = "修改RoleUser表")
+
+
+    @ApiOperation(value = "修改RoleUser表通过角色id")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleid", value = "角色id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
@@ -90,6 +92,59 @@ public class RoleUserController {
         return ResultUtil.success("角色用户分配成功",result);
     }
 
+
+
+    @ApiOperation(value = "获取这个用户下的角色列表(全部)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
+    })
+    @PostMapping(value = "/getRoleListByUserId")
+    public ResultUtil getRoleListByUserId(@RequestParam Map<String, Object> condition){
+        return service.getRoleListByUserId(condition);
+    }
+
+
+    @ApiOperation(value = "获取角色列表(分页)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
+    })
+    @PostMapping(value = "/getRoleListByCondition")
+    public ResultUtil getRoleListByCondition(@RequestParam Map<String, Object> condition){
+        return service.getRoleListByCondition(condition);
+    }
+
+
+
+    @ApiOperation(value = "修改RoleUser表通过用户id")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "用户id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
+            @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
+    })
+    @PostMapping(value = "/updateRoleUserByUserId")
+    public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+        //删除
+        if(!delArr.isEmpty()){
+            QueryWrapper<RoleUser> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("userid",userid);
+            queryWrapper.in("roleid",delArr);
+            service.remove(queryWrapper);
+        }
+        //新增
+        if(!addArr.isEmpty()){
+            List<RoleUser> addlist = new ArrayList<>();
+            for(Long roleid:addArr){
+                RoleUser ru=new RoleUser();
+                ru.setRoleid(roleid);
+                ru.setUserid(userid);
+                addlist.add(ru);
+            }
+            service.saveBatch(addlist);
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("isSuccess", true);
+        return ResultUtil.success("用户角色分配成功",result);
+    }
 
 
 }

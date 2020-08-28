@@ -33,7 +33,6 @@
             and u.tel like concat('%',#{tel},'%')
         </if>
     </select>
-
     <!--获取用户列表分页-->
     <select id="getUserListByCondition" resultType="java.util.Map">
         select distinct u.id,u.loginname,u.name,u.tel,o.name orgname
@@ -58,6 +57,51 @@
                  <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")" >
                      #{item}
                  </foreach>
+            </if>
+            <if test="condition.filter_userid!=null">
+                ru.userid not in
+                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!--获取某个用户下的所有角色-->
+    <select id="getRoleListByUserId" resultType="java.util.Map">
+        select distinct r.id,r.name,r.code,r.description
+        from role_user ru
+        left join role r on ru.roleid = r.id
+        where r.id is not null and  ru.userid=#{userid}
+        <if test="name!=null">
+            and r.name like concat('%',#{name},'%')
+        </if>
+        <if test="code!=null">
+            and r.code like concat('%',#{code},'%')
+        </if>
+        <if test="description!=null">
+            and r.description like concat('%',#{description},'%')
+        </if>
+    </select>
+    <!--获取角色列表分页-->
+    <select id="getRoleListByCondition" resultType="java.util.Map">
+         select distinct r.id,r.name,r.code,r.description
+         from role r
+         left join role_user ru on ru.roleid = r.id
+        <where>
+            <if test="condition.userid!=null">
+                ru.userid=#{userid}
+            </if>
+            <if test="condition.name!=null">
+                and r.name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.code!=null">
+                and r.code like concat('%',#{condition.code},'%')
+            </if>
+            <if test="condition.filter_roleid!=null">
+                ru.roleid not in
+                <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")" >
+                    #{item}
+                </foreach>
             </if>
             <if test="condition.filter_userid!=null">
                 ru.userid not in

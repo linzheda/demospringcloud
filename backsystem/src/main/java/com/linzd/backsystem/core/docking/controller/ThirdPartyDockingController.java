@@ -72,7 +72,7 @@ public class ThirdPartyDockingController {
     }
 
 
-    @ApiOperation(value = "删除岗位")
+    @ApiOperation(value = "删除应用")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "应用id", required = true, dataType = "Long")
     })

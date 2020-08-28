@@ -44,4 +44,22 @@ public interface RoleUserMapper extends BaseMapper<RoleUser> {
      * @created 2020/8/18 10:36
      **/
     IPage<Map> getUserListByCondition(Page<Map> page, Map<String, Object> condition);
+
+    /**
+     * 描述  获取这个用户下的角色列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/27 16:11
+     **/
+    List<Map> getRoleListByUserId(Map<String, Object> condition);
+
+    /**
+     * 描述  获取角色列表分页
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/27 16:16
+     **/
+    IPage<Map> getRoleListByCondition(Page<Map> page, Map<String, Object> condition);
 }

@@ -71,5 +71,36 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
         return ResultUtil.success(result);
     }
 
+    /**
+     * 描述  获取这个用户下的角色列表(全部)
+     *
+     * @param condition
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/27 16:03
+     */
+    @Override
+    public ResultUtil getRoleListByUserId(Map<String, Object> condition) {
+        List<Map> result = mapper.getRoleListByUserId(condition);
+        return ResultUtil.success(result);
+    }
+
+    /**
+     * 描述  获取角色列表(分页)
+     *
+     * @param condition
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/8/27 16:15
+     */
+    @Override
+    public ResultUtil getRoleListByCondition(Map<String, Object> condition) {
+        long current = Long.valueOf(condition.get("current").toString());
+        long size = Long.valueOf(condition.get("size").toString());
+        Page<Map> page = new Page<>(current, size);
+        IPage<Map> result = mapper.getRoleListByCondition(page, condition);
+        return ResultUtil.success(result);
+    }
+
 
 }
