@@ -26,8 +26,8 @@
             <if test="condition.tel!=null">
                 and t.tel like concat('%',#{condition.tel},'%')
             </if>
-            <if test="condition.tag!=null">
-                and t.tag like concat('%',#{condition.tag},'%')
+            <if test="condition.tag!=null and condition.tag!='' ">
+                and t.tag regexp replace(#{condition.tag},',','|')
             </if>
             <if test="condition.orgid!=null and condition.orgid!='' ">
                 and t.orgid in
@@ -40,11 +40,13 @@
     </select>
     <!--获取组织机构列表-->
     <select id="getOrganizationList" resultType="java.util.Map">
-        select t.*,(select count(*) from organization where pid=t.id ) children_cnt,
-        t2.name pid_text
+        select t.id, t.name, if(t.level=2,null,t.pid) pid, t.code, t.isn, t.status,
+        t.level, t.description, t.areacode, t.seq,
+        t.createby, t.createtime,t.updateby, t.updatetime,
+        (select count(*) from organization where pid = t.id) children_cnt, t2.name pid_text
         from organization t
-        left join organization t2 on t.pid=t2.id
-        where  t.level>1
+        left join organization t2 on t.pid = t2.id
+        where t.level > 1
         <if test="condition.pid!=null and pid!=''">
             and t.pid=#{condition.pid}
         </if>
@@ -64,7 +66,10 @@
     </select>
     <!--获取菜单列表-->
     <select id="getResourcesList" resultType="java.util.Map">
-        select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
+        select t.id,  if(t.level=2,null,t.pid) pid, t.name, t.type, t.route,
+        t.attr, t.level, t.isn, t.description,  t.css, t.premissions,
+        t.icon, t.status, t.seq, t.createby, t.createtime, t.updateby, t.updatetime ,
+        (select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
         t2.name pid_text
         from resources t
         left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2

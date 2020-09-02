@@ -44,7 +44,7 @@ public class Organization extends BaseEntity<Organization> {
     private String isn;
 
     @ApiModelProperty(value = "状态")
-    private String status;
+    private Integer status;
 
     @ApiModelProperty(value = "等级")
     private Integer level;

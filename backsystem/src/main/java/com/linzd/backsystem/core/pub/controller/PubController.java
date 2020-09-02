@@ -49,6 +49,7 @@ public class PubController {
         } else {
             queryWrapper.eq("level", 2);
         }
+        queryWrapper.orderByAsc("seq");
         List<Dictionary> result = new Dictionary().selectList(queryWrapper);
         return ResultUtil.success(result);
     }

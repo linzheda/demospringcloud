@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="Role对象", description="")
+@ApiModel(value="Role对象", description="Role对象")
 public class Role extends BaseEntity<Role> {
 
     private static final long serialVersionUID=1L;
@@ -39,6 +39,10 @@ public class Role extends BaseEntity<Role> {
 
     @ApiModelProperty(value = "角色描述")
     private String description;
+
+
+    @ApiModelProperty(value = "标签")
+    private String tag;
 
     @ApiModelProperty(value = "状态")
     private Integer status;

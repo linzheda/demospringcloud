@@ -7,7 +7,8 @@
 
     <!--查询角色列表-->
     <select id="getRoleList" resultType="java.util.Map">
-        select t.*,d.name as status_text
+        select t.*,d.name as status_text,
+        (select GROUP_CONCAT(name) from dictionary where dictkey='role_tag' and t.tag like concat('%',value,'%') and level=2 ) tag_text
         from role t
         left join dictionary d on t.status=d.value and d.dictkey='able_disable'
         <where>
@@ -20,7 +21,11 @@
             <if test="condition.code!=null">
                 and t.code like concat('%',#{condition.code},'%')
             </if>
+            <if test="condition.tag!=null and condition.tag!='' ">
+                and t.tag regexp replace(#{condition.tag},',','|')
+            </if>
         </where>
+        order by t.seq*1
     </select>
 
 </mapper>

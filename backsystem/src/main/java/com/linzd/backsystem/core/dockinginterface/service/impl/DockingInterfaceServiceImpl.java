@@ -207,8 +207,18 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         organization.setUpdateby(null);
         boolean isSuccess = organization.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
-        if (organization.getPid() == null && organization.getPid() == 0) {
-            return ResultUtil.error("请确认组织机构信息是否正确");
+        if (organization.getPid() == null || organization.getPid() == 0) {
+            //说明插入根节点 (应用级组织机构下)
+            QueryWrapper<Organization> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("isn", obj.get("org_isn"));
+            Organization p = new Organization().selectOne(queryWrapper);
+            if (!p.getIsn().contains(obj.get("org_isn").toString())) {
+                //如果不存在
+                return ResultUtil.error("请确认组织机构信息的父级id是否正确");
+            }
+            organization.setIsn(p.getIsn() + "." + organization.getId());
+            organization.setLevel(p.getLevel() + 1);
+            organization.setPid(p.getId());
         } else {
             //说明有父级
             Organization p = new Organization().selectById(organization.getPid());
@@ -219,6 +229,9 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             }
             organization.setIsn(p.getIsn() + "." + organization.getId());
             organization.setLevel(p.getLevel() + 1);
+        }
+        if(organization.getStatus()==null){
+            organization.setStatus(1);
         }
         organization.updateById();
         Map<String, Object> result = new HashMap<>();
@@ -273,8 +286,18 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         resources.setUpdateby(null);
         boolean isSuccess = resources.insertOrUpdate();
         msg += isSuccess ? "成功" : "失败";
-        if (resources.getPid() == null && resources.getPid() == 0) {
-            return ResultUtil.error("请确认菜单信息是否正确");
+        if (resources.getPid() == null || resources.getPid() == 0) {
+            //说明插入根节点 (应用级组织机构下)
+            QueryWrapper<Resources> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("isn", obj.get("resources_isn"));
+            Resources p = new Resources().selectOne(queryWrapper);
+            if (!p.getIsn().contains(obj.get("resources_isn").toString())) {
+                //如果不存在
+                return ResultUtil.error("请确认菜单信息的父级id是否正确");
+            }
+            resources.setIsn(p.getIsn() + "." + resources.getId());
+            resources.setLevel(p.getLevel() + 1);
+            resources.setPid(p.getId());
         } else {
             //说明有父级
             Resources p = new Resources().selectById(resources.getPid());
@@ -330,8 +353,14 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         if (tpd == null) {
             return ResultUtil.error("秘钥或标识错误");
         }
+        Gson g = new Gson();
+        Map obj = g.fromJson(tpd.getAttr(), Map.class);
         boolean isInsert = role.getId() != null ? false : true;
         String msg = isInsert ? "新增" : "编辑";
+        if (role.getTag() == null || !role.getTag().contains(obj.get("user_tag").toString())) {
+            String tag = (role.getTag() == null || role.getTag().isEmpty()) ? obj.get("user_tag").toString() : "," + obj.get("user_tag");
+            role.setTag(tag);
+        }
         role.setUpdatetime(null);
         role.setUpdateby(null);
         boolean isSuccess = role.insertOrUpdate();

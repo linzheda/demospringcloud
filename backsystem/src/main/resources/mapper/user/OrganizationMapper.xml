@@ -26,7 +26,7 @@
         <if test="filter_id!=null">
             and t.id not in (#{filter_id})
         </if>
-        order by t.level,t.seq
+        order by t.level,t.seq*1
     </select>
 
     <!--删除当前id和下级-->
