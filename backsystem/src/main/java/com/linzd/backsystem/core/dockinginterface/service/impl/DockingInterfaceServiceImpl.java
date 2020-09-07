@@ -65,11 +65,17 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             user = new User().selectOne(queryWrapper);
             String token = JwtTokenUtil.sign(user.getId());
             user.setToken(token);
+
         } catch (Exception e) {
             user = null;
         }
         if (user != null) {
-            return ResultUtil.success(user);
+            Gson gson=new Gson();
+            String json=gson.toJson(user);
+            Map<String,Object> verifyResult=JwtTokenUtil.verify(user.getToken());
+            Map<String,Object>result = gson.fromJson(json, Map.class);
+            result.put("tokenExpTime",verifyResult.get("exp"));
+            return ResultUtil.success(result);
         } else {
             return ResultUtil.error("用户名或密码错误..");
         }
@@ -385,6 +391,9 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         if (tpd == null) {
             return ResultUtil.error("秘钥或标识错误");
         }
+        Gson g = new Gson();
+        Map obj = g.fromJson(tpd.getAttr(), Map.class);
+        condition.put("isn", obj.get("resources_isn"));
         List<Map<String, Object>> result = mapper.getResourcesListByRoleId(condition);
         return ResultUtil.success(result);
     }
@@ -440,6 +449,9 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         if (tpd == null) {
             return ResultUtil.error("秘钥或标识错误");
         }
+        Gson g = new Gson();
+        Map obj = g.fromJson(tpd.getAttr(), Map.class);
+        condition.put("tag", obj.get("user_tag"));
         List<Map> result = mapper.getUserListByRoleId(condition);
         return ResultUtil.success(result);
     }
@@ -479,6 +491,61 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
         return ResultUtil.success("角色用户分配成功", result);
+    }
+
+    /**
+     * 描述  获取这个用户下的角色列表(全部)
+     *
+     * @param condition
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/3 15:01
+     */
+    @Override
+    public ResultUtil getRoleListByUserId(Map<String, Object> condition) {
+        ThirdPartyDocking tpd = checkClient();
+        if (tpd == null) {
+            return ResultUtil.error("秘钥或标识错误");
+        }
+        List<Map> result = mapper.getRoleListByUserId(condition);
+        return ResultUtil.success(result);
+    }
+
+    /**
+     * 描述  修改RoleUser表通过用户id
+     *
+     * @param userid
+     * @param addArr
+     * @param delArr
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/3 15:18
+     */
+    @Override
+    public ResultUtil updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr) {
+        ThirdPartyDocking tpd = checkClient();
+        if (tpd == null) {
+            return ResultUtil.error("秘钥或标识错误");
+        }
+        //删除
+        if(!delArr.isEmpty()){
+            QueryWrapper<RoleUser> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("userid",userid);
+            queryWrapper.in("roleid",delArr);
+            new RoleUser().delete(queryWrapper);
+        }
+        //新增
+        if(!addArr.isEmpty()){
+            for(Long roleid:addArr){
+                RoleUser ru=new RoleUser();
+                ru.setRoleid(roleid);
+                ru.setUserid(userid);
+                ru.insert();
+            }
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("isSuccess", true);
+        return ResultUtil.success("用户角色分配成功",result);
     }
 
 

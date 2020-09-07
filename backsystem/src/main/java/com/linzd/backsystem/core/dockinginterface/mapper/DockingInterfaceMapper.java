@@ -72,4 +72,13 @@ public interface DockingInterfaceMapper extends BaseMapper<DockingInterface> {
      * @created 2020/8/21 17:02
      **/
     List<Map> getUserListByRoleId(Map<String, Object> condition);
+
+    /**
+     * 描述  获取这个用户下的所有角色
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/3 15:07
+     **/
+    List<Map> getRoleListByUserId(Map<String, Object> condition);
 }

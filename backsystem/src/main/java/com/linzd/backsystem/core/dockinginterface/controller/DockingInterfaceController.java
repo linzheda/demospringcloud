@@ -15,7 +15,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -173,6 +176,27 @@ public class DockingInterfaceController {
     public ResultUtil updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleUserByRoleId( roleid,   addArr,  delArr);
 
+    }
+
+    @ApiOperation(value = "获取这个用户下的角色列表(全部)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
+    })
+    @PostMapping(value = "/getRoleListByUserId")
+    public ResultUtil getRoleListByUserId(@RequestParam Map<String, Object> condition){
+        return service.getRoleListByUserId(condition);
+    }
+
+
+    @ApiOperation(value = "修改RoleUser表通过用户id")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "用户id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
+            @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
+    })
+    @PostMapping(value = "/updateRoleUserByUserId")
+    public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+        return service.updateRoleUserByUserId( userid,   addArr,  delArr);
     }
 
 }

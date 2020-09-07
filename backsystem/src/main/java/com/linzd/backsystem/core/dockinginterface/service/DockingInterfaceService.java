@@ -146,4 +146,22 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @created 2020/8/21 17:04
      **/
     ResultUtil updateRoleUserByRoleId(Long roleid, List<Long> addArr, List<Long> delArr);
+
+    /**
+     * 描述  获取这个用户下的角色列表(全部)
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/3 15:01
+     **/
+    ResultUtil getRoleListByUserId(Map<String, Object> condition);
+
+    /**
+     * 描述  修改RoleUser表通过用户id
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/3 15:18
+     **/
+    ResultUtil updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr);
 }

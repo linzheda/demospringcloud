@@ -9,6 +9,9 @@
     <!--获取用户列表-->
     <select id="getUserList" resultType="java.util.Map">
         select t.*,t2.name as orgid_text,t3.name jobid_text,d.name sex_text,t2.code org_code
+        <if test="condition.needRole!=null ">
+            ,(select GROUP_CONCAT(roleid) from role_user where userid=t.id ) rolelist
+        </if>
         from user t
         left join organization t2 on t.orgid=t2.id
         left join job t3 on t.jobid=t3.id
@@ -128,6 +131,9 @@
             <if test="name!=null">
                 and t.name like concat('%',#{name},'%')
             </if>
+            <if test="isn!=null">
+                and t.isn like concat(#{isn},'%')
+            </if>
             <if test="filter_id!=null">
                 and t.id not in (#{filter_id})
             </if>
@@ -149,6 +155,26 @@
         <if test="tel!=null">
             and u.tel like concat('%',#{tel},'%')
         </if>
+        <if test="tag!=null and tag!='' ">
+            and u.tag regexp replace(#{condition.tag},',','|')
+        </if>
     </select>
+    <!--获取某个用户下的所有角色-->
+    <select id="getRoleListByUserId" resultType="java.util.Map">
+        select distinct r.id,r.name,r.code,r.description
+        from role_user ru
+        left join role r on ru.roleid = r.id
+        where r.id is not null and  ru.userid=#{userid}
+        <if test="name!=null">
+            and r.name like concat('%',#{name},'%')
+        </if>
+        <if test="code!=null">
+            and r.code like concat('%',#{code},'%')
+        </if>
+        <if test="description!=null">
+            and r.description like concat('%',#{description},'%')
+        </if>
+    </select>
+
 
 </mapper>

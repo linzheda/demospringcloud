@@ -13,8 +13,8 @@
         from user t
         left join organization t2 on t.orgid=t2.id
         left join job t3 on t.jobid=t3.id
-        left join dictionary d on t.sex=d.value and d.dictkey='sex'
-        left join dictionary d1 on t.status=d.value and d1.dictkey='able_disable'
+        left join dictionary d on t.sex=d.value and d.dictkey='sex' and d.level=2
+        left join dictionary d1 on t.status=d1.value and d1.dictkey='able_disable' and d1.level=2
         <where>
             <if test="condition.id!=null">
                 t.id=#{condition.id}
