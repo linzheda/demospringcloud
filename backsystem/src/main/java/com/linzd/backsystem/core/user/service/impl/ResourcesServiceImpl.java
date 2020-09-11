@@ -46,7 +46,7 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
         Gson gson=new Gson();
         for(Map item:menu){
             RouteTree temp=null;
-            if(item.get("route")!=null){
+            if(item.get("route")!=null&&!((String)item.get("route")).isEmpty()){
                 temp = gson.fromJson(item.get("route").toString(), RouteTree.class);
             }else{
                 temp=new RouteTree();

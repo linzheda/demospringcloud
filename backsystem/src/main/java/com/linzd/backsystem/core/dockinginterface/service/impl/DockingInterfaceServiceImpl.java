@@ -120,6 +120,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
         condition.put("tag", obj.get("user_tag"));
+        condition.put("resources_isn", obj.get("resources_isn"));
         long current = Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);

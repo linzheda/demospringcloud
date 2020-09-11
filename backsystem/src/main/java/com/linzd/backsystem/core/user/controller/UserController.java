@@ -2,8 +2,10 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.annotation.PassToken;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.core.user.service.RoleUserService;
@@ -32,7 +34,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-01-15
  */
-@Api(value = "用户控制层", tags = "用户控制层")
+@Api(value = "用户管理", tags = "用户控制层")
 @CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RestController
@@ -42,18 +44,6 @@ public class UserController {
     private UserService service;
     @Autowired
     private RoleUserService roleUserService;
-
-    @ApiOperation(value = "登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name", value = "登录名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String")
-    })
-    @PostMapping(value = "/login")
-    @PassToken
-    @Transactional(readOnly = true)
-    public ResultUtil login(String name, String password) {
-        return service.login(name, password);
-    }
 
     @ApiOperation(value = "修改密码")
     @ApiImplicitParams({
@@ -66,11 +56,24 @@ public class UserController {
         return service.updatePassword(id, oldPassword, newPassword);
     }
 
+    @ApiOperation(value = "用户登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "登录名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/login")
+    @PassToken
+    @OperLog(type = OperType.LOGIN)
+    public ResultUtil login(String name, String password) {
+        return service.login(name, password);
+    }
+
     @ApiOperation(value = "重置密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/resetPassword")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil resetPassword(Long id){
         //设置默认密码
         QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
@@ -98,6 +101,7 @@ public class UserController {
             @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "User")
     })
     @PostMapping(value = "/editUser")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editUser(User user) {
         boolean isInsert= user.getId() == null;
         String msg = isInsert ? "新增" : "编辑";
@@ -124,6 +128,7 @@ public class UserController {
             @ApiImplicitParam(name = "id", value = "用户", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delUser")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delUser(Long id){
         //删除用户
         boolean isSuccess=service.removeById(id);

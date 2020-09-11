@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.dictionary.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.dictionary.service.DictionaryService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -27,7 +29,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-05-27
  */
-@Api(value = "数据字典控制层", tags = "数据字典控制层")
+@Api(value = "数据字典管理", tags = "数据字典控制层")
 @RestController
 @Transactional(rollbackFor=Exception.class)
 @CheckToken
@@ -51,6 +53,7 @@ public class DictionaryController {
             @ApiImplicitParam(name = "dictionary", value = "字典", required = true, dataType = "Dictionary"),
     })
     @PostMapping(value = "/editDict")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editDict(Dictionary dictionary) {
         String msg =  dictionary.getId() != null  ? "编辑" : "新增";
         if(dictionary.getPid()==null){
@@ -71,6 +74,7 @@ public class DictionaryController {
             @ApiImplicitParam(name = "id", value = "字典id", required = true, dataType = "Long"),
     })
     @PostMapping(value = "/delDict")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delDict(Long id) {
         return dictionaryService.delDict(id);
     }

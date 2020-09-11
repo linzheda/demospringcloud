@@ -3,6 +3,8 @@ package com.linzd.backsystem.core.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.RoleResources;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -30,7 +32,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-03-20
  */
-@Api(value = "角色资源控制层", tags = "角色资源控制层")
+@Api(value = "角色资源管理", tags = "角色资源控制层")
 @Transactional(rollbackFor=Exception.class)
 @CheckToken
 @RestController
@@ -48,13 +50,14 @@ public class RoleResourcesController {
         return service.getResourcesListByRoleId(condition);
     }
 
-    @ApiOperation(value = "修改RoleResources表")
+    @ApiOperation(value = "分配菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleid", value = "角色id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的资源数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的资源数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleResourcesByRoleId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleResourcesByRoleId(Long roleid,@RequestParam("addArr") List<Long> addArr,@RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){

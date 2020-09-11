@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
 import com.linzd.backsystem.core.user.service.RoleService;
@@ -29,7 +31,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-03-20
  */
-@Api(value = "角色控制层", tags = "角色控制层")
+@Api(value = "角色管理", tags = "角色控制层")
 @Transactional(rollbackFor=Exception.class)
 @CheckToken
 @RestController
@@ -57,6 +59,7 @@ public class RoleController {
             @ApiImplicitParam(name = "role", value = "角色", required = true, dataType = "Role")
     })
     @PostMapping(value = "/editRole")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editRole(Role role){
         boolean isInsert=role.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
@@ -75,6 +78,7 @@ public class RoleController {
             @ApiImplicitParam(name = "id", value = "角色id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delRole")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delRole(Long id){
         //删除角色
         boolean isSuccess=service.removeById(id);

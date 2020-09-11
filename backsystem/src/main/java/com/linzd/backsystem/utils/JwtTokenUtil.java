@@ -72,5 +72,14 @@ public class JwtTokenUtil {
         }
     }
 
+    /**
+     *  根据token获取用户id
+     * @param **token**
+     * @return
+     */
+    public static Long getUserIdByToken(String token){
+        Map<String,Object> result=  verify(token);
+        return  result!=null?(Long)result.get("userId"):null;
+    }
 
 }

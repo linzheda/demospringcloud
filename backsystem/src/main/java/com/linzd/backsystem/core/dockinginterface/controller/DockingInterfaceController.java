@@ -2,7 +2,9 @@ package com.linzd.backsystem.core.dockinginterface.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.annotation.PassToken;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.dockinginterface.service.DockingInterfaceService;
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.entity.Resources;
@@ -32,7 +34,7 @@ import java.util.Map;
  * @since 2020-08-20
  */
 @RestController
-@Api(value = "对外接口表控制层", tags = "对外接口表控制层")
+@Api(value = "对外接口", tags = "对外接口表控制层")
 @CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("/dockinginterface/dockingInterface")
@@ -47,13 +49,15 @@ public class DockingInterfaceController {
     })
     @PassToken
     @PostMapping(value = "/getToken")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getToken(@RequestParam("name") String name, @RequestParam("password") String password) {
         return service.getToken(name,password);
     }
 
 
-    @ApiOperation(value = "获取token")
+    @ApiOperation(value = "根据token获取用户信息")
     @PostMapping(value = "/getUserInfoByToken")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getUserInfoByToken(){
         return service.getUserInfoByToken();
     }
@@ -63,6 +67,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserList")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getUserList(@RequestParam Map<String, Object> condition) {
         return service.getUserList(condition);
     }
@@ -73,6 +78,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "User")
     })
     @PostMapping(value = "/editUser")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editUser(User user) {
        return  service.editUser(user);
     }
@@ -82,6 +88,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getOrganizationList")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getOrganizationList(@RequestParam Map<String, Object> condition) {
         return service.getOrganizationList(condition);
     }
@@ -92,6 +99,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "organization", value = "组织机构", required = true, dataType = "Organization")
     })
     @PostMapping(value = "/editOrganization")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editOrganization(Organization organization) {
         return  service.editOrganization(organization);
 
@@ -103,6 +111,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesList")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getResourcesList(@RequestParam Map<String, Object> condition) {
         return service.getResourcesList(condition);
     }
@@ -112,6 +121,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "resources", value = "菜单", required = true, dataType = "Resources")
     })
     @PostMapping(value = "/editResources")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editResources(Resources resources) {
         return  service.editResources(resources);
     }
@@ -121,6 +131,7 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getRoleList")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getRoleList(@RequestParam Map<String, Object> condition) {
         return service.getRoleList(condition);
     }
@@ -131,70 +142,77 @@ public class DockingInterfaceController {
             @ApiImplicitParam(name = "role", value = "角色", required = true, dataType = "Role")
     })
     @PostMapping(value = "/editRole")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editRole(Role role){
         return  service.editRole(role);
 
     }
 
-    @ApiOperation(value = "获取资源列表根据角色id")
+    @ApiOperation(value = "根据角色id获取资源列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesListByRoleId")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getResourcesListByRoleId(@RequestParam Map<String,Object> condition) {
         return service.getResourcesListByRoleId(condition);
     }
 
-    @ApiOperation(value = "修改RoleResources表")
+    @ApiOperation(value = "分配角色菜单资源")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleid", value = "角色id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的资源数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的资源数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleResourcesByRoleId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleResourcesByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleResourcesByRoleId( roleid,   addArr,  delArr);
     }
 
 
-    @ApiOperation(value = "获取这个角色下的用户列表(全部)")
+    @ApiOperation(value = "获取这个角色下的(全部)用户列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserListByRoleId")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getUserListByRoleId(@RequestParam Map<String, Object> condition){
         return service.getUserListByRoleId(condition);
     }
 
-    @ApiOperation(value = "修改RoleUser表")
+    @ApiOperation(value = "根据角色分配角色用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleid", value = "角色id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleUserByRoleId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleUserByRoleId( roleid,   addArr,  delArr);
 
     }
 
-    @ApiOperation(value = "获取这个用户下的角色列表(全部)")
+    @ApiOperation(value = "获取这个用户下的(全部)角色列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getRoleListByUserId")
+    @OperLog(type = OperType.SELECT)
     public ResultUtil getRoleListByUserId(@RequestParam Map<String, Object> condition){
         return service.getRoleListByUserId(condition);
     }
 
 
-    @ApiOperation(value = "修改RoleUser表通过用户id")
+    @ApiOperation(value = "根据用户分配角色")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleUserByUserId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleUserByUserId( userid,   addArr,  delArr);
     }

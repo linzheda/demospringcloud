@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Job;
 import com.linzd.backsystem.core.user.service.JobService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -28,7 +30,7 @@ import java.util.Map;
  * @since 2020-08-18
  */
 @RestController
-@Api(value = "岗位控制层", tags = "岗位控制层")
+@Api(value = "岗位管理", tags = "岗位控制层")
 @CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("/user/job")
@@ -52,6 +54,7 @@ public class JobController {
             @ApiImplicitParam(name = "job", value = "岗位", required = true, dataType = "Job")
     })
     @PostMapping(value = "/editJob")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editJob(Job job) {
         boolean isInsert=job.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
@@ -71,6 +74,7 @@ public class JobController {
             @ApiImplicitParam(name = "id", value = "岗位id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delJob")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delJob(Long id){
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";

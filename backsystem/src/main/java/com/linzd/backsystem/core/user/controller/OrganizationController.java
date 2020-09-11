@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.service.OrganizationService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +29,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-07-25
  */
-@Api(value = "机构控制层", tags = "机构控制层")
+@Api(value = "组织机构管理", tags = "机构控制层")
 @RestController
 @Transactional(rollbackFor = Exception.class)
 @CheckToken
@@ -50,6 +53,7 @@ public class OrganizationController {
             @ApiImplicitParam(name = "organization", value = "组织机构", required = true, dataType = "Organization")
     })
     @PostMapping(value = "/editOrganization")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editOrganization(Organization organization) {
         String msg =  organization.getId() != null  ? "编辑" : "新增";
         organization.setUpdatetime(null);
@@ -80,6 +84,7 @@ public class OrganizationController {
             @ApiImplicitParam(name = "id", value = "机构id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delOrganization")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delOrganization(Long id) {
         return service.delOrganization(id);
     }

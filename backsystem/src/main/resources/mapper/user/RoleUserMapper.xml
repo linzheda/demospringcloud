@@ -3,9 +3,9 @@
 <mapper namespace="com.linzd.backsystem.core.user.mapper.RoleUserMapper">
 
     <!-- 开启二级缓存 -->
-<!--
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
--->
+    <!--
+        <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    -->
     <!--删除无效的关联数据-->
     <delete id="delRoleUserLink">
         delete
@@ -18,11 +18,12 @@
     </delete>
     <!--获取某个角色下的所以用户-->
     <select id="getUserListByRoleId" resultType="java.util.Map">
-        select u.id,u.loginname,u.name,u.tel,o.name orgname
+        select distinct u.id,u.loginname,u.name,u.tel,o.name orgname,
+        (select GROUP_CONCAT(name) from dictionary where dictkey='user_tag' and u.tag like concat('%',value,'%') and level=2 ) tag_text
         from role_user ru
         left join user u on ru.userid = u.id
         left join organization o on u.orgid = o.id
-        where u.id is not null and  ru.roleid=#{roleid}
+        where u.id is not null and ru.roleid=#{roleid}
         <if test="name!=null">
             and u.name like concat('%',#{name},'%')
         </if>
@@ -32,16 +33,23 @@
         <if test="tel!=null">
             and u.tel like concat('%',#{tel},'%')
         </if>
+        <if test="keyWord!=null">
+            and (u.name like concat('%',#{keyWord},'%') or u.loginname like
+            concat('%',#{keyWord},'%') )
+        </if>
+        <if test="tag!=null and tag!='' ">
+            and u.tag regexp replace(#{tag},',','|')
+        </if>
     </select>
     <!--获取用户列表分页-->
     <select id="getUserListByCondition" resultType="java.util.Map">
-        select distinct u.id,u.loginname,u.name,u.tel,o.name orgname
+        select distinct u.id,u.loginname,u.name,u.tel,o.name orgname,
+        (select GROUP_CONCAT(name) from dictionary where dictkey='user_tag' and u.tag like concat('%',value,'%') and level=2 ) tag_text
         from user u
-        left join role_user ru on ru.userid = u.id
         left join organization o on u.orgid = o.id
         <where>
             <if test="condition.roleid!=null">
-               ru.roleid=#{roleid}
+                ru.roleid=#{roleid}
             </if>
             <if test="condition.name!=null">
                 and u.name like concat('%',#{condition.name},'%')
@@ -49,34 +57,46 @@
             <if test="condition.loginname!=null">
                 and u.loginname like concat('%',#{condition.loginname},'%')
             </if>
+            <if test="condition.keyWord!=null">
+                and (u.name like concat('%',#{condition.keyWord},'%') or u.loginname like
+                concat('%',#{condition.keyWord},'%') )
+            </if>
+            <if test="condition.tag!=null and condition.tag!='' ">
+                and u.tag regexp replace(#{condition.tag},',','|')
+            </if>
             <if test="condition.tel!=null">
                 and u.tel like concat('%',#{condition.tel},'%')
             </if>
-            <if test="condition.filter_roleid!=null">
-                ru.roleid not in
-                 <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")" >
-                     #{item}
-                 </foreach>
-            </if>
             <if test="condition.filter_userid!=null">
-                ru.userid not in
-                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")" >
+                u.id not in
+                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
+            </if>
+            <if test="condition.filter_roleid!=null">
+                and u.id in ( select ru.userid from role_user ru where ru.roleid not in
+                <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
             </if>
         </where>
     </select>
     <!--获取某个用户下的所有角色-->
     <select id="getRoleListByUserId" resultType="java.util.Map">
-        select distinct r.id,r.name,r.code,r.description
+        select distinct r.id,r.name,r.code,r.description,
+        (select GROUP_CONCAT(name) from dictionary where dictkey='role_tag' and r.tag like concat('%',value,'%') and level=2 ) tag_text
         from role_user ru
         left join role r on ru.roleid = r.id
-        where r.id is not null and  ru.userid=#{userid}
+        where r.id is not null and ru.userid=#{userid}
         <if test="name!=null">
             and r.name like concat('%',#{name},'%')
         </if>
         <if test="code!=null">
             and r.code like concat('%',#{code},'%')
+        </if>
+        <if test="tag!=null and condition.tag!='' ">
+            and r.tag regexp replace(#{condition.tag},',','|')
         </if>
         <if test="description!=null">
             and r.description like concat('%',#{description},'%')
@@ -84,9 +104,10 @@
     </select>
     <!--获取角色列表分页-->
     <select id="getRoleListByCondition" resultType="java.util.Map">
-         select distinct r.id,r.name,r.code,r.description
-         from role r
-         left join role_user ru on ru.roleid = r.id
+        select distinct r.id,r.name,r.code,r.description,
+        (select GROUP_CONCAT(name) from dictionary where dictkey='role_tag' and r.tag like concat('%',value,'%') and level=2 ) tag_text
+        from role r
+        left join role_user ru on ru.roleid = r.id
         <where>
             <if test="condition.userid!=null">
                 ru.userid=#{userid}
@@ -97,15 +118,18 @@
             <if test="condition.code!=null">
                 and r.code like concat('%',#{condition.code},'%')
             </if>
+            <if test="condition.tag!=null and condition.tag!='' ">
+                and r.tag regexp replace(#{condition.tag},',','|')
+            </if>
             <if test="condition.filter_roleid!=null">
                 ru.roleid not in
-                <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")" >
+                <foreach collection="condition.filter_roleid" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
             <if test="condition.filter_userid!=null">
                 ru.userid not in
-                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")" >
+                <foreach collection="condition.filter_userid" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>

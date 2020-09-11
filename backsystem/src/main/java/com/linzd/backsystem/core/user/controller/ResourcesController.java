@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.user.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.service.ResourcesService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -27,7 +29,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-03-20
  */
-@Api(value = "权限菜单控制层", tags = "权限菜单控制层")
+@Api(value = "权限管理", tags = "权限菜单控制层")
 @RestController
 @Transactional(rollbackFor=Exception.class)
 @CheckToken
@@ -60,6 +62,7 @@ public class ResourcesController {
             @ApiImplicitParam(name = "resources", value = "菜单", required = true, dataType = "Resources")
     })
     @PostMapping(value = "/editResources")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editResources(Resources resources) {
         String msg =  resources.getId() != null  ? "编辑" : "新增";
         resources.setUpdatetime(null);
@@ -89,6 +92,7 @@ public class ResourcesController {
             @ApiImplicitParam(name = "id", value = "菜单", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delResources")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delResources(Long id) {
         return service.delResources(id);
     }

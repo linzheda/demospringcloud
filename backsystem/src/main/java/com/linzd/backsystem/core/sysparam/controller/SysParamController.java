@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.sysparam.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.sysparam.service.SysParamService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -27,7 +29,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-08-07
  */
-@Api(value = "系统参数控制层", tags = "系统参数控制层")
+@Api(value = "系统管理", tags = "系统参数控制层")
 @CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RestController
@@ -51,6 +53,7 @@ public class SysParamController {
             @ApiImplicitParam(name = "sysParam", value = "参数", required = true, dataType = "SysParam")
     })
     @PostMapping(value = "/editSysparam")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editSysparam(SysParam sysParam) {
         boolean isInsert=sysParam.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
@@ -70,6 +73,7 @@ public class SysParamController {
             @ApiImplicitParam(name = "id", value = "参数id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delSysparam")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delSysparam(Long id){
         //删除用户
         boolean isSuccess=service.removeById(id);

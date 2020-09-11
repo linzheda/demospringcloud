@@ -1,12 +1,13 @@
 package com.linzd.backsystem.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.linzd.backsystem.core.pub.service.PubService;
+import com.linzd.backsystem.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
@@ -19,11 +20,11 @@ import java.time.LocalDateTime;
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
     @Autowired
-    private PubService pubService;
+    private HttpServletRequest request;
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        Long userId=pubService.getUserIdByToken();
+        Long userId= JwtTokenUtil.getUserIdByToken(request.getHeader("Authorization"));;
         // 起始版本 3.3.0(推荐使用)
         this.strictInsertFill(metaObject, "createtime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "createby", Long.class, userId);
@@ -33,7 +34,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        Long userId=pubService.getUserIdByToken();
+        Long userId=JwtTokenUtil.getUserIdByToken(request.getHeader("Authorization"));;
         // 起始版本 3.3.0(推荐使用)
         this.strictUpdateFill(metaObject, "updatetime", LocalDateTime.class, LocalDateTime.now());
         this.strictUpdateFill(metaObject, "updateby", Long.class, userId);

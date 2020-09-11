@@ -10,7 +10,11 @@
     <select id="getUserList" resultType="java.util.Map">
         select t.*,t2.name as orgid_text,t3.name jobid_text,d.name sex_text,t2.code org_code
         <if test="condition.needRole!=null ">
-            ,(select GROUP_CONCAT(roleid) from role_user where userid=t.id ) rolelist
+            ,(select GROUP_CONCAT(roleid) from role_user where userid=t.id and
+              roleid in  (select roleid from role_resources rr
+            inner join resources r on rr.resid=r.id
+            where r.isn like concat('%',#{condition.resources_isn},'%') )
+              ) rolelist
         </if>
         from user t
         left join organization t2 on t.orgid=t2.id

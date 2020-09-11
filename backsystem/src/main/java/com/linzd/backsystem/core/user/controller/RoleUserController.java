@@ -3,6 +3,8 @@ package com.linzd.backsystem.core.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.RoleUser;
 import com.linzd.backsystem.core.user.service.RoleUserService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -30,7 +32,7 @@ import java.util.Map;
  * @author linzd
  * @since 2020-03-20
  */
-@Api(value = "角色用户控制层", tags = "角色用户控制层")
+@Api(value = "角色用户管理", tags = "角色用户控制层")
 @Transactional(rollbackFor=Exception.class)
 @CheckToken
 @RestController
@@ -61,13 +63,14 @@ public class RoleUserController {
 
 
 
-    @ApiOperation(value = "修改RoleUser表通过角色id")
+    @ApiOperation(value = "分配用户(根据角色)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleid", value = "角色id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleUserByRoleId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){
@@ -115,13 +118,14 @@ public class RoleUserController {
 
 
 
-    @ApiOperation(value = "修改RoleUser表通过用户id")
+    @ApiOperation(value = "分配角色(根据用户)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "addArr", value = "新增的用户数组", required = true, dataType = "List"),
             @ApiImplicitParam(name = "delArr", value = "要删除的用户数组", required = true, dataType = "List")
     })
     @PostMapping(value = "/updateRoleUserByUserId")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){

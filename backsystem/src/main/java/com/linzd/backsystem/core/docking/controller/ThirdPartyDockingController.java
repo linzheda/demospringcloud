@@ -2,6 +2,8 @@ package com.linzd.backsystem.core.docking.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.OperLog;
+import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.linzd.backsystem.core.docking.service.ThirdPartyDockingService;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -29,7 +31,7 @@ import java.util.UUID;
  * @since 2020-08-20
  */
 @RestController
-@Api(value = "第三方平台应用表 控制层", tags = "第三方平台应用表 控制层")
+@Api(value = "第三方应用管理", tags = "第三方平台应用表 控制层")
 @CheckToken
 @Transactional(rollbackFor = Exception.class)
 @RequestMapping("/docking/thirdPartyDocking")
@@ -53,6 +55,7 @@ public class ThirdPartyDockingController {
             @ApiImplicitParam(name = "entity", value = "应用", required = true, dataType = "ThirdPartyDocking")
     })
     @PostMapping(value = "/editThirdPartyDocking")
+    @OperLog(type = OperType.UPDATE)
     public ResultUtil editThirdPartyDocking(ThirdPartyDocking entity) {
         boolean isInsert=entity.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
@@ -77,6 +80,7 @@ public class ThirdPartyDockingController {
             @ApiImplicitParam(name = "id", value = "应用id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/delThirdPartyDocking")
+    @OperLog(type = OperType.DELETE)
     public ResultUtil delThirdPartyDocking(Long id){
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
