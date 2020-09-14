@@ -35,11 +35,24 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
      * @created 2020/9/11 16:42
      */
     @Override
-    public ResultUtil getOperLogList(Map<String, Object> condition) {
+    public ResultUtil getLogList(Map<String, Object> condition) {
         long current= Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
-        IPage<Map> result=mapper.getOperLogList(page,condition);
+        IPage<Map> result;
+        if("login".equals(condition.get("type"))){
+            result=mapper.getLoginLogList(page,condition);
+            //登录日志处理下 登录状态
+            for(Map<String,Object> record:result.getRecords() ){
+                if(((String)record.get("outresult")).contains("\"code\":200")){
+                    record.put("loginstatus", "登录成功");
+                }else{
+                    record.put("loginstatus", "登录失败");
+                }
+            }
+        }else{
+            result=mapper.getLogList(page,condition);
+        }
         return ResultUtil.success(result);
     }
 }

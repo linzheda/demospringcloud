@@ -38,13 +38,13 @@ public class SysLogController {
     @Autowired
     private SysLogService service;
 
-    @ApiOperation(value = "获取操作日志列表")
+    @ApiOperation(value = "获取日志分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
-    @PostMapping(value = "/getOperLogList")
-    public ResultUtil getOperLogList(@RequestParam Map<String, Object> condition) {
-        return service.getOperLogList(condition);
+    @PostMapping(value = "/getLogList")
+    public ResultUtil getLogList(@RequestParam Map<String, Object> condition) {
+        return service.getLogList(condition);
     }
 
 
@@ -61,14 +61,32 @@ public class SysLogController {
     }
 
 
-    @ApiOperation(value = "清空操作日志")
-    @PostMapping(value = "/cleanOperLog")
+    @ApiOperation(value = "清空日志")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "日志类型", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/cleanLog")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil cleanOperLog(){
+    public ResultUtil cleanLog(String type){
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.ne("opertype",5);
-        queryWrapper.isNull("client_id");
-        queryWrapper.isNull("errormsg");
+        switch (type){
+            case "oper":
+                queryWrapper.ne("opertype",5);
+                queryWrapper.isNull("client_id");
+                queryWrapper.isNull("errormsg");
+                break;
+            case "interface":
+                queryWrapper.isNotNull("client_id");
+                break;
+            case "login":
+                queryWrapper.eq("opertype", 5);
+                queryWrapper.isNull("client_id");
+                break;
+            case "error":
+                queryWrapper.isNotNull("errormsg");
+                break;
+            default:break;
+        }
         boolean isSuccess=service.remove(queryWrapper);
         String msg =isSuccess ? "数据成功清空" : "操作失败";
         return ResultUtil.success(msg,isSuccess);

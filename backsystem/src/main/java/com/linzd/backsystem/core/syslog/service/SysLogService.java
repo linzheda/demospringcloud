@@ -23,5 +23,5 @@ public interface SysLogService extends IService<SysLog> {
      * @params
      * @created 2020/9/11 16:42
      **/
-    ResultUtil getOperLogList(Map<String, Object> condition);
+    ResultUtil getLogList(Map<String, Object> condition);
 }

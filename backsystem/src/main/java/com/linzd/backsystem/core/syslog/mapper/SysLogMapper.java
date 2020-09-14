@@ -18,11 +18,20 @@ import java.util.Map;
 public interface SysLogMapper extends BaseMapper<SysLog> {
 
     /**
-     * 描述  获取操作日志分页列表
+     * 描述  获取日志分页列表
      *
      * @author Lorenzo Lin
      * @params
      * @created 2020/9/11 16:44
      **/
-    IPage<Map> getOperLogList(Page<Map> page, Map<String, Object> condition);
+    IPage<Map> getLogList(Page<Map> page, Map<String, Object> condition);
+
+    /**
+     * 描述  获取登录日志分页列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/14 11:54
+     **/
+    IPage<Map> getLoginLogList(Page<Map> page, Map<String, Object> condition);
 }
