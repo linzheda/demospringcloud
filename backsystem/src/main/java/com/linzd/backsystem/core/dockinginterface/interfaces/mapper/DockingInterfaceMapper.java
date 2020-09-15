@@ -1,10 +1,8 @@
-package com.linzd.backsystem.core.dockinginterface.mapper;
-
+package com.linzd.backsystem.core.dockinginterface.interfaces.mapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.linzd.backsystem.core.dockinginterface.entity.DockingInterface;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
+import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 import java.util.List;
 import java.util.Map;
 

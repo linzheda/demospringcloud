@@ -1,12 +1,12 @@
-package com.linzd.backsystem.core.dockinginterface.service;
+package com.linzd.backsystem.core.dockinginterface.interfaces.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.core.dockinginterface.entity.DockingInterface;
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 
 import java.util.List;
 import java.util.Map;

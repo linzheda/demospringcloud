@@ -34,4 +34,13 @@ public interface SysLogMapper extends BaseMapper<SysLog> {
      * @created 2020/9/14 11:54
      **/
     IPage<Map> getLoginLogList(Page<Map> page, Map<String, Object> condition);
+
+    /**
+     * 描述  获取日志时间列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/14 16:03
+     **/
+    IPage<Map> getLogTimeLine(Page<Map> page, Map<String, Object> condition);
 }

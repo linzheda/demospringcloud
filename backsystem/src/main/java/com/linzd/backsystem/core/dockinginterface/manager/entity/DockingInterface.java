@@ -1,4 +1,4 @@
-package com.linzd.backsystem.core.dockinginterface.entity;
+package com.linzd.backsystem.core.dockinginterface.manager.entity;
 
 import com.linzd.backsystem.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;

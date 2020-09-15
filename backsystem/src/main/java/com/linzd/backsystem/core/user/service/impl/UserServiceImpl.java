@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.core.user.mapper.UserMapper;
 import com.linzd.backsystem.core.user.service.UserService;
@@ -45,7 +46,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String md5Password = password;
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("loginname", name);
-        queryWrapper.eq("password", md5Password);
+        //查询超级密码
+        QueryWrapper<SysParam> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("code", "superPassword");
+        SysParam superPassword=new SysParam().selectOne(queryWrapper2);
+        String superPasswordText = superPassword.getValue();
+        if(!md5Password.equals(Encrypt.md5(superPasswordText))){
+            //说明不是超级密码
+            queryWrapper.eq("password", md5Password);
+        }
         User user = null;
         try {
             user = mapper.selectOne(queryWrapper);

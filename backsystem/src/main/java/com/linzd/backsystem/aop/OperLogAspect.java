@@ -1,9 +1,6 @@
 package com.linzd.backsystem.aop;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.entity.SysLog;
 import com.linzd.backsystem.common.enums.OperStatus;
@@ -27,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -166,21 +164,18 @@ public class OperLogAspect {
      */
     private void setRequestValue(SysLog operLog) throws Exception {
         Map<String, String[]> map =request.getParameterMap();
+        Map<String, String[]> map1 =new HashMap<>();
         if (!map.isEmpty()) {
-            Gson gson=new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-                @Override
-                public boolean shouldSkipField(FieldAttributes f) {
-                    //过滤掉字段
-                    return Arrays.asList(EXCLUDE_PROPERTIES).contains(f.getName());
+            //遍历排查需要过滤的字段
+            for (String key : map.keySet()) {
+                if(Arrays.asList(EXCLUDE_PROPERTIES).contains(key)){
+                    map1.put(key, null);
+                }else{
+                    map1.put(key, map.get(key));
                 }
-
-                @Override
-                public boolean shouldSkipClass(Class<?> aClass) {
-                    return false;
-                }
-            }).create();
-
-            String params = gson.toJson(map);
+            }
+            Gson  gson=new Gson();
+            String params = gson.toJson(map1);
             operLog.setReqparam(params);
         }
     }

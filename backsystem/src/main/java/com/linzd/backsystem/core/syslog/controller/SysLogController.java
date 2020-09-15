@@ -92,5 +92,13 @@ public class SysLogController {
         return ResultUtil.success(msg,isSuccess);
     }
 
+    @ApiOperation(value = "获取日志时间线")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
+    })
+    @PostMapping(value = "/getLogTimeLine")
+    public ResultUtil getLogTimeLine(@RequestParam Map<String, Object> condition) {
+        return service.getLogTimeLine(condition);
+    }
 }
 

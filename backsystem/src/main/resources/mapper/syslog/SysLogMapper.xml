@@ -43,7 +43,7 @@
             <if test="condition.errormsg!=null and condition.errormsg!='' ">
                 and t.errormsg like concat('%',#{condition.errormsg},'%')
             </if>
-            <if test="condition.opertime!=null ">
+            <if test="condition.opertime!=null and condition.opertime!='' ">
                 and t.createtime between
                 <foreach collection="condition.opertime.split(',')" separator=" and " index="index"
                          item="item">
@@ -78,6 +78,43 @@
                 #{item}
             </foreach>
         </if>
+        order by t.createtime desc
+    </select>
+
+    <!--获取日志时间列表-->
+    <select id="getLogTimeLine" resultType="java.util.Map">
+        select t.*, d.name opertype_text, u.loginname loginname, u.name operatorid_text, d1.name status_text,
+        tpd.name client_id_text
+        from sys_log t
+        left join third_party_docking tpd on tpd.client_id=t.client_id
+        left join user u on (t.opertype = 5 and t.reqparam like concat('%"name":["', u.loginname, '"]%'))
+        or (t.opertype != 5 and t.operatorid = u.id)
+        left join dictionary d on t.opertype = d.value and d.dictkey = 'oper_type' and d.level = 2
+        left join dictionary d1 on t.status = d1.value and d1.dictkey = 'oper_status' and d1.level = 2
+        <where>
+            <if test="condition.operator!=null ">
+                 u.name like concat('%',#{condition.operator},'%')
+            </if>
+            <if test="condition.loginname!=null ">
+                and u.loginname like concat('%',#{condition.loginname},'%')
+            </if>
+            <if test="condition.userid!=null ">
+                and u.id =#{condition.userid}
+            </if>
+            <if test="condition.client_id!=null ">
+                and t.client_id =#{condition.client_id}
+            </if>
+            <if test="condition.loginstatus!=null ">
+                and t.outresult like concat('%"code":',#{condition.loginstatus},',%')
+            </if>
+            <if test="condition.opertime!=null ">
+                and t.createtime between
+                <foreach collection="condition.opertime.split(',')" separator=" and " index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
         order by t.createtime desc
     </select>
 

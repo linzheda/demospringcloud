@@ -1,11 +1,11 @@
-package com.linzd.backsystem.core.dockinginterface.controller;
+package com.linzd.backsystem.core.dockinginterface.interfaces.controller;
 
 
 import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.common.enums.OperType;
-import com.linzd.backsystem.core.dockinginterface.service.DockingInterfaceService;
+import com.linzd.backsystem.core.dockinginterface.interfaces.service.DockingInterfaceService;
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.entity.Role;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +39,7 @@ import java.util.Map;
 @RequestMapping("/dockinginterface/dockingInterface")
 public class DockingInterfaceController {
     @Autowired
-    private DockingInterfaceService  service;
+    private DockingInterfaceService service;
 
     @ApiOperation(value = "获取token")
     @ApiImplicitParams({

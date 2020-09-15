@@ -24,4 +24,13 @@ public interface SysLogService extends IService<SysLog> {
      * @created 2020/9/11 16:42
      **/
     ResultUtil getLogList(Map<String, Object> condition);
+
+    /**
+     * 描述  获取日志时间线
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/14 16:00
+     **/
+    ResultUtil getLogTimeLine(Map<String, Object> condition);
 }

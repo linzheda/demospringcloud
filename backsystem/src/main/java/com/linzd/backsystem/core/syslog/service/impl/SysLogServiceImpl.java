@@ -55,4 +55,21 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         }
         return ResultUtil.success(result);
     }
+
+    /**
+     * 描述  获取日志时间线
+     *
+     * @param condition
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/14 16:00
+     */
+    @Override
+    public ResultUtil getLogTimeLine(Map<String, Object> condition) {
+        long current= Long.valueOf(condition.get("current").toString());
+        long size = Long.valueOf(condition.get("size").toString());
+        Page<Map> page = new Page<>(current,size);
+        IPage<Map> result= mapper.getLogTimeLine(page,condition);;
+        return ResultUtil.success(result);
+    }
 }

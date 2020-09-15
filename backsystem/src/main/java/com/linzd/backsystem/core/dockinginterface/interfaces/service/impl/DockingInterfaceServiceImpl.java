@@ -1,4 +1,4 @@
-package com.linzd.backsystem.core.dockinginterface.service.impl;
+package com.linzd.backsystem.core.dockinginterface.interfaces.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -6,9 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
-import com.linzd.backsystem.core.dockinginterface.entity.DockingInterface;
-import com.linzd.backsystem.core.dockinginterface.mapper.DockingInterfaceMapper;
-import com.linzd.backsystem.core.dockinginterface.service.DockingInterfaceService;
+import com.linzd.backsystem.core.dockinginterface.interfaces.mapper.DockingInterfaceMapper;
+import com.linzd.backsystem.core.dockinginterface.interfaces.service.DockingInterfaceService;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.*;
 import com.linzd.backsystem.utils.Encrypt;
@@ -17,6 +16,7 @@ import com.linzd.backsystem.utils.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
