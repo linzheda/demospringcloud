@@ -1,10 +1,11 @@
 package com.linzd.backsystem.core.pub.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.CheckToken;
+import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.pub.service.PubService;
+import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.utils.JwtTokenUtil;
 import com.linzd.backsystem.utils.ResultUtil;
@@ -51,6 +52,21 @@ public class PubController {
         }
         queryWrapper.orderByAsc("seq");
         List<Dictionary> result = new Dictionary().selectList(queryWrapper);
+        return ResultUtil.success(result);
+    }
+
+
+    @ApiOperation(value = "获取系统参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code", value = "参数编码", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/getSysParam")
+    @PassToken
+    public ResultUtil getSysParam(String code) {
+        QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("code", code);
+        queryWrapper.orderByAsc("seq");
+        List<SysParam> result = new SysParam().selectList(queryWrapper);
         return ResultUtil.success(result);
     }
 
