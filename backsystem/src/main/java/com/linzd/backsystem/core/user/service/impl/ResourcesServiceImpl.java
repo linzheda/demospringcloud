@@ -7,8 +7,8 @@ import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.mapper.ResourcesMapper;
 import com.linzd.backsystem.core.user.service.ResourcesService;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
-import com.linzd.backsystem.utils.ResultUtil;
-import com.linzd.backsystem.utils.TreeUtils;
+import com.linzd.backsystem.common.entity.ResultPojo;
+import com.linzd.backsystem.utils.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      * @created 2020/3/23 11:24
      **/
     @Override
-    public ResultUtil getResourcesByUserId(Map<String,Object> condition) {
+    public ResultPojo getResourcesByUserId(Map<String,Object> condition) {
         List<Map<String,Object>> menu=resourcesMapper.getResourcesByUserId(condition);
         List<RouteTree> route = new ArrayList<>();
         Gson gson=new Gson();
@@ -62,9 +62,9 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
             }
             route.add(temp);
         }
-        TreeUtils tu=new TreeUtils();
+        TreeUtil tu=new TreeUtil();
         List<RouteTree> tree= tu.toRouteTree(route,Long.valueOf(condition.get("pid").toString()));
-        return ResultUtil.success(tree);
+        return ResultPojo.success(tree);
     }
 
     /**
@@ -75,11 +75,11 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      * @created 2020/5/26 11:52
      **/
     @Override
-    public ResultUtil getResourcesByPid(Map<String,Object> condition) {
+    public ResultPojo getResourcesByPid(Map<String,Object> condition) {
         List<Map<String,Object>> resources = resourcesMapper.getResourcesByPid(condition);
-        TreeUtils tu=new TreeUtils();
+        TreeUtil tu=new TreeUtil();
         List<Map<String,Object>> tree=tu.toMapTree(resources,null);
-        return ResultUtil.success(tree);
+        return ResultPojo.success(tree);
     }
 
 
@@ -91,12 +91,12 @@ public class ResourcesServiceImpl extends ServiceImpl<ResourcesMapper, Resources
      * @created 2020/7/16 16:48
      **/
     @Override
-    public ResultUtil delResources(Long id) {
+    public ResultPojo delResources(Long id) {
         //删除资源
         int result= resourcesMapper.delResources(id);
         String msg = result >0 ? "删除成功" : "删除失败";
         //删除角色资源的关联数据
         roleResourcesService.delRoleResourcesLink();
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 }

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.linzd.backsystem.core.user.entity.RoleUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface RoleUserService extends IService<RoleUser> {
      * @params
      * @created 2020/8/12 10:49
      **/
-    ResultUtil delRoleUserLink();
+    ResultPojo delRoleUserLink();
 
 
     /**
@@ -33,7 +33,7 @@ public interface RoleUserService extends IService<RoleUser> {
      * @params
      * @created 2020/8/17 16:48
      **/
-    ResultUtil getUserListByRoleId(Map<String, Object> condition);
+    ResultPojo getUserListByRoleId(Map<String, Object> condition);
 
 
     /**
@@ -43,7 +43,7 @@ public interface RoleUserService extends IService<RoleUser> {
      * @params
      * @created 2020/8/18 10:35
      **/
-    ResultUtil getUserListByCondition(Map<String, Object> condition);
+    ResultPojo getUserListByCondition(Map<String, Object> condition);
 
     /**
      * 描述  获取这个用户下的角色列表(全部)
@@ -52,7 +52,7 @@ public interface RoleUserService extends IService<RoleUser> {
      * @params
      * @created 2020/8/27 16:03
      **/
-    ResultUtil getRoleListByUserId(Map<String, Object> condition);
+    ResultPojo getRoleListByUserId(Map<String, Object> condition);
     
     
     /**
@@ -62,5 +62,5 @@ public interface RoleUserService extends IService<RoleUser> {
      * @params
      * @created 2020/8/27 16:15
      **/
-    ResultUtil getRoleListByCondition(Map<String, Object> condition);
+    ResultPojo getRoleListByCondition(Map<String, Object> condition);
 }

@@ -6,7 +6,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.dictionary.service.DictionaryService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -44,7 +44,7 @@ public class DictionaryController {
             @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getDictsByPid")
-    public ResultUtil getDictsByPid(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getDictsByPid(@RequestParam Map<String, Object> condition) {
         return dictionaryService.getDictsByPid(condition);
     }
 
@@ -54,7 +54,7 @@ public class DictionaryController {
     })
     @PostMapping(value = "/editDict")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editDict(Dictionary dictionary) {
+    public ResultPojo editDict(Dictionary dictionary) {
         String msg =  dictionary.getId() != null  ? "编辑" : "新增";
         if(dictionary.getPid()==null){
             dictionary.setPid(0L);
@@ -65,7 +65,7 @@ public class DictionaryController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", dictionary.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
 
@@ -75,7 +75,7 @@ public class DictionaryController {
     })
     @PostMapping(value = "/delDict")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delDict(Long id) {
+    public ResultPojo delDict(Long id) {
         return dictionaryService.delDict(id);
     }
 }

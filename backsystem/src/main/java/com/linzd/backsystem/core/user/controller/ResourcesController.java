@@ -6,7 +6,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.service.ResourcesService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,7 +43,7 @@ public class ResourcesController {
             @ApiImplicitParam(name = "condition", value = "用户userid和pid", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesByUserId")
-    public ResultUtil getResourcesByUserId(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getResourcesByUserId(@RequestParam Map<String, Object> condition) {
         return service.getResourcesByUserId(condition);
     }
 
@@ -52,7 +52,7 @@ public class ResourcesController {
             @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesByPid")
-    public ResultUtil getResourcesByPid(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getResourcesByPid(@RequestParam Map<String, Object> condition) {
         return service.getResourcesByPid(condition);
     }
 
@@ -63,7 +63,7 @@ public class ResourcesController {
     })
     @PostMapping(value = "/editResources")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editResources(Resources resources) {
+    public ResultPojo editResources(Resources resources) {
         String msg =  resources.getId() != null  ? "编辑" : "新增";
         resources.setUpdatetime(null);
         resources.setUpdateby(null);
@@ -84,7 +84,7 @@ public class ResourcesController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", resources.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     @ApiOperation(value = "删除菜单")
@@ -93,7 +93,7 @@ public class ResourcesController {
     })
     @PostMapping(value = "/delResources")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delResources(Long id) {
+    public ResultPojo delResources(Long id) {
         return service.delResources(id);
     }
 

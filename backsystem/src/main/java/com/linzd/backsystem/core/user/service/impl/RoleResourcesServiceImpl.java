@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.user.entity.RoleResources;
 import com.linzd.backsystem.core.user.mapper.RoleResourcesMapper;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +32,9 @@ public class RoleResourcesServiceImpl extends ServiceImpl<RoleResourcesMapper, R
      * @created 2020/8/12 10:24
      **/
     @Override
-    public ResultUtil delRoleResourcesLink() {
+    public ResultPojo delRoleResourcesLink() {
         int result= mapper.delRoleResourcesLink();
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -45,8 +45,8 @@ public class RoleResourcesServiceImpl extends ServiceImpl<RoleResourcesMapper, R
      * @created 2020/8/14 18:55
      **/
     @Override
-    public ResultUtil getResourcesListByRoleId(Map<String, Object> condition) {
+    public ResultPojo getResourcesListByRoleId(Map<String, Object> condition) {
         List<Map<String,Object>> result = mapper.getResourcesListByRoleId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 }

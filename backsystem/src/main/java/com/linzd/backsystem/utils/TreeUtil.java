@@ -11,7 +11,7 @@ import java.util.*;
  * @author Lorenzo Lin
  * @created 2020年03月23日 14:34
  */
-public class TreeUtils<T> {
+public class TreeUtil<T> {
 
     /**
      * 描述  生成普通树

@@ -7,7 +7,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.RoleUser;
 import com.linzd.backsystem.core.user.service.RoleUserService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -48,7 +48,7 @@ public class RoleUserController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserListByRoleId")
-    public ResultUtil getUserListByRoleId(@RequestParam Map<String, Object> condition){
+    public ResultPojo getUserListByRoleId(@RequestParam Map<String, Object> condition){
         return service.getUserListByRoleId(condition);
     }
 
@@ -57,7 +57,7 @@ public class RoleUserController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserListByCondition")
-    public ResultUtil getUserListByCondition(@RequestParam Map<String, Object> condition){
+    public ResultPojo getUserListByCondition(@RequestParam Map<String, Object> condition){
         return service.getUserListByCondition(condition);
     }
 
@@ -71,7 +71,7 @@ public class RoleUserController {
     })
     @PostMapping(value = "/updateRoleUserByRoleId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){
             QueryWrapper<RoleUser> queryWrapper = new QueryWrapper<>();
@@ -92,7 +92,7 @@ public class RoleUserController {
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("角色用户分配成功",result);
+        return ResultPojo.success("角色用户分配成功",result);
     }
 
 
@@ -102,7 +102,7 @@ public class RoleUserController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getRoleListByUserId")
-    public ResultUtil getRoleListByUserId(@RequestParam Map<String, Object> condition){
+    public ResultPojo getRoleListByUserId(@RequestParam Map<String, Object> condition){
         return service.getRoleListByUserId(condition);
     }
 
@@ -112,7 +112,7 @@ public class RoleUserController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getRoleListByCondition")
-    public ResultUtil getRoleListByCondition(@RequestParam Map<String, Object> condition){
+    public ResultPojo getRoleListByCondition(@RequestParam Map<String, Object> condition){
         return service.getRoleListByCondition(condition);
     }
 
@@ -126,7 +126,7 @@ public class RoleUserController {
     })
     @PostMapping(value = "/updateRoleUserByUserId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){
             QueryWrapper<RoleUser> queryWrapper = new QueryWrapper<>();
@@ -147,7 +147,7 @@ public class RoleUserController {
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("用户角色分配成功",result);
+        return ResultPojo.success("用户角色分配成功",result);
     }
 
 

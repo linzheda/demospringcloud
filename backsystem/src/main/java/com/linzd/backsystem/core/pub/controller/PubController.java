@@ -8,7 +8,7 @@ import com.linzd.backsystem.core.pub.service.PubService;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.utils.JwtTokenUtil;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,7 +42,7 @@ public class PubController {
     })
     @PostMapping(value = "/getDict")
     @PassToken
-    public ResultUtil getDict(String key, Integer level) {
+    public ResultPojo getDict(String key, Integer level) {
         QueryWrapper<Dictionary> queryWrapper = new QueryWrapper<Dictionary>();
         queryWrapper.eq("dictkey", key);
         if (level != null) {
@@ -52,7 +52,7 @@ public class PubController {
         }
         queryWrapper.orderByAsc("seq");
         List<Dictionary> result = new Dictionary().selectList(queryWrapper);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
 
@@ -62,12 +62,12 @@ public class PubController {
     })
     @PostMapping(value = "/getSysParam")
     @PassToken
-    public ResultUtil getSysParam(String code) {
+    public ResultPojo getSysParam(String code) {
         QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("code", code);
         queryWrapper.orderByAsc("seq");
         List<SysParam> result = new SysParam().selectList(queryWrapper);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
 
@@ -77,13 +77,13 @@ public class PubController {
     })
     @PostMapping(value = "/getUserInfoByToken")
     @PassToken
-    public ResultUtil getUserInfoByToken(String token) {
+    public ResultPojo getUserInfoByToken(String token) {
         Map<String, Object> verifyResult = JwtTokenUtil.verify(token);
         Long userId = (long) verifyResult.get("userId");
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
         queryWrapper.eq("id", userId);
         User user = new User().selectOne(queryWrapper);
-        return ResultUtil.success(user);
+        return ResultPojo.success(user);
     }
 
 

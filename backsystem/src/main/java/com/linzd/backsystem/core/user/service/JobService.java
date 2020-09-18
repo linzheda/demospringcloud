@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.linzd.backsystem.core.user.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,5 +23,5 @@ public interface JobService extends IService<Job> {
      * @params
      * @created 2020/8/18 21:44
      **/
-    ResultUtil getJobList(Map<String, Object> condition);
+    ResultPojo getJobList(Map<String, Object> condition);
 }

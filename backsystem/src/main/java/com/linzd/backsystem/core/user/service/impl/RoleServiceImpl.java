@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.mapper.RoleMapper;
 import com.linzd.backsystem.core.user.service.RoleService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +34,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * @created 2020/8/11 15:58
      **/
     @Override
-    public ResultUtil getRoleList(Map<String,Object> condition) {
+    public ResultPojo getRoleList(Map<String,Object> condition) {
         long current= Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
         IPage<Map> result = mapper.getRoleList(page,condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 }

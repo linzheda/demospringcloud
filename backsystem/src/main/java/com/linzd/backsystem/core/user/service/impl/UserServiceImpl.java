@@ -8,9 +8,9 @@ import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.core.user.mapper.UserMapper;
 import com.linzd.backsystem.core.user.service.UserService;
-import com.linzd.backsystem.utils.Encrypt;
+import com.linzd.backsystem.utils.EncryptUtil;
 import com.linzd.backsystem.utils.JwtTokenUtil;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +39,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @created 2020/1/15 20:53
      **/
     @Override
-    public ResultUtil login(String name, String password) {
+    public ResultPojo login(String name, String password) {
         if (StringUtils.isBlank(name) || StringUtils.isBlank(password)) {
-            return ResultUtil.error("用户名或密码不允许为空");
+            return ResultPojo.error("用户名或密码不允许为空");
         }
         String md5Password = password;
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -51,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper2.eq("code", "superPassword");
         SysParam superPassword=new SysParam().selectOne(queryWrapper2);
         String superPasswordText = superPassword.getValue();
-        if(!md5Password.equals(Encrypt.md5(superPasswordText))){
+        if(!md5Password.equals(EncryptUtil.md5(superPasswordText))){
             //说明不是超级密码
             queryWrapper.eq("password", md5Password);
         }
@@ -65,12 +65,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         if (user != null) {
             if(user.getStatus()==1){
-                return ResultUtil.success(user);
+                return ResultPojo.success(user);
             }else{
-                return ResultUtil.error("账户被冻结,请联系管理员..");
+                return ResultPojo.error("账户被冻结,请联系管理员..");
             }
         } else {
-            return ResultUtil.error("用户名或密码错误..");
+            return ResultPojo.error("用户名或密码错误..");
         }
 
     }
@@ -83,9 +83,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @created 2020/4/10 17:02
      **/
     @Override
-    public ResultUtil updatePassword(Long id, String oldPassword, String newPassword) {
+    public ResultPojo updatePassword(Long id, String oldPassword, String newPassword) {
         User user = mapper.selectById(id);
-        String oldPwdMd5 = Encrypt.md5(oldPassword);
+        String oldPwdMd5 = EncryptUtil.md5(oldPassword);
         boolean isSuccess=false;
         String msg="";
         if (!user.getPassword().equals(oldPwdMd5)) {
@@ -93,14 +93,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             msg="原密码错误";
         }else{
             isSuccess=true;
-            String newPwdMd5 = Encrypt.md5(newPassword);
+            String newPwdMd5 = EncryptUtil.md5(newPassword);
             user.setPassword(newPwdMd5);
             user.updateById();
             isSuccess=true;
             msg="修改密码成功,请重新登录";
         }
 
-        return ResultUtil.success(msg, isSuccess);
+        return ResultPojo.success(msg, isSuccess);
     }
 
     /**
@@ -111,11 +111,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @created 2020/7/25 18:08
      **/
     @Override
-    public ResultUtil getUserList(Map<String, Object> condition) {
+    public ResultPojo getUserList(Map<String, Object> condition) {
         long current= Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
         IPage<Map> result=mapper.getUserList(page,condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 }

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.docking.service;
 
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,5 +23,5 @@ public interface ThirdPartyDockingService extends IService<ThirdPartyDocking> {
      * @params
      * @created 2020/8/20 18:53
      **/
-    ResultUtil getThirdPartyDockingList(Map<String, Object> condition);
+    ResultPojo getThirdPartyDockingList(Map<String, Object> condition);
 }

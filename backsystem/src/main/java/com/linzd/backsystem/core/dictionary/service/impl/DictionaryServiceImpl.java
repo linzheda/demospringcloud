@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.linzd.backsystem.core.dictionary.mapper.DictionaryMapper;
 import com.linzd.backsystem.core.dictionary.service.DictionaryService;
-import com.linzd.backsystem.utils.ResultUtil;
-import com.linzd.backsystem.utils.TreeUtils;
+import com.linzd.backsystem.common.entity.ResultPojo;
+import com.linzd.backsystem.utils.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +34,11 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Diction
      * @created 2020/7/16 16:48
      **/
     @Override
-    public ResultUtil getDictsByPid(Map<String, Object> condition) {
+    public ResultPojo getDictsByPid(Map<String, Object> condition) {
         List<Map<String,Object>> resources = mapper.getDictsByPid(condition);
-        TreeUtils tu=new TreeUtils();
+        TreeUtil tu=new TreeUtil();
         List<Map<String,Object>> tree=tu.toMapTree(resources,null);
-        return ResultUtil.success(tree);
+        return ResultPojo.success(tree);
     }
 
     /**
@@ -49,9 +49,9 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Diction
      * @created 2020/7/16 16:48
      **/
     @Override
-    public ResultUtil delDict(Long id) {
+    public ResultPojo delDict(Long id) {
         int result= mapper.delDict(id);
         String msg = result >0 ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 }

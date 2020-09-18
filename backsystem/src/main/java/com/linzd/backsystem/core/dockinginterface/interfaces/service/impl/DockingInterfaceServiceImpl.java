@@ -10,9 +10,9 @@ import com.linzd.backsystem.core.dockinginterface.interfaces.mapper.DockingInter
 import com.linzd.backsystem.core.dockinginterface.interfaces.service.DockingInterfaceService;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.*;
-import com.linzd.backsystem.utils.Encrypt;
+import com.linzd.backsystem.utils.EncryptUtil;
 import com.linzd.backsystem.utils.JwtTokenUtil;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +49,13 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 10:39
      */
     @Override
-    public ResultUtil getToken(String name, String password) {
+    public ResultPojo getToken(String name, String password) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         if (StringUtils.isBlank(name) || StringUtils.isBlank(password)) {
-            return ResultUtil.error("用户名或密码不允许为空");
+            return ResultPojo.error("用户名或密码不允许为空");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("loginname", name);
@@ -75,9 +75,9 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             Map<String,Object> verifyResult=JwtTokenUtil.verify(user.getToken());
             Map<String,Object>result = gson.fromJson(json, Map.class);
             result.put("tokenExpTime",verifyResult.get("exp"));
-            return ResultUtil.success(result);
+            return ResultPojo.success(result);
         } else {
-            return ResultUtil.error("用户名或密码错误..");
+            return ResultPojo.error("用户名或密码错误..");
         }
     }
 
@@ -89,10 +89,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 11:38
      **/
     @Override
-    public ResultUtil getUserInfoByToken() {
+    public ResultPojo getUserInfoByToken() {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         String token = request.getHeader("Authorization");
         Map<String, Object> verifyResult = JwtTokenUtil.verify(token);
@@ -100,7 +100,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
         queryWrapper.eq("id", userId);
         User user = new User().selectOne(queryWrapper);
-        return ResultUtil.success(user);
+        return ResultPojo.success(user);
     }
 
     /**
@@ -112,10 +112,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 11:42
      */
     @Override
-    public ResultUtil getUserList(Map<String, Object> condition) {
+    public ResultPojo getUserList(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -125,7 +125,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getUserList(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -137,10 +137,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 14:40
      */
     @Override
-    public ResultUtil editUser(User user) {
+    public ResultPojo editUser(User user) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         boolean isInsert = user.getId() != null ? false : true;
         String msg = isInsert ? "新增" : "编辑";
@@ -149,7 +149,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("code", "password");
             SysParam defaultPassword = new SysParam().selectOne(queryWrapper);
-            String md5Password = Encrypt.md5(defaultPassword.getValue());
+            String md5Password = EncryptUtil.md5(defaultPassword.getValue());
             user.setPassword(md5Password);
         }
         Gson g = new Gson();
@@ -165,7 +165,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", user.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     /**
@@ -177,10 +177,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 15:09
      */
     @Override
-    public ResultUtil getOrganizationList(Map<String, Object> condition) {
+    public ResultPojo getOrganizationList(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -189,7 +189,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getOrganizationList(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -201,10 +201,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 15:40
      */
     @Override
-    public ResultUtil editOrganization(Organization organization) {
+    public ResultPojo editOrganization(Organization organization) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -221,7 +221,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             Organization p = new Organization().selectOne(queryWrapper);
             if (!p.getIsn().contains(obj.get("org_isn").toString())) {
                 //如果不存在
-                return ResultUtil.error("请确认组织机构信息的父级id是否正确");
+                return ResultPojo.error("请确认组织机构信息的父级id是否正确");
             }
             organization.setIsn(p.getIsn() + "." + organization.getId());
             organization.setLevel(p.getLevel() + 1);
@@ -232,7 +232,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
 
             if (!p.getIsn().contains(obj.get("org_isn").toString())) {
                 //如果不存在
-                return ResultUtil.error("请确认组织机构信息的父级id是否正确");
+                return ResultPojo.error("请确认组织机构信息的父级id是否正确");
             }
             organization.setIsn(p.getIsn() + "." + organization.getId());
             organization.setLevel(p.getLevel() + 1);
@@ -244,7 +244,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", organization.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     /**
@@ -256,10 +256,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 15:57
      */
     @Override
-    public ResultUtil getResourcesList(Map<String, Object> condition) {
+    public ResultPojo getResourcesList(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -268,7 +268,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getResourcesList(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -280,10 +280,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 16:17
      */
     @Override
-    public ResultUtil editResources(Resources resources) {
+    public ResultPojo editResources(Resources resources) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -300,7 +300,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             Resources p = new Resources().selectOne(queryWrapper);
             if (!p.getIsn().contains(obj.get("resources_isn").toString())) {
                 //如果不存在
-                return ResultUtil.error("请确认菜单信息的父级id是否正确");
+                return ResultPojo.error("请确认菜单信息的父级id是否正确");
             }
             resources.setIsn(p.getIsn() + "." + resources.getId());
             resources.setLevel(p.getLevel() + 1);
@@ -310,7 +310,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
             Resources p = new Resources().selectById(resources.getPid());
             if (!p.getIsn().contains(obj.get("resources_isn").toString())) {
                 //如果不存在
-                return ResultUtil.error("请确认菜单信息的父级id是否正确");
+                return ResultPojo.error("请确认菜单信息的父级id是否正确");
             }
             resources.setIsn(p.getIsn() + "." + resources.getId());
             resources.setLevel(p.getLevel() + 1);
@@ -319,7 +319,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", resources.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     /**
@@ -331,10 +331,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 16:24
      */
     @Override
-    public ResultUtil getRoleList(Map<String, Object> condition) {
+    public ResultPojo getRoleList(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -343,7 +343,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getRoleList(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -355,10 +355,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 16:44
      */
     @Override
-    public ResultUtil editRole(Role role) {
+    public ResultPojo editRole(Role role) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
@@ -375,7 +375,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", role.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     /**
@@ -387,16 +387,16 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 16:47
      */
     @Override
-    public ResultUtil getResourcesListByRoleId(Map<String, Object> condition) {
+    public ResultPojo getResourcesListByRoleId(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
         condition.put("isn", obj.get("resources_isn"));
         List<Map<String, Object>> result = mapper.getResourcesListByRoleId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -410,10 +410,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 16:56
      */
     @Override
-    public ResultUtil updateRoleResourcesByRoleId(Long roleid, List<Long> addArr, List<Long> delArr) {
+    public ResultPojo updateRoleResourcesByRoleId(Long roleid, List<Long> addArr, List<Long> delArr) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         //删除
         if (!delArr.isEmpty()) {
@@ -433,7 +433,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("资源菜单分配成功", result);
+        return ResultPojo.success("资源菜单分配成功", result);
     }
 
     /**
@@ -445,16 +445,16 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 17:01
      */
     @Override
-    public ResultUtil getUserListByRoleId(Map<String, Object> condition) {
+    public ResultPojo getUserListByRoleId(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         Gson g = new Gson();
         Map obj = g.fromJson(tpd.getAttr(), Map.class);
         condition.put("tag", obj.get("user_tag"));
         List<Map> result = mapper.getUserListByRoleId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -468,10 +468,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/8/21 17:04
      */
     @Override
-    public ResultUtil updateRoleUserByRoleId(Long roleid, List<Long> addArr, List<Long> delArr) {
+    public ResultPojo updateRoleUserByRoleId(Long roleid, List<Long> addArr, List<Long> delArr) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         //删除
         if (!delArr.isEmpty()) {
@@ -491,7 +491,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("角色用户分配成功", result);
+        return ResultPojo.success("角色用户分配成功", result);
     }
 
     /**
@@ -503,13 +503,13 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/9/3 15:01
      */
     @Override
-    public ResultUtil getRoleListByUserId(Map<String, Object> condition) {
+    public ResultPojo getRoleListByUserId(Map<String, Object> condition) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         List<Map> result = mapper.getRoleListByUserId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -523,10 +523,10 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
      * @created 2020/9/3 15:18
      */
     @Override
-    public ResultUtil updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr) {
+    public ResultPojo updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr) {
         ThirdPartyDocking tpd = checkClient();
         if (tpd == null) {
-            return ResultUtil.error("秘钥或标识错误");
+            return ResultPojo.error("秘钥或标识错误");
         }
         //删除
         if(!delArr.isEmpty()){
@@ -546,7 +546,7 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("用户角色分配成功",result);
+        return ResultPojo.success("用户角色分配成功",result);
     }
 
 

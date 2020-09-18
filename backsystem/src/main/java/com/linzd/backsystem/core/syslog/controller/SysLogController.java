@@ -6,7 +6,7 @@ import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.syslog.service.SysLogService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,7 +43,7 @@ public class SysLogController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getLogList")
-    public ResultUtil getLogList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getLogList(@RequestParam Map<String, Object> condition) {
         return service.getLogList(condition);
     }
 
@@ -54,10 +54,10 @@ public class SysLogController {
     })
     @PostMapping(value = "/delLog")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delLog(Long id){
+    public ResultPojo delLog(Long id){
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 
@@ -67,7 +67,7 @@ public class SysLogController {
     })
     @PostMapping(value = "/cleanLog")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil cleanLog(String type){
+    public ResultPojo cleanLog(String type){
         QueryWrapper queryWrapper = new QueryWrapper();
         switch (type){
             case "oper":
@@ -89,7 +89,7 @@ public class SysLogController {
         }
         boolean isSuccess=service.remove(queryWrapper);
         String msg =isSuccess ? "数据成功清空" : "操作失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
     @ApiOperation(value = "获取日志时间线")
@@ -97,7 +97,7 @@ public class SysLogController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getLogTimeLine")
-    public ResultUtil getLogTimeLine(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getLogTimeLine(@RequestParam Map<String, Object> condition) {
         return service.getLogTimeLine(condition);
     }
 }

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.linzd.backsystem.core.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface UserService extends IService<User> {
      * @params
      * @created 2020/1/15 20:51
      **/
-    ResultUtil login(String name, String password);
+    ResultPojo login(String name, String password);
 
     /**
      * 描述  修改面膜
@@ -32,7 +32,7 @@ public interface UserService extends IService<User> {
      * @params
      * @created 2020/7/25 18:07
      **/
-    ResultUtil updatePassword(Long id, String oldPassword, String newPassword);
+    ResultPojo updatePassword(Long id, String oldPassword, String newPassword);
 
     /**
      * 描述  获取用户列表
@@ -41,5 +41,5 @@ public interface UserService extends IService<User> {
      * @params
      * @created 2020/7/25 18:07
      **/
-    ResultUtil getUserList(Map<String, Object> condition);
+    ResultPojo getUserList(Map<String, Object> condition);
 }

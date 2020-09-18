@@ -8,7 +8,7 @@ import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
 import com.linzd.backsystem.core.user.service.RoleService;
 import com.linzd.backsystem.core.user.service.RoleUserService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,7 +50,7 @@ public class RoleController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getRoleList")
-    public ResultUtil getRoleList(@RequestParam Map<String,Object> condition) {
+    public ResultPojo getRoleList(@RequestParam Map<String,Object> condition) {
         return service.getRoleList(condition);
     }
 
@@ -60,7 +60,7 @@ public class RoleController {
     })
     @PostMapping(value = "/editRole")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editRole(Role role){
+    public ResultPojo editRole(Role role){
         boolean isInsert=role.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
         role.setUpdatetime(null);
@@ -70,7 +70,7 @@ public class RoleController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", role.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     @ApiOperation(value = "删除角色")
@@ -79,7 +79,7 @@ public class RoleController {
     })
     @PostMapping(value = "/delRole")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delRole(Long id){
+    public ResultPojo delRole(Long id){
         //删除角色
         boolean isSuccess=service.removeById(id);
         //删除角色资源关联表
@@ -87,7 +87,7 @@ public class RoleController {
         //删除角色用户关联表
         roleUserService.delRoleUserLink();
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 }

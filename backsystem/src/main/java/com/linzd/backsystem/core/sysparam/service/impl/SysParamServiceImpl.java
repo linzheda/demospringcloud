@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.sysparam.mapper.SysParamMapper;
 import com.linzd.backsystem.core.sysparam.service.SysParamService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +36,11 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParam> i
      * @created 2020/8/18 20:08
      */
     @Override
-    public ResultUtil getSysParamList(Map<String, Object> condition) {
+    public ResultPojo getSysParamList(Map<String, Object> condition) {
         long current= Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
         IPage<Map> result=mapper.getSysParamList(page,condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.user.entity.RoleUser;
 import com.linzd.backsystem.core.user.mapper.RoleUserMapper;
 import com.linzd.backsystem.core.user.service.RoleUserService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +35,9 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
      * @created 2020/8/12 10:49
      **/
     @Override
-    public ResultUtil delRoleUserLink() {
+    public ResultPojo delRoleUserLink() {
         int result = mapper.delRoleUserLink();
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -49,9 +49,9 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
      * @created 2020/8/17 16:48
      */
     @Override
-    public ResultUtil getUserListByRoleId(Map<String, Object> condition) {
+    public ResultPojo getUserListByRoleId(Map<String, Object> condition) {
         List<Map> result = mapper.getUserListByRoleId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -63,12 +63,12 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
      * @created 2020/8/18 10:35
      */
     @Override
-    public ResultUtil getUserListByCondition(Map<String, Object> condition) {
+    public ResultPojo getUserListByCondition(Map<String, Object> condition) {
         long current = Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getUserListByCondition(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -80,9 +80,9 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
      * @created 2020/8/27 16:03
      */
     @Override
-    public ResultUtil getRoleListByUserId(Map<String, Object> condition) {
+    public ResultPojo getRoleListByUserId(Map<String, Object> condition) {
         List<Map> result = mapper.getRoleListByUserId(condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**
@@ -94,12 +94,12 @@ public class RoleUserServiceImpl extends ServiceImpl<RoleUserMapper, RoleUser> i
      * @created 2020/8/27 16:15
      */
     @Override
-    public ResultUtil getRoleListByCondition(Map<String, Object> condition) {
+    public ResultPojo getRoleListByCondition(Map<String, Object> condition) {
         long current = Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current, size);
         IPage<Map> result = mapper.getRoleListByCondition(page, condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
 

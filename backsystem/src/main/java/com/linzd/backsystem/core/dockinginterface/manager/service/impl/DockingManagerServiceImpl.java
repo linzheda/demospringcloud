@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 import com.linzd.backsystem.core.dockinginterface.manager.mapper.DockingManagerMapper;
 import com.linzd.backsystem.core.dockinginterface.manager.service.DockingManagerService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +48,7 @@ public class DockingManagerServiceImpl extends ServiceImpl<DockingManagerMapper,
      * @created 2020/9/16 9:53
      */
     @Override
-    public ResultUtil getInterfaceUrl() {
+    public ResultPojo getInterfaceUrl() {
         //获取所有的url
         List<Map<String, String>> allUrl = getAllUrl();
         //过滤出对外的url
@@ -67,7 +67,7 @@ public class DockingManagerServiceImpl extends ServiceImpl<DockingManagerMapper,
             String url = i.getUrl();
             dockingUrl.removeIf(m -> url.equals(m.get("url")));
         }
-        return ResultUtil.success(dockingUrl);
+        return ResultPojo.success(dockingUrl);
     }
 
     /**
@@ -79,7 +79,7 @@ public class DockingManagerServiceImpl extends ServiceImpl<DockingManagerMapper,
      * @created 2020/9/16 10:15
      */
     @Override
-    public ResultUtil getInterfaceList(Map<String, Object> condition) {
+    public ResultPojo getInterfaceList(Map<String, Object> condition) {
         long current = Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         IPage<Map<String, Object>> page = new Page<>(current, size);
@@ -95,7 +95,7 @@ public class DockingManagerServiceImpl extends ServiceImpl<DockingManagerMapper,
         for(Map<String, Object> map:result.getRecords()){
             map.put("status_text", ((int) map.get("status")) == 1 ? "启用" : "禁用");
         }
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
 

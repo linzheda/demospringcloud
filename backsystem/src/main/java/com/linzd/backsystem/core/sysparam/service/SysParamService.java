@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.sysparam.service;
 
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,5 +23,5 @@ public interface SysParamService extends IService<SysParam> {
      * @params
      * @created 2020/8/18 20:08
      **/
-    ResultUtil getSysParamList(Map<String, Object> condition);
+    ResultPojo getSysParamList(Map<String, Object> condition);
 }

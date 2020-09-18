@@ -7,7 +7,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 import com.linzd.backsystem.core.dockinginterface.manager.service.DockingManagerService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,7 +42,7 @@ public class DockingManagerController {
 
     @ApiOperation(value = "获取未入库的接口")
     @PostMapping(value = "/getInterfaceUrl")
-    public ResultUtil getInterfaceUrl() {
+    public ResultPojo getInterfaceUrl() {
         return service.getInterfaceUrl();
     }
 
@@ -51,7 +51,7 @@ public class DockingManagerController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getInterfaceList")
-    public ResultUtil getInterfaceList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getInterfaceList(@RequestParam Map<String, Object> condition) {
         return service.getInterfaceList(condition);
     }
 
@@ -61,12 +61,12 @@ public class DockingManagerController {
     })
     @PostMapping(value = "/addInterfaceList")
     @OperLog(type = OperType.INSERT)
-    public ResultUtil addInterfaceList(@RequestParam  String list) {
+    public ResultPojo addInterfaceList(@RequestParam  String list) {
         Gson gson=new Gson();
         List<DockingInterface> list1 = gson.fromJson(list,new TypeToken<ArrayList<DockingInterface>>() {}.getType());
         boolean isSuccess = service.saveBatch(list1);
         String msg = isSuccess ? "新增成功" : "新增失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
     @ApiOperation(value = "删除接口")
@@ -75,10 +75,10 @@ public class DockingManagerController {
     })
     @PostMapping(value = "/delInterface")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delInterface(Long id){
+    public ResultPojo delInterface(Long id){
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 
@@ -88,7 +88,7 @@ public class DockingManagerController {
     })
     @PostMapping(value = "/editInterface")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editInterface(DockingInterface entity) {
+    public ResultPojo editInterface(DockingInterface entity) {
         boolean isInsert= entity.getId() == null;
         String msg = isInsert ? "新增" : "编辑";
         entity.setUpdateby(null);
@@ -98,7 +98,7 @@ public class DockingManagerController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", entity.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
 

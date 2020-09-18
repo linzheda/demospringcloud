@@ -6,12 +6,14 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.sysparam.service.SysParamService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +46,8 @@ public class SysParamController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getSysParamList")
-    public ResultUtil getSysParamList(@RequestParam Map<String, Object> condition) {
+    @Cacheable(value = "sysparam")
+    public ResultPojo getSysParamList(@RequestParam Map<String, Object> condition) {
         return service.getSysParamList(condition);
     }
 
@@ -54,7 +57,8 @@ public class SysParamController {
     })
     @PostMapping(value = "/editSysparam")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editSysparam(SysParam sysParam) {
+    @CacheEvict(cacheNames="sysparam", allEntries=true)
+    public ResultPojo editSysparam(SysParam sysParam) {
         boolean isInsert=sysParam.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
         sysParam.setUpdateby(null);
@@ -64,7 +68,7 @@ public class SysParamController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", sysParam.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
 
@@ -74,11 +78,12 @@ public class SysParamController {
     })
     @PostMapping(value = "/delSysparam")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delSysparam(Long id){
+    @CacheEvict(cacheNames="sysparam", allEntries=true)
+    public ResultPojo delSysparam(Long id){
         //删除用户
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 

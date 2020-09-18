@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.linzd.backsystem.core.user.entity.Role;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,5 +23,5 @@ public interface RoleService extends IService<Role> {
      * @params
      * @created 2020/8/11 15:57
      **/
-    ResultUtil getRoleList(Map<String,Object> condition);
+    ResultPojo getRoleList(Map<String,Object> condition);
 }

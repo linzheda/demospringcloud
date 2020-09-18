@@ -6,7 +6,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.linzd.backsystem.core.docking.service.ThirdPartyDockingService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -46,7 +46,7 @@ public class ThirdPartyDockingController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getThirdPartyDockingList")
-    public ResultUtil getThirdPartyDockingList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getThirdPartyDockingList(@RequestParam Map<String, Object> condition) {
         return service.getThirdPartyDockingList(condition);
     }
 
@@ -56,7 +56,7 @@ public class ThirdPartyDockingController {
     })
     @PostMapping(value = "/editThirdPartyDocking")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editThirdPartyDocking(ThirdPartyDocking entity) {
+    public ResultPojo editThirdPartyDocking(ThirdPartyDocking entity) {
         boolean isInsert=entity.getId() != null ? false:true;
         String msg = isInsert ? "新增" : "编辑";
         entity.setUpdateby(null);
@@ -71,7 +71,7 @@ public class ThirdPartyDockingController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", entity.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
 
@@ -81,10 +81,10 @@ public class ThirdPartyDockingController {
     })
     @PostMapping(value = "/delThirdPartyDocking")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delThirdPartyDocking(Long id){
+    public ResultPojo delThirdPartyDocking(Long id){
         boolean isSuccess=service.removeById(id);
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 }

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.dictionary.service;
 
 import com.linzd.backsystem.core.dictionary.entity.Dictionary;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface DictionaryService extends IService<Dictionary> {
      * @params
      * @created 2020/7/15 16:38
      **/
-    ResultUtil getDictsByPid(Map<String, Object> condition);
+    ResultPojo getDictsByPid(Map<String, Object> condition);
 
     /**
      * 描述  删除字典和下级
@@ -31,5 +31,5 @@ public interface DictionaryService extends IService<Dictionary> {
      * @params
      * @created 2020/7/16 16:27
      **/
-    ResultUtil delDict(Long id);
+    ResultPojo delDict(Long id);
 }

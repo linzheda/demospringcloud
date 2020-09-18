@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface ResourcesService extends IService<Resources> {
      * @params
      * @created 2020/3/23 11:14
      **/
-    ResultUtil getResourcesByUserId(Map<String,Object> condition);
+    ResultPojo getResourcesByUserId(Map<String,Object> condition);
 
     
     /**
@@ -33,7 +33,7 @@ public interface ResourcesService extends IService<Resources> {
      * @params
      * @created 2020/5/26 11:53
      **/
-    ResultUtil getResourcesByPid(Map<String,Object> condition);
+    ResultPojo getResourcesByPid(Map<String,Object> condition);
 
     /**
      * 描述  删除资源和下级
@@ -42,5 +42,5 @@ public interface ResourcesService extends IService<Resources> {
      * @params
      * @created 2020/7/16 16:47
      **/
-    ResultUtil delResources(Long id);
+    ResultPojo delResources(Long id);
 }

@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.user.service;
 
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface OrganizationService extends IService<Organization> {
      * @params
      * @created 2020/7/25 15:13
      **/
-    ResultUtil getOrganizationByPid(Map<String, Object> condition);
+    ResultPojo getOrganizationByPid(Map<String, Object> condition);
     
     /**
      * 描述  删除组织机构和下级
@@ -32,5 +32,5 @@ public interface OrganizationService extends IService<Organization> {
      * @params  
      * @created 2020/8/19 19:53
      **/
-    ResultUtil delOrganization(Long id);
+    ResultPojo delOrganization(Long id);
 }

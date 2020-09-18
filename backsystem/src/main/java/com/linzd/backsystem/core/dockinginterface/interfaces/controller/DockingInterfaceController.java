@@ -10,7 +10,7 @@ import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.entity.User;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -49,7 +49,7 @@ public class DockingInterfaceController {
     @PassToken
     @PostMapping(value = "/getToken")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getToken(@RequestParam("name") String name, @RequestParam("password") String password) {
+    public ResultPojo getToken(@RequestParam("name") String name, @RequestParam("password") String password) {
         return service.getToken(name,password);
     }
 
@@ -57,7 +57,7 @@ public class DockingInterfaceController {
     @ApiOperation(value = "根据token获取用户信息")
     @PostMapping(value = "/getUserInfoByToken")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getUserInfoByToken(){
+    public ResultPojo getUserInfoByToken(){
         return service.getUserInfoByToken();
     }
 
@@ -67,7 +67,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getUserList")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getUserList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getUserList(@RequestParam Map<String, Object> condition) {
         return service.getUserList(condition);
     }
 
@@ -78,7 +78,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/editUser")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editUser(User user) {
+    public ResultPojo editUser(User user) {
        return  service.editUser(user);
     }
 
@@ -88,7 +88,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getOrganizationList")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getOrganizationList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getOrganizationList(@RequestParam Map<String, Object> condition) {
         return service.getOrganizationList(condition);
     }
 
@@ -99,7 +99,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/editOrganization")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editOrganization(Organization organization) {
+    public ResultPojo editOrganization(Organization organization) {
         return  service.editOrganization(organization);
 
     }
@@ -111,7 +111,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getResourcesList")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getResourcesList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getResourcesList(@RequestParam Map<String, Object> condition) {
         return service.getResourcesList(condition);
     }
 
@@ -121,7 +121,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/editResources")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editResources(Resources resources) {
+    public ResultPojo editResources(Resources resources) {
         return  service.editResources(resources);
     }
 
@@ -131,7 +131,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getRoleList")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getRoleList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getRoleList(@RequestParam Map<String, Object> condition) {
         return service.getRoleList(condition);
     }
 
@@ -142,7 +142,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/editRole")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editRole(Role role){
+    public ResultPojo editRole(Role role){
         return  service.editRole(role);
 
     }
@@ -153,7 +153,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getResourcesListByRoleId")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getResourcesListByRoleId(@RequestParam Map<String,Object> condition) {
+    public ResultPojo getResourcesListByRoleId(@RequestParam Map<String,Object> condition) {
         return service.getResourcesListByRoleId(condition);
     }
 
@@ -165,7 +165,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/updateRoleResourcesByRoleId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleResourcesByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleResourcesByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleResourcesByRoleId( roleid,   addArr,  delArr);
     }
 
@@ -176,7 +176,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getUserListByRoleId")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getUserListByRoleId(@RequestParam Map<String, Object> condition){
+    public ResultPojo getUserListByRoleId(@RequestParam Map<String, Object> condition){
         return service.getUserListByRoleId(condition);
     }
 
@@ -188,7 +188,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/updateRoleUserByRoleId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleUserByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleUserByRoleId( roleid,   addArr,  delArr);
 
     }
@@ -199,7 +199,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/getRoleListByUserId")
     @OperLog(type = OperType.SELECT)
-    public ResultUtil getRoleListByUserId(@RequestParam Map<String, Object> condition){
+    public ResultPojo getRoleListByUserId(@RequestParam Map<String, Object> condition){
         return service.getRoleListByUserId(condition);
     }
 
@@ -212,7 +212,7 @@ public class DockingInterfaceController {
     })
     @PostMapping(value = "/updateRoleUserByUserId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleUserByUserId(Long userid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         return service.updateRoleUserByUserId( userid,   addArr,  delArr);
     }
 

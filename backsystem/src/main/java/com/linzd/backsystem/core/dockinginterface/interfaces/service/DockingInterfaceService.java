@@ -5,7 +5,7 @@ import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.entity.Resources;
 import com.linzd.backsystem.core.user.entity.Role;
 import com.linzd.backsystem.core.user.entity.User;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 10:39
      **/
-    ResultUtil getToken(String name, String password);
+    ResultPojo getToken(String name, String password);
 
     /**
      * 描述  根据token获取用户信息
@@ -37,7 +37,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 11:38
      **/
-    ResultUtil getUserInfoByToken();
+    ResultPojo getUserInfoByToken();
 
     /**
      * 描述  获取用户列表
@@ -46,7 +46,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 11:42
      **/
-    ResultUtil getUserList(Map<String, Object> condition);
+    ResultPojo getUserList(Map<String, Object> condition);
 
     /**
      * 描述  编辑用户
@@ -55,7 +55,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 14:40
      **/
-    ResultUtil editUser(User user);
+    ResultPojo editUser(User user);
 
     /**
      * 描述  获取组织机构列表
@@ -64,7 +64,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 15:09
      **/
-    ResultUtil getOrganizationList(Map<String, Object> condition);
+    ResultPojo getOrganizationList(Map<String, Object> condition);
 
     /**
      * 描述  编辑组织机构
@@ -73,7 +73,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 15:40
      **/
-    ResultUtil editOrganization(Organization organization);
+    ResultPojo editOrganization(Organization organization);
 
     /**
      * 描述  获取菜单列表
@@ -82,7 +82,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 15:57
      **/
-    ResultUtil getResourcesList(Map<String, Object> condition);
+    ResultPojo getResourcesList(Map<String, Object> condition);
 
     /**
      * 描述  编辑菜单
@@ -91,7 +91,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 16:17
      **/
-    ResultUtil editResources(Resources resources);
+    ResultPojo editResources(Resources resources);
 
     /**
      * 描述  获取角色列表
@@ -100,7 +100,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 16:24
      **/
-    ResultUtil getRoleList(Map<String, Object> condition);
+    ResultPojo getRoleList(Map<String, Object> condition);
 
     /**
      * 描述  编辑角色
@@ -109,7 +109,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 16:44
      **/
-    ResultUtil editRole(Role role);
+    ResultPojo editRole(Role role);
 
     /**
      * 描述  获取资源列表根据角色id
@@ -118,7 +118,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 16:47
      **/
-    ResultUtil getResourcesListByRoleId(Map<String, Object> condition);
+    ResultPojo getResourcesListByRoleId(Map<String, Object> condition);
 
     /**
      * 描述  分配角色资源列表
@@ -127,7 +127,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 16:56
      **/
-    ResultUtil updateRoleResourcesByRoleId(Long roleid, List<Long> addArr, List<Long> delArr);
+    ResultPojo updateRoleResourcesByRoleId(Long roleid, List<Long> addArr, List<Long> delArr);
 
     /**
      * 描述  获取这个角色下的用户列表
@@ -136,7 +136,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 17:01
      **/
-    ResultUtil getUserListByRoleId(Map<String, Object> condition);
+    ResultPojo getUserListByRoleId(Map<String, Object> condition);
 
     /**
      * 描述  更新用户角色表
@@ -145,7 +145,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/8/21 17:04
      **/
-    ResultUtil updateRoleUserByRoleId(Long roleid, List<Long> addArr, List<Long> delArr);
+    ResultPojo updateRoleUserByRoleId(Long roleid, List<Long> addArr, List<Long> delArr);
 
     /**
      * 描述  获取这个用户下的角色列表(全部)
@@ -154,7 +154,7 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/9/3 15:01
      **/
-    ResultUtil getRoleListByUserId(Map<String, Object> condition);
+    ResultPojo getRoleListByUserId(Map<String, Object> condition);
 
     /**
      * 描述  修改RoleUser表通过用户id
@@ -163,5 +163,5 @@ public interface DockingInterfaceService extends IService<DockingInterface> {
      * @params
      * @created 2020/9/3 15:18
      **/
-    ResultUtil updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr);
+    ResultPojo updateRoleUserByUserId(Long userid, List<Long> addArr, List<Long> delArr);
 }

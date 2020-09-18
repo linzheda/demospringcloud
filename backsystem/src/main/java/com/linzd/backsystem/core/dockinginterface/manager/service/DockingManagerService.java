@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.dockinginterface.manager.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface DockingManagerService extends IService<DockingInterface> {
      * @params
      * @created 2020/9/16 9:53
      **/
-    ResultUtil getInterfaceUrl();
+    ResultPojo getInterfaceUrl();
 
     /**
      * 描述  获取所有入库的接口分页列表
@@ -31,5 +31,5 @@ public interface DockingManagerService extends IService<DockingInterface> {
      * @params
      * @created 2020/9/16 10:15
      **/
-    ResultUtil getInterfaceList(Map<String, Object> condition);
+    ResultPojo getInterfaceList(Map<String, Object> condition);
 }

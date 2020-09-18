@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.linzd.backsystem.core.docking.mapper.ThirdPartyDockingMapper;
 import com.linzd.backsystem.core.docking.service.ThirdPartyDockingService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +34,11 @@ public class ThirdPartyDockingServiceImpl extends ServiceImpl<ThirdPartyDockingM
      * @created 2020/8/20 18:53
      */
     @Override
-    public ResultUtil getThirdPartyDockingList(Map<String, Object> condition) {
+    public ResultPojo getThirdPartyDockingList(Map<String, Object> condition) {
         long current= Long.valueOf(condition.get("current").toString());
         long size = Long.valueOf(condition.get("size").toString());
         Page<Map> page = new Page<>(current,size);
         IPage<Map> result=mapper.getThirdPartyDockingList(page,condition);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 }

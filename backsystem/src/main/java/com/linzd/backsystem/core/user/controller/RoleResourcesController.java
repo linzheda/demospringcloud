@@ -7,7 +7,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.RoleResources;
 import com.linzd.backsystem.core.user.service.RoleResourcesService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -46,7 +46,7 @@ public class RoleResourcesController {
             @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getResourcesListByRoleId")
-    public ResultUtil getResourcesListByRoleId(@RequestParam Map<String,Object> condition) {
+    public ResultPojo getResourcesListByRoleId(@RequestParam Map<String,Object> condition) {
         return service.getResourcesListByRoleId(condition);
     }
 
@@ -58,7 +58,7 @@ public class RoleResourcesController {
     })
     @PostMapping(value = "/updateRoleResourcesByRoleId")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil updateRoleResourcesByRoleId(Long roleid,@RequestParam("addArr") List<Long> addArr,@RequestParam("delArr") List<Long> delArr){
+    public ResultPojo updateRoleResourcesByRoleId(Long roleid, @RequestParam("addArr") List<Long> addArr, @RequestParam("delArr") List<Long> delArr){
         //删除
         if(!delArr.isEmpty()){
             QueryWrapper<RoleResources> queryWrapper = new QueryWrapper<>();
@@ -79,7 +79,7 @@ public class RoleResourcesController {
         }
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", true);
-        return ResultUtil.success("资源菜单分配成功",result);
+        return ResultPojo.success("资源菜单分配成功",result);
     }
 
 

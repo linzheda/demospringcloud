@@ -6,7 +6,7 @@ import com.linzd.backsystem.annotation.OperLog;
 import com.linzd.backsystem.common.enums.OperType;
 import com.linzd.backsystem.core.user.entity.Organization;
 import com.linzd.backsystem.core.user.service.OrganizationService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -44,7 +44,7 @@ public class OrganizationController {
             @ApiImplicitParam(name = "condition", value = "父级pid和过滤某个特定的id", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getOrganizationByPid")
-    public ResultUtil getOrganizationByPid(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getOrganizationByPid(@RequestParam Map<String, Object> condition) {
         return service.getOrganizationByPid(condition);
     }
 
@@ -54,7 +54,7 @@ public class OrganizationController {
     })
     @PostMapping(value = "/editOrganization")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editOrganization(Organization organization) {
+    public ResultPojo editOrganization(Organization organization) {
         String msg =  organization.getId() != null  ? "编辑" : "新增";
         organization.setUpdatetime(null);
         organization.setUpdateby(null);
@@ -75,7 +75,7 @@ public class OrganizationController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", organization.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
 
@@ -85,7 +85,7 @@ public class OrganizationController {
     })
     @PostMapping(value = "/delOrganization")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delOrganization(Long id) {
+    public ResultPojo delOrganization(Long id) {
         return service.delOrganization(id);
     }
 

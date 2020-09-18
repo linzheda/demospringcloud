@@ -2,7 +2,7 @@ package com.linzd.backsystem.core.syslog.service;
 
 import com.linzd.backsystem.common.entity.SysLog;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface SysLogService extends IService<SysLog> {
      * @params
      * @created 2020/9/11 16:42
      **/
-    ResultUtil getLogList(Map<String, Object> condition);
+    ResultPojo getLogList(Map<String, Object> condition);
 
     /**
      * 描述  获取日志时间线
@@ -32,5 +32,5 @@ public interface SysLogService extends IService<SysLog> {
      * @params
      * @created 2020/9/14 16:00
      **/
-    ResultUtil getLogTimeLine(Map<String, Object> condition);
+    ResultPojo getLogTimeLine(Map<String, Object> condition);
 }

@@ -10,8 +10,8 @@ import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.User;
 import com.linzd.backsystem.core.user.service.RoleUserService;
 import com.linzd.backsystem.core.user.service.UserService;
-import com.linzd.backsystem.utils.Encrypt;
-import com.linzd.backsystem.utils.ResultUtil;
+import com.linzd.backsystem.utils.EncryptUtil;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,7 +52,7 @@ public class UserController {
             @ApiImplicitParam(name = "newPassword", value = "新密码", required = true, dataType = "String")
     })
     @PostMapping(value = "/updatePassword")
-    public ResultUtil updatePassword(Long id, String oldPassword, String newPassword) {
+    public ResultPojo updatePassword(Long id, String oldPassword, String newPassword) {
         return service.updatePassword(id, oldPassword, newPassword);
     }
 
@@ -64,7 +64,7 @@ public class UserController {
     @PostMapping(value = "/login")
     @PassToken
     @OperLog(type = OperType.LOGIN)
-    public ResultUtil login(String name, String password) {
+    public ResultPojo login(String name, String password) {
         return service.login(name, password);
     }
 
@@ -74,16 +74,16 @@ public class UserController {
     })
     @PostMapping(value = "/resetPassword")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil resetPassword(Long id){
+    public ResultPojo resetPassword(Long id){
         //设置默认密码
         QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("code", "password");
         SysParam defaultPassword=new SysParam().selectOne(queryWrapper);
-        String md5Password = Encrypt.md5(defaultPassword.getValue());
+        String md5Password = EncryptUtil.md5(defaultPassword.getValue());
         User user = new User().selectById(id);
         user.setPassword(md5Password);
         boolean isSuccess=user.updateById();
-        return ResultUtil.success("重置密码成功",isSuccess);
+        return ResultPojo.success("重置密码成功",isSuccess);
     }
 
     @ApiOperation(value = "获取用户列表")
@@ -91,7 +91,7 @@ public class UserController {
             @ApiImplicitParam(name = "condition", value = "条件", required = true, dataType = "Map")
     })
     @PostMapping(value = "/getUserList")
-    public ResultUtil getUserList(@RequestParam Map<String, Object> condition) {
+    public ResultPojo getUserList(@RequestParam Map<String, Object> condition) {
         return service.getUserList(condition);
     }
 
@@ -102,7 +102,7 @@ public class UserController {
     })
     @PostMapping(value = "/editUser")
     @OperLog(type = OperType.UPDATE)
-    public ResultUtil editUser(User user) {
+    public ResultPojo editUser(User user) {
         boolean isInsert= user.getId() == null;
         String msg = isInsert ? "新增" : "编辑";
         if(isInsert&&user.getPassword()==null){
@@ -110,7 +110,7 @@ public class UserController {
             QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("code", "password");
             SysParam defaultPassword=new SysParam().selectOne(queryWrapper);
-            String md5Password = Encrypt.md5(defaultPassword.getValue());
+            String md5Password = EncryptUtil.md5(defaultPassword.getValue());
             user.setPassword(md5Password);
         }
         user.setUpdateby(null);
@@ -120,7 +120,7 @@ public class UserController {
         Map<String, Object> result = new HashMap<>();
         result.put("isSuccess", isSuccess);
         result.put("id", user.getId());
-        return ResultUtil.success(msg, result);
+        return ResultPojo.success(msg, result);
     }
 
     @ApiOperation(value = "删除用户")
@@ -129,13 +129,13 @@ public class UserController {
     })
     @PostMapping(value = "/delUser")
     @OperLog(type = OperType.DELETE)
-    public ResultUtil delUser(Long id){
+    public ResultPojo delUser(Long id){
         //删除用户
         boolean isSuccess=service.removeById(id);
         //删除用户角色关联表的数据
         roleUserService.delRoleUserLink();
         String msg =isSuccess ? "删除成功" : "删除失败";
-        return ResultUtil.success(msg,isSuccess);
+        return ResultPojo.success(msg,isSuccess);
     }
 
 
