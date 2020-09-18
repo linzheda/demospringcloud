@@ -11,7 +11,7 @@
         from sys_log t
         left join user u on t.operatorid=u.id
         <if test='condition.type!=null and condition.type=="interface" '>
-           left join third_party_docking tpd on tpd.client_id=t.client_id
+            left join third_party_docking tpd on tpd.client_id=t.client_id
         </if>
         left join dictionary d on t.opertype=d.value and d.dictkey='oper_type' and d.level=2
         left join dictionary d1 on t.status=d1.value and d1.dictkey='oper_status' and d1.level=2
@@ -83,17 +83,20 @@
 
     <!--获取日志时间列表-->
     <select id="getLogTimeLine" resultType="java.util.Map">
-        select t.*, d.name opertype_text, u.loginname loginname, u.name operatorid_text, d1.name status_text,
+        select t.*,
+        (select d.name from dictionary d where t.opertype = d.value and d.dictkey = 'oper_type' and d.level = 2)
+        opertype_text,
+        (select d1.name from dictionary d1 where t.status = d1.value and d1.dictkey = 'oper_status' and d1.level = 2 )
+        status_text,
+        u.loginname loginname, u.name operatorid_text,
         tpd.name client_id_text
         from sys_log t
         left join third_party_docking tpd on tpd.client_id=t.client_id
         left join user u on (t.opertype = 5 and t.reqparam like concat('%"name":["', u.loginname, '"]%'))
         or (t.opertype != 5 and t.operatorid = u.id)
-        left join dictionary d on t.opertype = d.value and d.dictkey = 'oper_type' and d.level = 2
-        left join dictionary d1 on t.status = d1.value and d1.dictkey = 'oper_status' and d1.level = 2
         <where>
             <if test="condition.operator!=null ">
-                 u.name like concat('%',#{condition.operator},'%')
+                u.name like concat('%',#{condition.operator},'%')
             </if>
             <if test="condition.loginname!=null ">
                 and u.loginname like concat('%',#{condition.loginname},'%')
@@ -106,6 +109,9 @@
             </if>
             <if test="condition.loginstatus!=null ">
                 and t.outresult like concat('%"code":',#{condition.loginstatus},',%')
+            </if>
+            <if test="condition.url!=null ">
+                and t.requrl like concat('%',#{condition.url},'%')
             </if>
             <if test="condition.opertime!=null ">
                 and t.createtime between

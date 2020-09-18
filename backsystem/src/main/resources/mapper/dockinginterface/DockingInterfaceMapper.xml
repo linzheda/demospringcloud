@@ -160,7 +160,7 @@
             and u.tel like concat('%',#{tel},'%')
         </if>
         <if test="tag!=null and tag!='' ">
-            and u.tag regexp replace(#{condition.tag},',','|')
+            and u.tag regexp replace(#{tag},',','|')
         </if>
     </select>
     <!--获取某个用户下的所有角色-->

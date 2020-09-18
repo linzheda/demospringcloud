@@ -34,6 +34,12 @@ public class DockingInterface extends BaseEntity<DockingInterface> {
     @ApiModelProperty(value = "接口地址")
     private String url;
 
+    @ApiModelProperty(value = "方法名称")
+    private String method;
+
+    @ApiModelProperty(value = "请求方式")
+    private String type;
+
     @ApiModelProperty(value = "状态")
     private Integer status;
 
