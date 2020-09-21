@@ -1,11 +1,10 @@
 package com.linzd.backsystem.interceptor;
 
 
-import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.annotation.CheckToken;
-import com.linzd.backsystem.core.user.entity.User;
-import com.linzd.backsystem.core.user.mapper.UserMapper;
+import com.linzd.backsystem.annotation.PassToken;
 import com.linzd.backsystem.utils.JwtTokenUtil;
+import com.linzd.backsystem.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 描述 token拦截器
@@ -27,7 +27,7 @@ import java.util.Map;
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
-    private UserMapper userMapper;
+    private RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -90,25 +90,26 @@ public class TokenInterceptor implements HandlerInterceptor {
                 }
                 // 获取 token 中的 user id
                 Long userId;
-                User user = null;
                 try {
-                    Map<String,Object> verifyResult=JwtTokenUtil.verify(token);
-                    userId = (long)verifyResult.get("userId") ;
-                    long exp =((Date) verifyResult.get("exp")).getTime();
+                    Map<String, Object> verifyResult = JwtTokenUtil.verify(token);
+                    userId = (long) verifyResult.get("userId");
+                    String key = JwtTokenUtil.LOGIN_TOKEN_PREFIX + userId;
+                    //如果可以不存在或者token值不对
+                    if (!redisUtil.hasKey(key) || !redisUtil.get(key).equals(token)) {
+                        //如果token和redis的对不上这包403
+                        httpServletResponse.sendError(403, "token错误!");
+                        return false;
+                    }
+                    long exp = ((Date) verifyResult.get("exp")).getTime();
                     long now = System.currentTimeMillis();
                     //说明当前时间+5分钟小于到期时间=>距离过期时间不足5分钟 生产新的token
-                    if((now+300000)>exp){
-                        httpServletResponse.setHeader("authorization",JwtTokenUtil.sign(userId));
+                    if ((now + 300000) > exp) {
+                        String newToken = JwtTokenUtil.sign(userId);
+                        httpServletResponse.setHeader("authorization", newToken);
+                        redisUtil.set(key, newToken, JwtTokenUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
                     }
-                    //查询用户id是否存在  这个可以放到redis
-                    user = userMapper.selectById(userId);
                 } catch (Exception j) {
                     httpServletResponse.sendError(403, "token错误!");
-                    return false;
-                }
-
-                if (user == null) {
-                    httpServletResponse.sendError(403, "用户不存在!");
                     return false;
                 }
                 return true;

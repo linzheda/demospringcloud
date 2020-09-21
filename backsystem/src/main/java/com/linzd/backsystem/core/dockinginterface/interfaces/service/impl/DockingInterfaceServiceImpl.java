@@ -5,23 +5,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.linzd.backsystem.common.entity.ResultPojo;
 import com.linzd.backsystem.core.docking.entity.ThirdPartyDocking;
 import com.linzd.backsystem.core.dockinginterface.interfaces.mapper.DockingInterfaceMapper;
 import com.linzd.backsystem.core.dockinginterface.interfaces.service.DockingInterfaceService;
+import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
+import com.linzd.backsystem.core.pub.service.PubService;
 import com.linzd.backsystem.core.sysparam.entity.SysParam;
 import com.linzd.backsystem.core.user.entity.*;
 import com.linzd.backsystem.utils.EncryptUtil;
 import com.linzd.backsystem.utils.JwtTokenUtil;
-import com.linzd.backsystem.common.entity.ResultPojo;
+import com.linzd.backsystem.utils.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.linzd.backsystem.core.dockinginterface.manager.entity.DockingInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -39,6 +42,12 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
 
     @Autowired
     private DockingInterfaceMapper mapper;
+
+    @Autowired
+    private PubService pubService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 描述  获取访问令牌
@@ -63,9 +72,26 @@ public class DockingInterfaceServiceImpl extends ServiceImpl<DockingInterfaceMap
         User user = null;
         try {
             user = new User().selectOne(queryWrapper);
-            String token = JwtTokenUtil.sign(user.getId());
+            //查询登录策略
+            SysParam loginType = pubService.getSysParam("loginType");
+            String token = null;
+            String key = JwtTokenUtil.LOGIN_TOKEN_PREFIX + user.getId();
+            if (loginType.getValue().equals("1")) {
+                //允许同时在线
+                if (redisUtil.hasKey(key)) {
+                    //如果键存在则取出 token
+                    token = redisUtil.get(key).toString();
+                } else {
+                    //如果不存在则生成新的token
+                    token = JwtTokenUtil.sign(user.getId());
+                    redisUtil.set(key, token, JwtTokenUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
+                }
+            } else {
+                //不允许同时在线生成新的token
+                token = JwtTokenUtil.sign(user.getId());
+                redisUtil.set(key, token, JwtTokenUtil.EXPIRE_TIME,TimeUnit.MILLISECONDS);
+            }
             user.setToken(token);
-
         } catch (Exception e) {
             user = null;
         }

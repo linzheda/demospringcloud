@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author linzd
@@ -34,6 +34,16 @@ public interface UserService extends IService<User> {
      **/
     ResultPojo updatePassword(Long id, String oldPassword, String newPassword);
 
+
+    /**
+     * 描述  登出
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/21 16:08
+     **/
+    ResultPojo loginOut(Long id);
+
     /**
      * 描述  获取用户列表
      *
@@ -42,4 +52,16 @@ public interface UserService extends IService<User> {
      * @created 2020/7/25 18:07
      **/
     ResultPojo getUserList(Map<String, Object> condition);
+
+
+    /**
+     * 描述  获取在线用户列表
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/21 16:56
+     **/
+    ResultPojo getOnlineUserList(Map<String, Object> condition);
+
+
 }

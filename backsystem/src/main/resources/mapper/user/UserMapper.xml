@@ -38,7 +38,16 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="condition.userids!=null and condition.userids!='' ">
+                and t.id in
+                <foreach collection="condition.userids.split(',')" open="(" separator="," close=")" index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
+
+
 
 </mapper>

@@ -17,9 +17,11 @@ import java.util.Map;
  */
 public class JwtTokenUtil {
     //过期时间
-    private static final long EXPIRE_TIME = 30 * 60 * 1000;
+    public static final long EXPIRE_TIME = 30 * 60 * 1000;
     //私钥
     private static final String TOKEN_SECRET = "privateKey";
+    //登录token前缀
+    public static final String LOGIN_TOKEN_PREFIX = "pc_login:";
 
     /**
      * 生成签名，15分钟过期

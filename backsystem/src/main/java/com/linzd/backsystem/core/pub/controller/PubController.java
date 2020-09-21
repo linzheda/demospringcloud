@@ -1,14 +1,9 @@
 package com.linzd.backsystem.core.pub.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linzd.backsystem.annotation.CheckToken;
 import com.linzd.backsystem.annotation.PassToken;
-import com.linzd.backsystem.core.dictionary.entity.Dictionary;
-import com.linzd.backsystem.core.pub.service.PubService;
-import com.linzd.backsystem.core.sysparam.entity.SysParam;
-import com.linzd.backsystem.core.user.entity.User;
-import com.linzd.backsystem.utils.JwtTokenUtil;
 import com.linzd.backsystem.common.entity.ResultPojo;
+import com.linzd.backsystem.core.pub.service.PubService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 描述 通用方法的控制层
@@ -33,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/pub/pubCtr")
 public class PubController {
     @Autowired
-    private PubService pubService;
+    private PubService service;
 
     @ApiOperation(value = "获取字典")
     @ApiImplicitParams({
@@ -43,16 +35,7 @@ public class PubController {
     @PostMapping(value = "/getDict")
     @PassToken
     public ResultPojo getDict(String key, Integer level) {
-        QueryWrapper<Dictionary> queryWrapper = new QueryWrapper<Dictionary>();
-        queryWrapper.eq("dictkey", key);
-        if (level != null) {
-            queryWrapper.eq("level", level);
-        } else {
-            queryWrapper.eq("level", 2);
-        }
-        queryWrapper.orderByAsc("seq");
-        List<Dictionary> result = new Dictionary().selectList(queryWrapper);
-        return ResultPojo.success(result);
+        return ResultPojo.success(service.getDict(key,level));
     }
 
 
@@ -63,11 +46,7 @@ public class PubController {
     @PostMapping(value = "/getSysParam")
     @PassToken
     public ResultPojo getSysParam(String code) {
-        QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("code", code);
-        queryWrapper.orderByAsc("seq");
-        List<SysParam> result = new SysParam().selectList(queryWrapper);
-        return ResultPojo.success(result);
+        return ResultPojo.success(service.getSysParam(code));
     }
 
 
@@ -78,12 +57,7 @@ public class PubController {
     @PostMapping(value = "/getUserInfoByToken")
     @PassToken
     public ResultPojo getUserInfoByToken(String token) {
-        Map<String, Object> verifyResult = JwtTokenUtil.verify(token);
-        Long userId = (long) verifyResult.get("userId");
-        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
-        queryWrapper.eq("id", userId);
-        User user = new User().selectOne(queryWrapper);
-        return ResultPojo.success(user);
+        return ResultPojo.success(service.getUserInfoByToken(token));
     }
 
 
