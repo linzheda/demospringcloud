@@ -102,8 +102,8 @@ public class TokenInterceptor implements HandlerInterceptor {
                     }
                     long exp = ((Date) verifyResult.get("exp")).getTime();
                     long now = System.currentTimeMillis();
-                    //说明当前时间+5分钟小于到期时间=>距离过期时间不足5分钟 生产新的token
-                    if ((now + 300000) > exp) {
+                    //说明当前时间+10分钟小于到期时间=>距离过期时间不足10分钟 生产新的token
+                    if ((now + 600000) > exp) {
                         String newToken = JwtTokenUtil.sign(userId);
                         httpServletResponse.setHeader("authorization", newToken);
                         redisUtil.set(key, newToken, JwtTokenUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);

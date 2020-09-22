@@ -24,7 +24,7 @@ public class JwtTokenUtil {
     public static final String LOGIN_TOKEN_PREFIX = "pc_login:";
 
     /**
-     * 生成签名，15分钟过期
+     * 生成签名，30分钟过期
      * @param **username**
      * @param **password**
      * @return
