@@ -2,6 +2,7 @@ package com.linzd.backsystem.utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * 描述 获取ip地址
@@ -47,5 +48,22 @@ public class IpUtil {
             ipAddress = "";
         }
         return ipAddress;
+    }
+
+    /**
+     * 描述  获取hostname
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/22 10:32
+     **/
+    public static String getHostName()  {
+        String result= null;
+        try {
+            result = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -92,7 +92,6 @@ public class UserController {
             @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Long")
     })
     @PostMapping(value = "/loginOut")
-    @OperLog(type = OperType.OTHER)
     public ResultPojo loginOut(Long id) {
         return service.loginOut(id);
     }
@@ -121,7 +120,7 @@ public class UserController {
             @ApiImplicitParam(name = "userid", value = "条件", required = true, dataType = "Long")
     })
     @PostMapping(value = "/loginOutById")
-    @OperLog(type = OperType.OTHER)
+    @OperLog(type = OperType.FORCE)
     public ResultPojo loginOutById(Long userid) {
         return service.loginOut(userid);
     }
