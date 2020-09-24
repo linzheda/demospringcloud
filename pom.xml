@@ -17,8 +17,8 @@
         <module>gateway-api</module>
         <!--自己写的通用服务-->
         <module>attachment</module>
-        <module>login</module>
         <module>backsystem</module>
+        <module>app</module>
         <!--业务模块-->
 
     </modules>
