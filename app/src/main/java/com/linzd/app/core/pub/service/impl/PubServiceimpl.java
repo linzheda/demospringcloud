@@ -101,7 +101,7 @@ public class PubServiceimpl implements PubService {
      * @created 2020/9/21 10:38
      */
     @Override
-    @Cacheable(value = "sysparam",key = "#code")
+    @Cacheable(value = "sysparam")
     public SysParam getSysParam(String code) {
         QueryWrapper<SysParam> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("code", code);
