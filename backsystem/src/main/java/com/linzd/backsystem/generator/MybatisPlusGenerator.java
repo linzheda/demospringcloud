@@ -1,4 +1,4 @@
-package com.linzd.backsystem.generator;
+package com.linzd.app.generator;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -24,7 +24,7 @@ import java.util.Scanner;
  * @author Lorenzo Lin
  * @created 2020年01月15日 9:50
  */
-public  class MybatisPlusGenerator {
+public class MybatisPlusGenerator {
     /**
      * <p>
      * 读取控制台内容
@@ -62,7 +62,7 @@ public  class MybatisPlusGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir")+ File.separator +properties.getProperty("generator.project.name");
+        String projectPath = System.getProperty("user.dir") + File.separator + properties.getProperty("generator.project.name");
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("linzd");
         gc.setOpen(false);  // 是否打开输出目录,默认true
@@ -91,7 +91,7 @@ public  class MybatisPlusGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.linzd."+properties.getProperty("generator.project.name")+".core");
+        pc.setParent("com.linzd." + properties.getProperty("generator.project.name") + ".core");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -138,7 +138,7 @@ public  class MybatisPlusGenerator {
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
         // templateConfig.setEntity("templates/entity2.java");
         // templateConfig.setService();
-         templateConfig.setController("templates/controller2.java");
+        templateConfig.setController("templates/controller2.java");
 
         templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
@@ -147,17 +147,18 @@ public  class MybatisPlusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel); // 数据库表映射到实体的命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);// 数据库表字段映射到实体的命名策略, 未指定按照 naming 执行
-        strategy.setSuperEntityClass("com.linzd.backsystem.common.entity.BaseEntity");//自定义继承的Entity类全称，带包名
+        strategy.setSuperEntityClass("com.linzd." + properties.getProperty("generator.project.name") + ".common.entity.BaseEntity");//自定义继承的Entity类全称，带包名
         strategy.setEntityLombokModel(true);// 是否为lombok模型
         strategy.setEntityBooleanColumnRemoveIsPrefix(true); // Boolean类型字段是否移除is前缀
         strategy.setRestControllerStyle(true); // 生成 @RestController 控制器
-        if(!"all".equals(scanner("是否生成所有实体类(所有请输入:all)"))){
-            strategy.setInclude(scanner("表名"));//设置要生成的表名
+        if (!"all".equals(scanner("是否生成所有实体类(所有请输入:all)"))) {
+            strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));//设置要生成的表名
         }
+        // 写于父类中的公共字段
+        strategy.setSuperEntityColumns("createby","createtime","updateby","updatetime");
+
         // 公共父类
 //        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
-        // 写于父类中的公共字段
-//        strategy.setSuperEntityColumns("id");
 //        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
 //        strategy.setControllerMappingHyphenStyle(true);
 //        strategy.setTablePrefix(pc.getModuleName() + "_"); // 表前缀

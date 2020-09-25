@@ -21,7 +21,7 @@ public class JwtTokenUtil {
     //私钥
     private static final String TOKEN_SECRET = "privateKey";
     //登录token前缀
-    public static final String LOGIN_TOKEN_PREFIX = "pc_login:";
+    public static final String LOGIN_TOKEN_PREFIX = "app_login:";
 
     /**
      * 生成签名，30分钟过期

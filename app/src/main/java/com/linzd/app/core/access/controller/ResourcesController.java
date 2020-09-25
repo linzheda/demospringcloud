@@ -1,0 +1,26 @@
+package com.linzd.app.core.access.controller;
+
+
+import com.linzd.app.annotation.CheckToken;
+import io.swagger.annotations.Api;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * <p>
+ * 资源 前端控制器
+ * </p>
+ *
+ * @author linzd
+ * @since 2020-09-24
+ */
+@RestController
+@Api(value = "资源控制层", tags = "资源控制层")
+@CheckToken
+@Transactional(rollbackFor = Exception.class)
+@RequestMapping("/access/resources")
+public class ResourcesController {
+
+}
+
