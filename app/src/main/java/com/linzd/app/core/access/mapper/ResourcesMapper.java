@@ -3,6 +3,9 @@ package com.linzd.app.core.access.mapper;
 import com.linzd.app.core.access.entity.Resources;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 资源 Mapper 接口
@@ -12,5 +15,22 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-09-24
  */
 public interface ResourcesMapper extends BaseMapper<Resources> {
+    
+    /**
+     * 描述   获取树形的资源菜单
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/27 10:04
+     **/
+    List<Map<String, Object>> getResourcesByUserId(Map<String, Object> condition);
 
+    /**
+     * 描述  获取菜单路由 下一级
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/29 11:15
+     **/
+    List<Map<String, Object>> getAccessRoute(Map<String, Object> condition);
 }

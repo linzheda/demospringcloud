@@ -3,9 +3,9 @@
 <mapper namespace="com.linzd.backsystem.core.user.mapper.OrganizationMapper">
 
     <!-- 开启二级缓存 -->
-<!--
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
--->
+    <!--
+        <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    -->
 
     <!--根据pid获取组织机构-->
     <select id="getOrganizationByPid" resultType="java.util.Map">
@@ -26,29 +26,13 @@
         <if test="filter_id!=null">
             and t.id not in (#{filter_id})
         </if>
-        order by t.level,t.seq*1
+        order by t.level,-t.seq desc
     </select>
 
     <!--删除当前id和下级-->
-    <delete id="delOrganization" parameterType="Long" >
-        delete from organization where id in(
-        SELECT id
-        FROM (
-            SELECT name,id, pid,
-                   @le := IF(pid = 0, 0,
-                       IF(LOCATE(CONCAT('|', pid, ':'), @pathlevel) > 0,
-                           SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', pid, ':'), -1), '|', 1) + 1,@le + 1)) levels,
-                   @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') pathlevel,
-                   @pathnodes := IF(pid = 0, ',root',
-                       CONCAT_WS(',', IF(LOCATE(CONCAT('|', pid, ':'), @pathall) > 0,
-                         SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', pid, ':'), -1), '|', 1), @pathnodes), pid)) paths,
-                   @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') pathall
-            FROM organization,
-            (SELECT @le := 0,@pathlevel := '',
-            @pathall := '',@pathnodes := '') vv
-            ORDER BY paths
-        ) t where  instr(paths,#{id})>0
-        ORDER BY paths ) or id=#{id}
+    <delete id="delOrganization" parameterType="Long">
+        delete from organization
+        where  isn like (select * from( select concat(isn,'%') from organization where id =#{id}) a )
     </delete>
 
 

@@ -25,7 +25,7 @@
                 and t.tag regexp replace(#{condition.tag},',','|')
             </if>
         </where>
-        order by t.seq*1
+        order by -t.seq desc
     </select>
 
 </mapper>

@@ -1,15 +1,16 @@
 package com.linzd.app.core.access.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.linzd.app.common.entity.BaseEntity;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -71,11 +72,16 @@ public class User extends BaseEntity<User> {
     private String remark;
 
     @ApiModelProperty(value = "排序")
-    private String seq;
+    private Integer seq;
 
     @ApiModelProperty(value = "令牌")
     private String token;
 
+    @ApiModelProperty(value = "验证码")
+    private String sms;
+
+    @ApiModelProperty(value = "发送验证码时间")
+    private LocalDateTime smstime;
 
     @Override
     protected Serializable pkVal() {

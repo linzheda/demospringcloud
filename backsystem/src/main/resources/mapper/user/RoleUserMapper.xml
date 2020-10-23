@@ -40,6 +40,7 @@
         <if test="tag!=null and tag!='' ">
             and u.tag regexp replace(#{tag},',','|')
         </if>
+        order by -u.seq desc
     </select>
     <!--获取用户列表分页-->
     <select id="getUserListByCondition" resultType="java.util.Map">
@@ -81,6 +82,7 @@
                 )
             </if>
         </where>
+        order by -u.seq desc
     </select>
     <!--获取某个用户下的所有角色-->
     <select id="getRoleListByUserId" resultType="java.util.Map">
@@ -101,6 +103,7 @@
         <if test="description!=null">
             and r.description like concat('%',#{description},'%')
         </if>
+        order by -r.seq desc
     </select>
     <!--获取角色列表分页-->
     <select id="getRoleListByCondition" resultType="java.util.Map">
@@ -134,6 +137,7 @@
                 </foreach>
             </if>
         </where>
+        order by -r.seq desc
     </select>
 
 </mapper>

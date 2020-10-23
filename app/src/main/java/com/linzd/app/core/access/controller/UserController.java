@@ -56,5 +56,30 @@ public class UserController {
     public ResultPojo updatePassword(Long id, String oldPassword, String newPassword) {
         return service.updatePassword(id, oldPassword, newPassword);
     }
+
+
+    @ApiOperation(value = "登出")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Long")
+    })
+    @PostMapping(value = "/loginOut")
+    public ResultPojo loginOut(Long id) {
+        return service.loginOut(id);
+    }
+
+    @ApiOperation(value = "发送短信验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "tel", value = "手机号码", required = true, dataType = "String")
+    })
+    @PassToken
+    @PostMapping(value = "/sendSms")
+    public ResultPojo sendSms(String tel) {
+        return service.sendSms(tel);
+    }
+
+
+
+
+
 }
 

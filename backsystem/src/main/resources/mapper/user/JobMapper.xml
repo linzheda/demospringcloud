@@ -20,7 +20,7 @@
                 and t.code like concat('%',#{condition.code},'%')
             </if>
         </where>
-        order by t.seq
+        order by -t.seq desc
     </select>
 
 </mapper>

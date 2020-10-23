@@ -31,4 +31,22 @@ public interface UserService extends IService<User> {
      * @created 2020/9/24 15:34
      **/
     ResultPojo updatePassword(Long id, String oldPassword, String newPassword);
+
+    /**
+     * 描述  登出
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/9/21 16:08
+     **/
+    ResultPojo loginOut(Long id);
+
+    /**
+     * 描述  发送验证码
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/10/15 14:46
+     **/
+    ResultPojo sendSms(String tel);
 }
