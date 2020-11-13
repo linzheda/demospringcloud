@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -76,12 +75,6 @@ public class User extends BaseEntity<User> {
 
     @ApiModelProperty(value = "令牌")
     private String token;
-
-    @ApiModelProperty(value = "验证码")
-    private String sms;
-
-    @ApiModelProperty(value = "发送验证码时间")
-    private LocalDateTime smstime;
 
     @Override
     protected Serializable pkVal() {

@@ -3,6 +3,7 @@ package com.linzd.app.core.access.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.app.common.entity.ResultPojo;
+import com.linzd.app.core.access.entity.SmsLog;
 import com.linzd.app.core.access.entity.User;
 import com.linzd.app.core.access.mapper.UserMapper;
 import com.linzd.app.core.access.service.UserService;
@@ -15,8 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -152,28 +155,102 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @created 2020/10/15 14:46
      */
     @Override
-    public ResultPojo sendSms(String tel) {
+    public ResultPojo sendSms(String tel, Integer type) {
+        SmsLog smsLog = new SmsLog();
+        smsLog.setTel(tel);
+        smsLog.setType(type);
+        //获取关联用户
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("tel", tel);
         User user = new User().selectOne(queryWrapper);
         if (user != null) {
-            if (user.getSmstime() != null) {
-                Duration duration = Duration.between(LocalDateTime.now(), user.getSmstime());
-                if (duration.toMinutes() < 1) {
-                    //说明小于1分钟
-                    return ResultPojo.error("一分钟之内只能发送一次验证码！");
-                }
+            if (type == 1) {
+                //说明是注册
+                return ResultPojo.error("该号码已注册！");
+            } else {
+                smsLog.setUserid(user.getId());
             }
-            //生成随机验证码
-            String sms = String.valueOf((Math.random() * 9 + 1) * 100000);
-            user.setSms(sms);
-            user.setSmstime(LocalDateTime.now());
-            user.updateById();
-            //TODO:这里调发送短信的接口
-            return ResultPojo.success("发送成功", sms);
-
-        } else {
+        } else if (type != 1) {
             return ResultPojo.error("当前用户不存在！");
         }
+        //发送短信的校验
+        Map<String, Object> smscnt = mapper.getSmsCnt(tel, type);
+        if (smscnt != null) {
+            //失败次数验证
+            SysParam smsFailCnt = pubService.getSysParam("smsFailCnt");
+            if (Integer.valueOf(smscnt.get("failcnt").toString()) >= Integer.parseInt(smsFailCnt.getValue())) {
+                return ResultPojo.error("今日失败次数已达上限,请明日再试！");
+            }
+            //发送间隔验证
+            Duration duration = Duration.between(((Timestamp) smscnt.get("maxtime")).toLocalDateTime(), LocalDateTime.now());
+            if (duration.toMinutes() < 1) {
+                //说明小于1分钟
+                return ResultPojo.error("一分钟之内只能发送一次验证码！");
+            }
+        }
+        //生成随机验证码
+        String sms = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
+        smsLog.setSms(sms);
+        smsLog.setSmstime(LocalDateTime.now());
+        smsLog.insert();
+        //TODO:这里调发送短信的接口
+        return ResultPojo.success("发送成功", sms);
+
     }
+
+    /**
+     * 描述  校验短信验证码
+     *
+     * @param tel
+     * @param sms
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/10/26 11:26
+     */
+    @Override
+    public ResultPojo checkSms(String tel, String sms, Integer type) {
+        SmsLog smsLog = mapper.getMaxNewSms(tel, type);
+        if (smsLog != null) {
+            if (!smsLog.getSms().equals(sms)) {
+                smsLog.setResult(0);
+                smsLog.updateById();
+                return ResultPojo.error("验证码错误");
+            }
+            Duration duration = Duration.between(smsLog.getSmstime(), LocalDateTime.now());
+            if (duration.toMinutes() >= 10) {
+                smsLog.setResult(0);
+                smsLog.updateById();
+                //说明小于1分钟
+                return ResultPojo.error("验证码已失效！");
+            }
+            smsLog.setResult(1);
+            smsLog.updateById();
+            return ResultPojo.success("验证通过", true);
+        } else {
+            return ResultPojo.error("验证错误！");
+        }
+    }
+
+    /**
+     * 描述  忘记密码 修改
+     *
+     * @param tel
+     * @param password
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/10/27 9:18
+     */
+    @Override
+    public ResultPojo forgetPassWord(String tel, String password) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("tel", tel);
+        User user = new User().selectOne(queryWrapper);
+        String newPwdMd5 = EncryptUtil.md5(password);
+        user.setPassword(newPwdMd5);
+        boolean result = user.updateById();
+        String msg = result ? "修改密码成功,请重新登录" : "修改密码失败";
+        return ResultPojo.success(msg, result);
+    }
+
+
 }

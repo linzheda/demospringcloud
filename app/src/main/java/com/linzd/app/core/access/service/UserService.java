@@ -48,5 +48,25 @@ public interface UserService extends IService<User> {
      * @params
      * @created 2020/10/15 14:46
      **/
-    ResultPojo sendSms(String tel);
+    ResultPojo sendSms(String tel,Integer type);
+    
+    /**
+     * 描述  校验短信验证码
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/10/26 11:26
+     **/
+    ResultPojo checkSms(String tel, String sms,Integer type);
+
+    /**
+     * 描述  忘记密码 修改
+     *
+     * @author Lorenzo Lin
+     * @params
+     * @created 2020/10/27 9:18
+     **/
+    ResultPojo forgetPassWord(String tel, String password);
+
+
 }
