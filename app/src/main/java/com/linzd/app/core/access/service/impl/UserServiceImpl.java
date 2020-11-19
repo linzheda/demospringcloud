@@ -111,16 +111,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResultPojo updatePassword(Long id, String oldPassword, String newPassword) {
         User user = mapper.selectById(id);
-        String oldPwdMd5 = EncryptUtil.md5(oldPassword);
         boolean isSuccess = false;
         String msg = "";
-        if (!user.getPassword().equals(oldPwdMd5)) {
+        if (!user.getPassword().equals(oldPassword)) {
             isSuccess = false;
             msg = "原密码错误";
         } else {
-            isSuccess = true;
-            String newPwdMd5 = EncryptUtil.md5(newPassword);
-            user.setPassword(newPwdMd5);
+            user.setPassword(newPassword);
             user.updateById();
             isSuccess = true;
             msg = "修改密码成功,请重新登录";
@@ -245,8 +242,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("tel", tel);
         User user = new User().selectOne(queryWrapper);
-        String newPwdMd5 = EncryptUtil.md5(password);
-        user.setPassword(newPwdMd5);
+        user.setPassword(password);
         boolean result = user.updateById();
         String msg = result ? "修改密码成功,请重新登录" : "修改密码失败";
         return ResultPojo.success(msg, result);
