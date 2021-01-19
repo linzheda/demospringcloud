@@ -17,7 +17,7 @@ import java.util.*;
  * @author Lorenzo Lin
  * @created 2019年11月25日 20:00
  */
-public class FileUploadUtils {
+public class FileUploadUtil {
     /**
      * 文件上传路径
      */
@@ -51,7 +51,7 @@ public class FileUploadUtils {
      */
     private static final int THUMB_SIZE = 150;
 
-    public FileUploadUtils() {
+    public FileUploadUtil() {
         List<String> imgList = new ArrayList<>();
         imgList.add(".jpg");
         imgList.add(".png");

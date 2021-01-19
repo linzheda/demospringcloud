@@ -3,9 +3,9 @@ package com.linzd.attachment.attachment.controller;
 
 import com.linzd.attachment.attachment.entity.Attachment;
 import com.linzd.attachment.attachment.service.AttachmentService;
+import com.linzd.attachment.common.entity.ResultPojo;
 import com.linzd.attachment.config.ServerConfig;
-import com.linzd.attachment.utils.FileUploadUtils;
-import com.linzd.attachment.utils.ResultUtil;
+import com.linzd.attachment.utils.FileUploadUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -56,14 +56,14 @@ public class AttachmentController {
     })
     @RequestMapping(value = "/uploadFileByBase64", method = RequestMethod.POST)
     public @ResponseBody
-    ResultUtil uploadFileByBase64(String fileData, String fileName, String fileType) {
-        FileUploadUtils fup = new FileUploadUtils();
+    ResultPojo uploadFileByBase64(String fileData, String fileName, String fileType) {
+        FileUploadUtil fup = new FileUploadUtil();
         Map<String, String> result = null;
         try {
             result = fup.uploadBase64(fileData, fileName, fileType);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultUtil.error("上传失败");
+            return ResultPojo.error("上传失败");
         }
         if (result != null) {
             Attachment attachment = new Attachment();
@@ -76,12 +76,12 @@ public class AttachmentController {
             attachment.setType(fileType);
             int saveResult = attachmentservice.saveAttach(attachment);
             if (saveResult > 0) {
-                return ResultUtil.success(attachment);
+                return ResultPojo.success(attachment);
             } else {
-                return ResultUtil.error("上传失败");
+                return ResultPojo.error("上传失败");
             }
         } else {
-            return ResultUtil.error("上传失败");
+            return ResultPojo.error("上传失败");
         }
     }
 
@@ -113,14 +113,14 @@ public class AttachmentController {
     })
     @RequestMapping(value = "/deleteAttachmentById", method = RequestMethod.POST)
     public @ResponseBody
-    ResultUtil deleteAttachmentById(Integer id, boolean realDelete) {
+    ResultPojo deleteAttachmentById(Integer id, boolean realDelete) {
         Attachment attachment = attachmentservice.findById(id);
         if (realDelete) {
             int result = attachmentservice.deleteFile(attachment);
         }
         int deleteResult=attachmentservice.deleteAttachmentById(id);
 
-        return deleteResult>0?ResultUtil.success("删除成功"):ResultUtil.error("删除失败");
+        return deleteResult>0?ResultPojo.success("删除成功"):ResultPojo.error("删除失败");
     }
 
     @ApiOperation(value = "根据ids获取附件")
@@ -129,9 +129,9 @@ public class AttachmentController {
     })
     @RequestMapping(value = "/getAttachmentByIds", method = RequestMethod.POST)
     public @ResponseBody
-    ResultUtil getAttachmentByIds(String ids){
+    ResultPojo getAttachmentByIds(String ids){
         Map<String,Object> result=attachmentservice.getAttachmentByIds(ids);
-        return ResultUtil.success(result);
+        return ResultPojo.success(result);
     }
 
     /**

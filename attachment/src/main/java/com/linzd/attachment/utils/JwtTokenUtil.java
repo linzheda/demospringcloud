@@ -21,12 +21,14 @@ import java.util.Map;
  */
 public class JwtTokenUtil {
     //过期时间
-    private static final long EXPIRE_TIME = 15 * 60 * 1000;
+    public static final long EXPIRE_TIME = 30 * 60 * 1000;
     //私钥
     private static final String TOKEN_SECRET = "privateKey";
+    //登录token前缀
+    public static final String LOGIN_TOKEN_PREFIX = "app_login:";
 
     /**
-     * 生成签名，15分钟过期
+     * 生成签名，30分钟过期
      * @param **username**
      * @param **password**
      * @return
@@ -59,17 +61,31 @@ public class JwtTokenUtil {
      * @param **token**
      * @return
      */
-    public static Long verify(String token){
+    public static Map<String,Object> verify(String token){
+        Map<String, Object> result = new HashMap<>();
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
             Long userId = jwt.getClaim("userId").asLong();
-            return userId;
+            //id
+            result.put("userId",userId);
+            //过期时间
+            result.put("exp",jwt.getExpiresAt());
+            return result;
         } catch (Exception e){
             return null;
         }
     }
 
+    /**
+     *  根据token获取用户id
+     * @param **token**
+     * @return
+     */
+    public static Long getUserIdByToken(String token){
+        Map<String,Object> result=  verify(token);
+        return  result!=null?(Long)result.get("userId"):null;
+    }
 
 }

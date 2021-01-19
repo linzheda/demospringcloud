@@ -1,14 +1,14 @@
-package com.linzd.attachment.utils;
+package com.linzd.attachment.common.entity;
 
 import java.io.Serializable;
 
 /**
- * 描述 响应结果返回工具类
+ * 描述 响应结果返回类
  *
  * @author Lorenzo Lin
  * @created 2017年11月08日 9:34
  */
-public class ResultUtil<T> implements Serializable {
+public class ResultPojo<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 编码  如果成功为200  失败 500
@@ -48,39 +48,39 @@ public class ResultUtil<T> implements Serializable {
         this.data = data;
     }
 
-    public static ResultUtil success(Object data) {
-        ResultUtil result = new ResultUtil();
+    public static ResultPojo success(Object data) {
+        ResultPojo result = new ResultPojo();
         result.setCode(200);
         result.setMsg("成功");
         result.setData(data);
         return result;
     }
 
-    public static ResultUtil success(String msg, Object data) {
-        ResultUtil result = new ResultUtil();
+    public static ResultPojo success(String msg, Object data) {
+        ResultPojo result = new ResultPojo();
         result.setCode(200);
         result.setMsg(msg);
         result.setData(data);
         return result;
     }
 
-    public static ResultUtil success(String msg) {
+    public static ResultPojo success(String msg) {
         return success(msg, null);
     }
 
-    public static ResultUtil success() {
+    public static ResultPojo success() {
         return success("成功");
     }
 
-    public static ResultUtil error(String msg) {
-        ResultUtil result = new ResultUtil();
+    public static ResultPojo error(String msg) {
+        ResultPojo result = new ResultPojo();
         result.setCode(500);
         result.setMsg(msg);
         return result;
     }
 
-    public static ResultUtil error(Integer code, String msg) {
-        ResultUtil result = new ResultUtil();
+    public static ResultPojo error(Integer code, String msg) {
+        ResultPojo result = new ResultPojo();
         result.setCode(code);
         result.setMsg(msg);
         return result;

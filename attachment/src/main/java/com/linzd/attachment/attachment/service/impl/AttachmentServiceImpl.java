@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.linzd.attachment.attachment.entity.Attachment;
 import com.linzd.attachment.attachment.mapper.AttachmentMapper;
 import com.linzd.attachment.attachment.service.AttachmentService;
-import com.linzd.attachment.utils.FileUploadUtils;
+import com.linzd.attachment.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
         String filePath=attachment.getFilepath() + attachment.getFilealias();
         int result=0;
         File thumbFile = new File(thumbPath);
-        FileUploadUtils fup=new FileUploadUtils();
+        FileUploadUtil fup=new FileUploadUtil();
         if(!thumbFile.exists()){
             if(fup.delete(thumbPath)){
                 result++;

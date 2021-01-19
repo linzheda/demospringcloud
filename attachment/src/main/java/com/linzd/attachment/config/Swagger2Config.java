@@ -1,8 +1,13 @@
 package com.linzd.attachment.config;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,31 +22,39 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @date 2018/3/14
  *
  */
-
 @Configuration
 @EnableSwagger2
-public class Swagger2Config extends WebMvcConfigurationSupport {
-	@Bean
-	public Docket createRestApi() {
+@EnableKnife4j
+@Import(BeanValidatorPluginsConfiguration.class)
+public class Swagger2Config implements WebMvcConfigurer {
+
+	@Bean(value = "userApi")
+	@Order(value = 1)
+	public Docket groupRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.linzd"))
 				.paths(PathSelectors.any())
+
 				.build();
 	}
 
+
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("统一认证")
-				.description("这是一个基础的demo:https://github.com/linzheda")
+				.title("后台管理")
+				.description("后台管理系统")
 				.termsOfServiceUrl("https://github.com/linzheda")
 				.version("1.0")
 				.build();
 	}
 
-
-
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 
 
 }

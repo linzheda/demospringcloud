@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.article.mapper.ArticleMapper">
+    <!--获取文章列表-->
+    <select id="getList" resultType="java.util.Map">
+        select a.*,t.name typeid_text,u.name createby_text,d.name status_text
+        from  article a
+        left join article_type t on a.typeid=t.id
+        left join user u on a.createby=u.id
+        left join dictionary d on a.status=d.value and d.dictkey='article_status' and d.level=2
+        <where>
+            <if test="condition.name!=null">
+                 a.name like concat('%',#{condition.name},'%')
+            </if>
+        </where>
+        order by a.updatetime desc
+    </select>
+
+
+
+
+</mapper>

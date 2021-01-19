@@ -8,12 +8,12 @@ import java.security.NoSuchAlgorithmException;
  * md5加密出来的长度是32位
  * sha加密出来的长度是40位
  */
-public class Encrypt {
+public class EncryptUtil {
 	/**
 	 * 测试
 	 */
 	public static void main(String[] args) {
-		System.out.println(Encrypt.md5AndSha("a"));
+		System.out.println(EncryptUtil.md5AndSha("a"));
 		//System.out.println(Encrypt.md5("a"));
 	}
 
