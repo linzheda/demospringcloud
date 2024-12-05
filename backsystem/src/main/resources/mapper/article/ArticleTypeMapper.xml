@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.article.mapper.ArticleTypeMapper">
+
+    <!--根据pid 获取文章类型-->
+    <select id="getListByPid" resultType="java.util.Map">
+        select t.*,(select count(*) from article_type where pid=t.id) children_cnt,
+        t2.name pid_text
+        from article_type t
+        left join article_type t2 on t.pid=t2.id
+        <where>
+            <if test="pid!=null and pid!=''">
+                 t.pid=#{pid}
+            </if>
+            <if test="name!=null">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="filter_id!=null">
+                and t.id not in (#{filter_id})
+            </if>
+        </where>
+        order by t.seq
+    </select>
+
+    <!--删除文章类型和下级-->
+    <delete id="delById">
+        delete from article_type
+        where  isn like (select * from( select concat(isn,'%') from article_type where id =#{id}) a )
+    </delete>
+</mapper>

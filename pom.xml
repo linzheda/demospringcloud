@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.linzd</groupId>
+    <artifactId>demospringcloud</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <!--通用服务-->
+        <module>eureka-server</module>
+        <module>hystrix-dashboard</module>
+        <module>hystrix-turbine</module>
+        <module>zuul-api-gateway</module>
+        <module>admin-server</module>
+        <module>gateway-api</module>
+        <module>config-server</module>
+        <!--自己写的通用服务-->
+        <module>base-common</module>
+        <module>attachment</module>
+        <module>backsystem</module>
+        <module>app</module>
+        <!--业务模块-->
+
+    </modules>
+    <packaging>pom</packaging>
+    <name>demospringcloud</name>
+    <url>http://maven.apache.org</url>
+
+    <!-- 使用最新的spring-boot版本 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.2.RELEASE</version>
+    </parent>
+
+    <properties>
+        <!--编码集-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--jdk-->
+        <java.version>1.8</java.version>
+        <!--swagger的版本-->
+        <knife4j.version>2.0.4</knife4j.version>
+        <springfox.version>2.9.2</springfox.version>
+        <swagger.version>1.5.21</swagger.version>
+        <!--springboot admin的版本-->
+        <admin.version>2.2.1</admin.version>
+        <!--mysql版本-->
+        <mysql.version>8.0.14</mysql.version>
+        <!--mybatisplus版本-->
+        <mybatisplus.version>3.3.0</mybatisplus.version>
+        <!--mybatisplus 代码生成器-->
+        <mybatisplus-generator.version>3.3.0</mybatisplus-generator.version>
+        <!--代码生成器模板引擎-->
+        <velocity.version>2.1</velocity.version>
+        <!--二级缓存-->
+        <mybatis-ehcache.version>1.2.0</mybatis-ehcache.version>
+        <!--jwt版本-->
+        <jwt.version>3.4.0</jwt.version>
+        <!--commons-lang 工具包-->
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <!--gson -->
+        <gson.version>2.8.5</gson.version>
+        <!--oshi-->
+        <oshi.version>3.9.1</oshi.version>
+        <!--工具类-->
+        <hutool.version>4.6.1</hutool.version>
+    </properties>
+
+    <!--springcloud 版本管理器-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!--通用的jar-->
+    <dependencies>
+        <!-- springboot依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--热更新-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--actuator健康检查、审计、统计和监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.user.mapper.RoleResourcesMapper">
+
+    <!-- 开启二级缓存 -->
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+    <!--删除无效的数据-->
+    <delete id="delRoleResourcesLink" >
+        delete
+        from role_resources
+        where id in (select t.id
+                     from (select id
+                           from role_resources
+                           where resid not in (select id from resources)
+                              or roleid not in (select id from role)) t)
+    </delete>
+
+    <!--获取菜单资源根据角色id-->
+    <select id="getResourcesListByRoleId" resultType="java.util.Map">
+        select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
+        t2.name pid_text,
+        case when rr.id is not null then true else false end ischecked
+        from resources t
+        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2
+        left join resources t2 on t.pid=t2.id
+        left join role_resources rr on t.id=rr.resid and  rr.roleid=#{roleid}
+        <where>
+            <if test="pid!=null and pid!=''">
+                t.pid=#{pid}
+            </if>
+            <if test="name!=null">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="filter_id!=null">
+                and t.id not in (#{filter_id})
+            </if>
+        </where>
+        order by -t.seq desc
+    </select>
+
+</mapper>

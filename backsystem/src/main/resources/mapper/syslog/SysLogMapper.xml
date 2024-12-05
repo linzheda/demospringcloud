@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.syslog.mapper.SysLogMapper">
+
+    <!--获取日志的分页列表-->
+    <select id="getLogList" resultType="java.util.Map">
+        select t.*,d.name opertype_text,u.name operatorid_text,d1.name status_text
+        <if test='condition.type!=null and condition.type=="interface" '>
+            ,tpd.name client_id_text
+        </if>
+        from sys_log t
+        left join user u on t.operatorid=u.id
+        <if test='condition.type!=null and condition.type=="interface" '>
+            left join third_party_docking tpd on tpd.client_id=t.client_id
+        </if>
+        left join dictionary d on t.opertype=d.value and d.dictkey='oper_type' and d.level=2
+        left join dictionary d1 on t.status=d1.value and d1.dictkey='oper_status' and d1.level=2
+        <where>
+            <if test='condition.type!=null and condition.type=="oper" '>
+                t.opertype !=5 and t.client_id is null and t.errormsg is null
+            </if>
+            <if test='condition.type!=null and condition.type=="login" '>
+                t.opertype =5 and t.client_id is null
+            </if>
+            <if test='condition.type!=null and condition.type=="error" '>
+                t.errormsg is not null
+            </if>
+            <if test='condition.type!=null and condition.type=="interface" '>
+                t.client_id is not null
+            </if>
+            <if test="condition.client_id!=null ">
+                and tpd.client_id =#{condition.client_id}
+            </if>
+            <if test="condition.module!=null ">
+                and t.module like concat('%',#{condition.module},'%')
+            </if>
+            <if test="condition.operator!=null ">
+                and u.name like concat('%',#{condition.operator},'%')
+            </if>
+            <if test="condition.opertype!=null and condition.opertype!='' ">
+                and t.opertype =#{condition.opertype}
+            </if>
+            <if test="condition.errormsg!=null and condition.errormsg!='' ">
+                and t.errormsg like concat('%',#{condition.errormsg},'%')
+            </if>
+            <if test="condition.opertime!=null and condition.opertime!='' ">
+                and t.createtime between
+                <foreach collection="condition.opertime.split(',')" separator=" and " index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by t.createtime desc
+    </select>
+
+    <!--获取登录日志的分页列表-->
+    <select id="getLoginLogList" resultType="java.util.Map">
+        select t.*,d.name opertype_text,u.loginname loginname,u.name operatorid_text,d1.name status_text
+        from sys_log t
+        left join user u on t.reqparam like concat('%"name":["',u.loginname,'"]%')
+        left join dictionary d on t.opertype=d.value and d.dictkey='oper_type' and d.level=2
+        left join dictionary d1 on t.status=d1.value and d1.dictkey='oper_status' and d1.level=2
+        where t.opertype =5 and t.client_id is null
+        <if test="condition.operator!=null ">
+            and u.name like concat('%',#{condition.operator},'%')
+        </if>
+        <if test="condition.loginname!=null ">
+            and u.loginname like concat('%',#{condition.loginname},'%')
+        </if>
+        <if test="condition.loginstatus!=null ">
+            and t.outresult like concat('%"code":',#{condition.loginstatus},',%')
+        </if>
+        <if test="condition.opertime!=null ">
+            and t.createtime between
+            <foreach collection="condition.opertime.split(',')" separator=" and " index="index"
+                     item="item">
+                #{item}
+            </foreach>
+        </if>
+        order by t.createtime desc
+    </select>
+
+    <!--获取日志时间列表-->
+    <select id="getLogTimeLine" resultType="java.util.Map">
+        select t.*,
+        (select d.name from dictionary d where t.opertype = d.value and d.dictkey = 'oper_type' and d.level = 2)
+        opertype_text,
+        (select d1.name from dictionary d1 where t.status = d1.value and d1.dictkey = 'oper_status' and d1.level = 2 )
+        status_text,
+        u.loginname loginname, u.name operatorid_text,
+        tpd.name client_id_text
+        from sys_log t
+        left join third_party_docking tpd on tpd.client_id=t.client_id
+        left join user u on (t.opertype = 5 and t.reqparam like concat('%"name":["', u.loginname, '"]%'))
+        or (t.opertype != 5 and t.operatorid = u.id)
+        <where>
+            <if test="condition.operator!=null ">
+                u.name like concat('%',#{condition.operator},'%')
+            </if>
+            <if test="condition.loginname!=null ">
+                and u.loginname like concat('%',#{condition.loginname},'%')
+            </if>
+            <if test="condition.userid!=null ">
+                and u.id =#{condition.userid}
+            </if>
+            <if test="condition.client_id!=null ">
+                and t.client_id =#{condition.client_id}
+            </if>
+            <if test="condition.loginstatus!=null ">
+                and t.outresult like concat('%"code":',#{condition.loginstatus},',%')
+            </if>
+            <if test="condition.url!=null ">
+                and t.requrl like concat('%',#{condition.url},'%')
+            </if>
+            <if test="condition.opertime!=null ">
+                and t.createtime between
+                <foreach collection="condition.opertime.split(',')" separator=" and " index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by t.createtime desc
+    </select>
+
+</mapper>

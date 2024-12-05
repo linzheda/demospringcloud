@@ -1,0 +1,30 @@
+#作为制定应用在任何profile下都通用的配置文件
+spring:
+  #时间戳统一转换
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 静态资源路径
+  resources:
+    static-locations: classpath:static/,file:static/
+  mvc:
+    static-path-pattern: /static/**
+#日志
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.sleuth: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+
+#mybatis-plus配置控制台打印完整带参数SQL语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    call-setters-on-nulls: true
+  typeAliasesPackage: com.linzd.backsystem.**.entity
+  typeEnumsPackage: com.linzd.backsystem.**.enums
+
+#feign
+feign:
+  hystrix:
+    enabled: true

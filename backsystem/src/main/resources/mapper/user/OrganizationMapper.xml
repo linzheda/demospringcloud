@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.user.mapper.OrganizationMapper">
+
+    <!-- 开启二级缓存 -->
+    <!--
+        <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    -->
+
+    <!--根据pid获取组织机构-->
+    <select id="getOrganizationByPid" resultType="java.util.Map">
+        select t.*,(select count(*) from organization where pid=t.id ) children_cnt,
+        t2.name pid_text
+        from organization t
+        left join organization t2 on t.pid=t2.id
+        where 1=1
+        <if test="pid!=null and pid!=''">
+            and t.pid=#{pid}
+        </if>
+        <if test="name!=null">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="key!=null">
+            and t.code like concat('%',#{code},'%')
+        </if>
+        <if test="filter_id!=null">
+            and t.id not in (#{filter_id})
+        </if>
+        order by t.level,-t.seq desc
+    </select>
+
+    <!--删除当前id和下级-->
+    <delete id="delOrganization" parameterType="Long">
+        delete from organization
+        where  isn like (select * from( select concat(isn,'%') from organization where id =#{id}) a )
+    </delete>
+
+
+</mapper>

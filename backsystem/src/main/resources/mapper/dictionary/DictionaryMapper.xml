@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.dictionary.mapper.DictionaryMapper">
+
+    <!-- 开启二级缓存 -->
+  <!--  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+    <!--通过父级id查询-->
+    <select id="getDictsByPid" resultType="java.util.Map">
+        select t.*,(select count(*) from dictionary where pid=t.id ) children_cnt,
+        t2.name pid_text
+        from dictionary t
+        left join dictionary t2 on t.pid=t2.id
+        where 1=1
+        <if test="pid!=null and pid!=''">
+            and t.pid=#{pid}
+        </if>
+        <if test="name!=null">
+            and t.name like concat('%',#{name},'%')
+        </if>
+        <if test="key!=null">
+            and t.dictkey like concat('%',#{key},'%')
+        </if>
+        <if test="filter_id!=null">
+            and t.id not in (#{filter_id})
+        </if>
+        order by t.seq
+    </select>
+
+    <!--删除当前id和下级-->
+    <delete id="delDict" parameterType="Long" >
+        delete from dictionary where id in(
+        SELECT id
+        FROM (
+            SELECT name,id, pid,
+                   @le := IF(pid = 0, 0,
+                       IF(LOCATE(CONCAT('|', pid, ':'), @pathlevel) > 0,
+                           SUBSTRING_INDEX(SUBSTRING_INDEX(@pathlevel, CONCAT('|', pid, ':'), -1), '|', 1) + 1,@le + 1)) levels,
+                   @pathlevel := CONCAT(@pathlevel, '|', id, ':', @le, '|') pathlevel,
+                   @pathnodes := IF(pid = 0, ',root',
+                       CONCAT_WS(',', IF(LOCATE(CONCAT('|', pid, ':'), @pathall) > 0,
+                         SUBSTRING_INDEX(SUBSTRING_INDEX(@pathall, CONCAT('|', pid, ':'), -1), '|', 1), @pathnodes), pid)) paths,
+                   @pathall := CONCAT(@pathall, '|', id, ':', @pathnodes, '|') pathall
+            FROM dictionary,
+            (SELECT @le := 0,@pathlevel := '',
+            @pathall := '',@pathnodes := '') vv
+            ORDER BY paths
+        ) t where  instr(paths,#{id})>0
+        ORDER BY paths ) or id=#{id}
+    </delete>
+
+</mapper>

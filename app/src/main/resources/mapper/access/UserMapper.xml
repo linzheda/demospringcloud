@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.app.core.access.mapper.UserMapper">
+
+    <!--获取验证码发送情况-->
+    <select id="getSmsCnt" resultType="Map">
+        select a.*,a.cnt-a.successcnt failcnt from (
+        select s.tel, s.type, count(s.id) cnt, IFNULL(sum(s.result),0) successcnt,max(s.smstime) maxtime
+        from sms_log s
+        where TO_DAYS(smstime) = TO_DAYS(now())
+        and s.tel=#{tel} and s.type=#{type}
+        group by s.tel, s.type ) a
+    </select>
+
+    <!--获取最新的验证码-->
+    <select id="getMaxNewSms" resultType="SmsLog">
+        select s.*
+        from sms_log s
+        where TO_DAYS(smstime) = TO_DAYS(now())
+        and s.tel=#{tel} and s.type=#{type}
+        order by s.smstime desc
+        limit 1
+    </select>
+</mapper>

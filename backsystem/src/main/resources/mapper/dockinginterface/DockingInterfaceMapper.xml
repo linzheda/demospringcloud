@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.backsystem.core.dockinginterface.interfaces.mapper.DockingInterfaceMapper">
+
+    <!-- 开启二级缓存 -->
+<!--
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+-->
+    <!--获取用户列表-->
+    <select id="getUserList" resultType="java.util.Map">
+        select t.*,t2.name as orgid_text,t3.name jobid_text,d.name sex_text,t2.code org_code
+        <if test="condition.needRole!=null ">
+            ,(select GROUP_CONCAT(roleid) from role_user where userid=t.id and
+              roleid in  (select roleid from role_resources rr
+            inner join resources r on rr.resid=r.id
+            where r.isn like concat('%',#{condition.resources_isn},'%') )
+              ) rolelist
+        </if>
+        from user t
+        left join organization t2 on t.orgid=t2.id
+        left join job t3 on t.jobid=t3.id
+        left join dictionary d on t.sex=d.value and d.dictkey='sex'
+        <where>
+            <if test="condition.id!=null">
+                t.id=#{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                and t.name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.loginname!=null">
+                and t.loginname like concat('%',#{condition.loginname},'%')
+            </if>
+            <if test="condition.tel!=null">
+                and t.tel like concat('%',#{condition.tel},'%')
+            </if>
+            <if test="condition.tag!=null and condition.tag!='' ">
+                and t.tag regexp replace(#{condition.tag},',','|')
+            </if>
+            <if test="condition.orgid!=null and condition.orgid!='' ">
+                and t.orgid in
+                <foreach collection="condition.orgid.split(',')" open="(" separator="," close=")" index="index"
+                         item="item">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!--获取组织机构列表-->
+    <select id="getOrganizationList" resultType="java.util.Map">
+        select t.id, t.name, if(t.level=2,null,t.pid) pid, t.code, t.isn, t.status,
+        t.level, t.description, t.areacode, t.seq,
+        t.createby, t.createtime,t.updateby, t.updatetime,
+        (select count(*) from organization where pid = t.id) children_cnt, t2.name pid_text
+        from organization t
+        left join organization t2 on t.pid = t2.id
+        where t.level > 1
+        <if test="condition.pid!=null and pid!=''">
+            and t.pid=#{condition.pid}
+        </if>
+        <if test="condition.name!=null">
+            and t.name like concat('%',#{condition.name},'%')
+        </if>
+        <if test="condition.key!=null">
+            and t.code like concat('%',#{condition.code},'%')
+        </if>
+        <if test="condition.isn!=null">
+            and t.isn like concat('%',#{condition.isn},'%')
+        </if>
+        <if test="condition.filter_id!=null">
+            and t.id not in (#{condition.filter_id})
+        </if>
+        order by t.level,t.seq
+    </select>
+    <!--获取菜单列表-->
+    <select id="getResourcesList" resultType="java.util.Map">
+        select t.id,  if(t.level=2,null,t.pid) pid, t.name, t.type, t.route,
+        t.attr, t.level, t.isn, t.description,  t.css, t.premissions,
+        t.icon, t.status, t.seq, t.createby, t.createtime, t.updateby, t.updatetime ,
+        (select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
+        t2.name pid_text
+        from resources t
+        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2
+        left join resources t2 on t.pid=t2.id
+        where  t.level>1
+        <if test="condition.pid!=null and pid!=''">
+           and t.pid=#{condition.pid}
+        </if>
+        <if test="condition.isn!=null">
+            and t.isn like concat('%',#{condition.isn},'%')
+        </if>
+        <if test="condition.name!=null">
+            and t.name like concat('%',#{condition.name},'%')
+        </if>
+        <if test="condition.filter_id!=null">
+            and t.id not in (#{condition.filter_id})
+        </if>
+        order by t.level,t.seq
+    </select>
+    <!--获取角色列表-->
+    <select id="getRoleList" resultType="java.util.Map">
+        select t.*,d.name as status_text
+        from role t
+        left join dictionary d on t.status=d.value and d.dictkey='able_disable'
+
+        <where>
+            <if test="condition.id!=null">
+                t.id=#{condition.id}
+            </if>
+            <if test="condition.isn!=null">
+                t.id in (select roleid from role_resources rr
+                        inner join resources r on rr.resid=r.id
+                        where r.isn like concat('%',#{condition.isn},'%') )
+            </if>
+            <if test="condition.name!=null">
+                and t.name like concat('%',#{condition.name},'%')
+            </if>
+            <if test="condition.code!=null">
+                and t.code like concat('%',#{condition.code},'%')
+            </if>
+        </where>
+    </select>
+    <!--根据角色id获取资源列表-->
+    <select id="getResourcesListByRoleId" resultType="java.util.Map">
+        select t.*,(select count(*) from resources where pid=t.id ) children_cnt,d.name type_text,
+        t2.name pid_text,
+        case when rr.id is not null then true else false end ischecked
+        from resources t
+        left join dictionary d on t.type=d.value and d.dictkey='resources_type' and d.level=2
+        left join resources t2 on t.pid=t2.id
+        left join role_resources rr on t.id=rr.resid and  rr.roleid=#{roleid}
+        where rr.id is not null
+            <if test="pid!=null and pid!=''">
+              and  t.pid=#{pid}
+            </if>
+            <if test="name!=null">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="isn!=null">
+                and t.isn like concat(#{isn},'%')
+            </if>
+            <if test="filter_id!=null">
+                and t.id not in (#{filter_id})
+            </if>
+        order by t.seq
+    </select>
+    <!--获取这个角色下的用户列表-->
+    <select id="getUserListByRoleId" resultType="java.util.Map">
+        select u.id,u.loginname,u.name,u.tel,o.name orgname
+        from role_user ru
+        left join user u on ru.userid = u.id
+        left join organization o on u.orgid = o.id
+        where u.id is not null and  ru.roleid=#{roleid}
+        <if test="name!=null">
+            and u.name like concat('%',#{name},'%')
+        </if>
+        <if test="loginname!=null">
+            and u.loginname like concat('%',#{loginname},'%')
+        </if>
+        <if test="tel!=null">
+            and u.tel like concat('%',#{tel},'%')
+        </if>
+        <if test="tag!=null and tag!='' ">
+            and u.tag regexp replace(#{tag},',','|')
+        </if>
+    </select>
+    <!--获取某个用户下的所有角色-->
+    <select id="getRoleListByUserId" resultType="java.util.Map">
+        select distinct r.id,r.name,r.code,r.description
+        from role_user ru
+        left join role r on ru.roleid = r.id
+        where r.id is not null and  ru.userid=#{userid}
+        <if test="name!=null">
+            and r.name like concat('%',#{name},'%')
+        </if>
+        <if test="code!=null">
+            and r.code like concat('%',#{code},'%')
+        </if>
+        <if test="description!=null">
+            and r.description like concat('%',#{description},'%')
+        </if>
+    </select>
+
+
+</mapper>

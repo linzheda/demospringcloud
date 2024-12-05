@@ -1,0 +1,35 @@
+#应用名称
+spring:
+  application:
+    name: hystrix-turbine
+#端口好
+server:
+  port: 8765
+
+#eureka
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+  instance:
+    #将自己的IP注册到eureka
+    prefer-ip-address: true
+    #instance-id 是再注册中心页面显示的微服务名。
+    instance-id: ${spring.application.name}:${server.port}
+
+
+#监控的配置 这个和spring-boot-starter-actuator 搭配使用
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#turbine
+turbine:
+  app-config: backsystem,test
+  cluster-name-expression: "'default'"
+  combine-host-port: true
+

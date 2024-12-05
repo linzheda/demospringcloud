@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzd.app.core.access.mapper.ResourcesMapper">
+    <!--获取资源根据用户id-->
+    <select id="getResourcesByUserId"  resultType="java.util.Map">
+        select distinct t.*,t.name as text,tt.btnname,tt.btncode
+        from resources t
+        left join role_resources t2 on t.id=t2.resid
+        left join role_user t3 on t3.roleid=t2.roleid
+        left join role t4 on t3.roleid=t4.id and t4.status=1
+        left join (
+        select t.pid,GROUP_CONCAT(t.name) btnname ,GROUP_CONCAT(t.premissions) btncode
+        from resources t
+        left join role_resources t2 on t.id = t2.resid
+        left join role_user t3 on t3.roleid = t2.roleid
+        left join role t4 on t3.roleid=t4.id
+        where t.type=3 and t4.status=1 and  t3.userid = #{userId} group by t.pid
+        ) tt on t.id=tt.pid
+        where t3.userid=#{userId} and t4.status=1 and t.route is not null and t.type in (1,2)
+        <if test="isn!=null and isn!=''">
+            and t.isn like concat(#{isn},'%')
+        </if>
+        <if test="pid!=null and pid!=''">
+            and t.pid = #{pid}
+        </if>
+        order by t.level,t.seq
+    </select>
+
+    <!--获取下一级路由-->
+    <select id="getAccessRoute" resultType="java.util.Map">
+        select distinct t.*,t.name as text,tt.btnname,tt.btncode
+        from resources t
+        left join role_resources t2 on t.id=t2.resid
+        left join role_user t3 on t3.roleid=t2.roleid
+        left join role t4 on t3.roleid=t4.id and t4.status=1
+        left join (
+        select t.pid,GROUP_CONCAT(t.name) btnname ,GROUP_CONCAT(t.premissions) btncode
+        from resources t
+        left join role_resources t2 on t.id = t2.resid
+        left join role_user t3 on t3.roleid = t2.roleid
+        left join role t4 on t3.roleid=t4.id
+        where t.type=3 and t4.status=1 and  t3.userid = #{userId} group by t.pid
+        ) tt on t.id=tt.pid
+        where t3.userid=#{userId} and t4.status=1 and t.route is not null and t.route is not null
+        <if test="isn!=null and isn!=''">
+            and t.isn like concat(#{isn},'%')
+        </if>
+        <if test="pid!=null and pid!=''">
+            and t.pid = #{pid}
+        </if>
+        order by t.level,t.seq
+    </select>
+
+</mapper>

@@ -1,0 +1,34 @@
+#端口配置
+server:
+  port: 8761
+  #应用的名字
+spring:
+  application:
+    name: eureka-server
+  #开启 http basic 的安全认证
+  security:
+    user:
+      name: admin
+      password: admin
+  #eureka配置
+  #表示是否把自己注册到Eureka上 默认为true
+eureka:
+  instance:
+    #域名  可以修改hosts文件做域名映射
+    hostname: eureka01.com
+    #如果开启了此配置会导致集群不可用 （关闭或者不配置）
+    prefer-ip-address: false
+    instance-id: eureka01
+  client:
+    registerWithEureka: false
+    #表示是否需要从eureka上获取信息 默认为true
+    fetchRegistry: false
+    #设置与eureka server交互的地址
+    serviceUrl:
+      defaultZone: http://eureka01.com:${server.port}/eureka/
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+#作为指定应用在指定profile下的配置文件
+info:
+  profile: dev
+
+spring:
+  #mysql
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/basedemo?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: '{cipher}309e6c0a1bd7bcf18941a9e702f40364416fac364c40db52d48cbac05be60e89'
+  #zipkin
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      type: web  # 设置使用http的方式传输数据
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      # 采样率，模式0.1，也就是10%，为了便于观察效果，改为1.0，也就是100%。生产环境建议保持默认。
+      probability: 1.0

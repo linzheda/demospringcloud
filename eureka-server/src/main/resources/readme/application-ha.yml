@@ -1,0 +1,38 @@
+ #应用的名字
+spring:
+  application:
+    name: eureka-server
+
+---
+spring:
+  profiles: eureka01.com                                 # 指定profile=peer1
+server:
+  port: 8761
+eureka:
+  instance:
+    hostname: eureka01.com # 指定当profile=peer1时，主机名是peer1
+    #如果开启了此配置会导致集群不可用 （关闭或者不配置）
+    prefer-ip-address: false
+    instance-id: eureka01
+  client:
+    serviceUrl:
+      defaultZone: http://eureka02.com:8762/eureka/      # 将自己注册到peer2这个Eureka上面去
+
+---
+spring:
+  profiles: eureka02.com
+server:
+  port: 8762
+eureka:
+  instance:
+    hostname: eureka02.com
+    #如果开启了此配置会导致集群不可用 （关闭或者不配置）
+    prefer-ip-address: false
+    instance-id: eureka01
+  client:
+    serviceUrl:
+      defaultZone: http://eureka01.com:8761/eureka/
+
+
+
+

@@ -1,0 +1,52 @@
+server:
+  port: 8767
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          # Git仓库地址
+          uri: https://gitee.com/lzd105/demospringcloud.git
+          #如果git项目中没有二级文件夹,则将引入全部配置文件,有文件夹则需添加文件夹路径
+          search-paths: config-application-git
+          # Git仓库账号
+          username: 717537314@qq.com
+          # Git仓库密码
+          password:
+    #开始事件跟踪
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+      ack:
+        enabled: true
+  #配置bus的rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+  instance:
+    #将自己的IP注册到eureka
+    prefer-ip-address: true
+    #instance-id 是再注册中心页面显示的微服务名。
+    instance-id: ${spring.application.name}:${server.port}
+
+#监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

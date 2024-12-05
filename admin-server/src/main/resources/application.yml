@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: admin-server  #服务名称
+#邮箱配置
+#  mail:
+#    host: smtp.qq.com
+#    username: 717537314@qq.com
+#    password:
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#  boot:
+#    admin:
+#      notify:
+#        mail:
+#          from: 717537314@qq.com
+#          to: 717537314@qq.com
+
+server:
+  port: 8770 #端口号
+
+eureka:
+  #客户端
+  client:
+    #注册中心地址
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+  instance:
+    #将自己的IP注册到eureka
+    prefer-ip-address: true
+    #instance-id 是再注册中心页面显示的微服务名。
+    instance-id: ${spring.application.name}:${server.port}
